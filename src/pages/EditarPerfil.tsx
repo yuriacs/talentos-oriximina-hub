@@ -4,8 +4,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Check, AlertCircle, Trophy, Star, Award } from 'lucide-react';
+import { Check, AlertCircle, Trophy, Star, Award, FileDown } from 'lucide-react';
+import { generateProfilePDF } from '@/lib/generateProfilePDF';
 import BasicInfoForm from '@/components/profile/BasicInfoForm';
 import SkillsForm from '@/components/profile/SkillsForm';
 import ProjectsForm from '@/components/profile/ProjectsForm';
@@ -53,7 +55,8 @@ function getProfileLevel(score: number): { label: string; icon: typeof Star; col
 export default function EditarPerfil() {
   const { user, isLoading: authLoading } = useAuth();
   const {
-    profile, skills, education, experiences, projects, availability, softSkills,
+    profile, skills, education, experiences, projects, certifications, languages,
+    availability, softSkills,
     loading, updateProfile, addSkill, deleteSkill,
     addEducation, deleteEducation, addExperience, deleteExperience,
     addProject, deleteProject, toggleAvailability,
@@ -90,6 +93,36 @@ export default function EditarPerfil() {
     await updateProfile({ status: 'PUBLISHED', profile_completion: score } as any);
   };
 
+  const handleDownloadPDF = () => {
+    generateProfilePDF({
+      fullName: profile.full_name,
+      area: p.area,
+      city: profile.city,
+      email: user?.email || null,
+      whatsapp: profile.whatsapp,
+      linkedinUrl: p.linkedin_url,
+      githubUrl: p.github_url,
+      portfolioUrl: p.portfolio_url,
+      bio: profile.bio,
+      professionalObjective: profile.professional_objective,
+      skills: skills.map(s => ({ name: s.name, level: s.level, category: s.category })),
+      softSkills: softSkills.map(s => ({ name: s.name, rating: s.rating })),
+      languages: languages.map(l => ({ name: l.name, level: l.level })),
+      experiences: experiences.map(e => ({
+        place: e.place, type: e.type, start_date: e.start_date,
+        end_date: e.end_date, current: e.current, description: e.description,
+      })),
+      education: education.map(e => ({
+        institution: e.institution, course: e.course, level: e.level,
+        year: e.year, current: e.current,
+      })),
+      certifications: certifications.map(c => ({
+        course: c.course, institution: c.institution,
+        completed_at: c.completed_at, hours: c.hours,
+      })),
+    });
+  };
+
   return (
     <Layout>
       <div className="container max-w-4xl px-4 py-8 space-y-6">
@@ -98,9 +131,14 @@ export default function EditarPerfil() {
             <h1 className="font-display text-2xl font-bold">Meu Perfil</h1>
             <p className="text-muted-foreground">Preencha suas informações para publicar seu perfil</p>
           </div>
-          <Badge variant={profile.status === 'PUBLISHED' ? 'default' : 'secondary'}>
-            {profile.status === 'PUBLISHED' ? 'Publicado' : profile.status === 'BLOCKED' ? 'Bloqueado' : 'Rascunho'}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Button onClick={handleDownloadPDF} variant="outline" size="sm" className="gap-2">
+              <FileDown className="h-4 w-4" /> Baixar perfil em PDF
+            </Button>
+            <Badge variant={profile.status === 'PUBLISHED' ? 'default' : 'secondary'}>
+              {profile.status === 'PUBLISHED' ? 'Publicado' : profile.status === 'BLOCKED' ? 'Bloqueado' : 'Rascunho'}
+            </Badge>
+          </div>
         </div>
 
         {/* Score + Progress + Checklist */}
