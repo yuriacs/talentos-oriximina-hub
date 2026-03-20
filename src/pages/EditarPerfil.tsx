@@ -131,9 +131,14 @@ export default function EditarPerfil() {
             <h1 className="font-display text-2xl font-bold">Meu Perfil</h1>
             <p className="text-muted-foreground">Preencha suas informações para publicar seu perfil</p>
           </div>
-          <Badge variant={profile.status === 'PUBLISHED' ? 'default' : 'secondary'}>
-            {profile.status === 'PUBLISHED' ? 'Publicado' : profile.status === 'BLOCKED' ? 'Bloqueado' : 'Rascunho'}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Button onClick={handleDownloadPDF} variant="outline" size="sm" className="gap-2">
+              <FileDown className="h-4 w-4" /> Baixar perfil em PDF
+            </Button>
+            <Badge variant={profile.status === 'PUBLISHED' ? 'default' : 'secondary'}>
+              {profile.status === 'PUBLISHED' ? 'Publicado' : profile.status === 'BLOCKED' ? 'Bloqueado' : 'Rascunho'}
+            </Badge>
+          </div>
         </div>
 
         {/* Score + Progress + Checklist */}
