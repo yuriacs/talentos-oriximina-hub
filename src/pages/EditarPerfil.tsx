@@ -55,7 +55,8 @@ function getProfileLevel(score: number): { label: string; icon: typeof Star; col
 export default function EditarPerfil() {
   const { user, isLoading: authLoading } = useAuth();
   const {
-    profile, skills, education, experiences, projects, availability, softSkills,
+    profile, skills, education, experiences, projects, certifications, languages,
+    availability, softSkills,
     loading, updateProfile, addSkill, deleteSkill,
     addEducation, deleteEducation, addExperience, deleteExperience,
     addProject, deleteProject, toggleAvailability,
