@@ -93,6 +93,36 @@ export default function EditarPerfil() {
     await updateProfile({ status: 'PUBLISHED', profile_completion: score } as any);
   };
 
+  const handleDownloadPDF = () => {
+    generateProfilePDF({
+      fullName: profile.full_name,
+      area: p.area,
+      city: profile.city,
+      email: user?.email || null,
+      whatsapp: profile.whatsapp,
+      linkedinUrl: p.linkedin_url,
+      githubUrl: p.github_url,
+      portfolioUrl: p.portfolio_url,
+      bio: profile.bio,
+      professionalObjective: profile.professional_objective,
+      skills: skills.map(s => ({ name: s.name, level: s.level, category: s.category })),
+      softSkills: softSkills.map(s => ({ name: s.name, rating: s.rating })),
+      languages: languages.map(l => ({ name: l.name, level: l.level })),
+      experiences: experiences.map(e => ({
+        place: e.place, type: e.type, start_date: e.start_date,
+        end_date: e.end_date, current: e.current, description: e.description,
+      })),
+      education: education.map(e => ({
+        institution: e.institution, course: e.course, level: e.level,
+        year: e.year, current: e.current,
+      })),
+      certifications: certifications.map(c => ({
+        course: c.course, institution: c.institution,
+        completed_at: c.completed_at, hours: c.hours,
+      })),
+    });
+  };
+
   return (
     <Layout>
       <div className="container max-w-4xl px-4 py-8 space-y-6">
