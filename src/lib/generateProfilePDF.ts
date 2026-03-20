@@ -11,6 +11,7 @@ interface ProfilePDFData {
   portfolioUrl?: string | null;
   bio?: string | null;
   professionalObjective?: string | null;
+  photoUrl?: string | null;
   skills: { name: string; level: string; category: string }[];
   softSkills: { name: string; rating: number }[];
   languages: { name: string; level: string }[];
@@ -61,17 +62,51 @@ function wrapText(doc: jsPDF, text: string, maxWidth: number): string[] {
   return doc.splitTextToSize(text, maxWidth);
 }
 
-export function generateProfilePDF(data: ProfilePDFData) {
+async function loadImageAsDataUrl(url: string): Promise<string | null> {
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return null;
+  }
+}
+
+export async function generateProfilePDF(data: ProfilePDFData) {
   const doc = new jsPDF('p', 'mm', 'a4');
+
+  // Load photo if available
+  let photoDataUrl: string | null = null;
+  if (data.photoUrl) {
+    photoDataUrl = await loadImageAsDataUrl(data.photoUrl);
+  }
 
   // ── Header block ──
   doc.setFillColor(...COLORS.primary);
   doc.rect(0, 0, PAGE_W, 44, 'F');
 
+  // Photo in top-right corner of header
+  const photoSize = 30;
+  const photoX = PAGE_W - MR - photoSize;
+  const photoY = 7;
+  if (photoDataUrl) {
+    // White circle background
+    doc.setFillColor(255, 255, 255);
+    doc.circle(photoX + photoSize / 2, photoY + photoSize / 2, photoSize / 2 + 1, 'F');
+    doc.addImage(photoDataUrl, 'JPEG', photoX, photoY, photoSize, photoSize);
+  }
+
+  const textMaxW = photoDataUrl ? CONTENT_W - photoSize - 6 : CONTENT_W;
+
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(22);
   doc.setTextColor(255, 255, 255);
-  doc.text(data.fullName, ML, 20);
+  doc.text(data.fullName, ML, 20, { maxWidth: textMaxW });
 
   if (data.area) {
     doc.setFont('helvetica', 'normal');
@@ -87,7 +122,7 @@ export function generateProfilePDF(data: ProfilePDFData) {
   if (contactParts.length) {
     doc.setFontSize(9);
     doc.setTextColor(180, 200, 230);
-    doc.text(contactParts.join('  •  '), ML, 36);
+    doc.text(contactParts.join('  •  '), ML, 36, { maxWidth: textMaxW });
   }
 
   let linkLine: string[] = [];
@@ -97,7 +132,7 @@ export function generateProfilePDF(data: ProfilePDFData) {
   if (linkLine.length) {
     doc.setFontSize(8);
     doc.setTextColor(180, 200, 230);
-    doc.text(linkLine.join('  |  '), ML, 42);
+    doc.text(linkLine.join('  |  '), ML, 42, { maxWidth: textMaxW });
   }
 
   let y = 54;

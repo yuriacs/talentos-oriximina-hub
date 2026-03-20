@@ -93,8 +93,8 @@ export default function EditarPerfil() {
     await updateProfile({ status: 'PUBLISHED', profile_completion: score } as any);
   };
 
-  const handleDownloadPDF = () => {
-    generateProfilePDF({
+  const handleDownloadPDF = async () => {
+    await generateProfilePDF({
       fullName: profile.full_name,
       area: p.area,
       city: profile.city,
@@ -105,6 +105,7 @@ export default function EditarPerfil() {
       portfolioUrl: p.portfolio_url,
       bio: profile.bio,
       professionalObjective: profile.professional_objective,
+      photoUrl: profile.photo || null,
       skills: skills.map(s => ({ name: s.name, level: s.level, category: s.category })),
       softSkills: softSkills.map(s => ({ name: s.name, rating: s.rating })),
       languages: languages.map(l => ({ name: l.name, level: l.level })),
