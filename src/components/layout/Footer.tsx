@@ -27,10 +27,10 @@ export function Footer() {
               </div>
               <div className="flex flex-col">
                 <span className="font-display text-xl font-bold gradient-text">
-                  BTJO
+                  Observatório
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  Banco de Talentos Jovens
+                  Da Juventude de Oriximiná
                 </span>
               </div>
             </Link>
@@ -86,7 +86,7 @@ export function Footer() {
               Todos os direitos reservados.
             </p>
             <p className="text-sm text-muted-foreground flex items-center gap-1">
-              Feito com <Heart className="h-4 w-4 text-destructive fill-destructive" /> para a juventude amazônica
+              Feito com <Heart className="h-4 w-4 text-destructive fill-destructive" /> para a juventude
             </p>
           </div>
         </div>

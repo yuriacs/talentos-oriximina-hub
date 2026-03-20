@@ -37,15 +37,15 @@ export function Header() {
     >
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm transition-transform group-hover:scale-105">
-            <img src="/LIKE (1).png" alt="Logo" className="h-12 w-12 object-contain" />
+        <Link to="/" className="flex items-center gap-0.1 group">
+          <div className="flex items-center justify-center transition-transform group-hover:scale-105">
+            <img src="/LIKE (1).png" alt="Logo" className="h-14 w-14 object-contain drop-shadow-md" />
           </div>
           <div className="flex flex-col">
             <span className="font-display text-lg font-bold leading-none text-white drop-shadow">
-              Likedin
+              Observatório
             </span>
-            <span className="text-[10px] text-white/75 leading-none">Talentos de Oriximiná</span>
+            <span className="text-[15px] text-white/75 leading-none">da Juventude de Oriximiná</span>
           </div>
         </Link>
 
