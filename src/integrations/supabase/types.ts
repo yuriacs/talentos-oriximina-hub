@@ -114,6 +114,102 @@ export type Database = {
           },
         ]
       }
+      companies: {
+        Row: {
+          acoes_profissionalizacao: string[] | null
+          cnpj: string
+          created_at: string
+          email: string
+          endereco_bairro: string | null
+          endereco_cep: string | null
+          endereco_cidade: string | null
+          endereco_estado: string | null
+          endereco_numero: string | null
+          endereco_rua: string | null
+          faixa_salarial: string | null
+          id: string
+          instagram_url: string | null
+          linkedin_url: string | null
+          modalidades_vaga: string[] | null
+          nome_fantasia: string
+          porte: string | null
+          razao_social: string
+          responsavel_cargo: string | null
+          responsavel_nome: string
+          setor_atividade: string | null
+          site_url: string | null
+          status: string
+          termo_aceito: boolean
+          termo_aceito_em: string | null
+          turnos_trabalho: string[] | null
+          updated_at: string
+          user_id: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          acoes_profissionalizacao?: string[] | null
+          cnpj: string
+          created_at?: string
+          email: string
+          endereco_bairro?: string | null
+          endereco_cep?: string | null
+          endereco_cidade?: string | null
+          endereco_estado?: string | null
+          endereco_numero?: string | null
+          endereco_rua?: string | null
+          faixa_salarial?: string | null
+          id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          modalidades_vaga?: string[] | null
+          nome_fantasia: string
+          porte?: string | null
+          razao_social: string
+          responsavel_cargo?: string | null
+          responsavel_nome: string
+          setor_atividade?: string | null
+          site_url?: string | null
+          status?: string
+          termo_aceito?: boolean
+          termo_aceito_em?: string | null
+          turnos_trabalho?: string[] | null
+          updated_at?: string
+          user_id?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          acoes_profissionalizacao?: string[] | null
+          cnpj?: string
+          created_at?: string
+          email?: string
+          endereco_bairro?: string | null
+          endereco_cep?: string | null
+          endereco_cidade?: string | null
+          endereco_estado?: string | null
+          endereco_numero?: string | null
+          endereco_rua?: string | null
+          faixa_salarial?: string | null
+          id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          modalidades_vaga?: string[] | null
+          nome_fantasia?: string
+          porte?: string | null
+          razao_social?: string
+          responsavel_cargo?: string | null
+          responsavel_nome?: string
+          setor_atividade?: string | null
+          site_url?: string | null
+          status?: string
+          termo_aceito?: boolean
+          termo_aceito_em?: string | null
+          turnos_trabalho?: string[] | null
+          updated_at?: string
+          user_id?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
       education: {
         Row: {
           course: string
