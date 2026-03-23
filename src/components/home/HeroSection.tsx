@@ -5,16 +5,27 @@ import {
   ArrowRight,
   Sparkles,
   Users,
-  FolderOpen,
+  Building2,
   Award,
   MapPin
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
-const stats = [
-  { icon: Users, value: '40+', label: 'Jovens Cadastrados' },
-  { icon: FolderOpen, value: '300+', label: 'Projetos no Portfólio' },
-  { icon: Award, value: '500+', label: 'Competências Registradas' },
-];
+export function HeroSection() {
+  const [companyCount, setCompanyCount] = useState(0);
+
+  useEffect(() => {
+    supabase.from('companies').select('id', { count: 'exact', head: true }).then(({ count }) => {
+      setCompanyCount(count ?? 0);
+    });
+  }, []);
+
+  const stats = [
+    { icon: Users, value: '40+', label: 'Jovens Cadastrados', link: '/explorar' },
+    { icon: Building2, value: `${companyCount}`, label: 'Empresas Cadastradas', link: '/cadastro-empresa' },
+    { icon: Award, value: '500+', label: 'Competências Registradas', link: undefined },
+  ];
 
 export function HeroSection() {
   return (
