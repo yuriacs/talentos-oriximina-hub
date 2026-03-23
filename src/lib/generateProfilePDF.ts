@@ -95,10 +95,18 @@ export async function generateProfilePDF(data: ProfilePDFData) {
   const photoX = PAGE_W - MR - photoSize;
   const photoY = 7;
   if (photoDataUrl) {
-    // White circle background
+    // White circle border
     doc.setFillColor(255, 255, 255);
     doc.circle(photoX + photoSize / 2, photoY + photoSize / 2, photoSize / 2 + 1, 'F');
+    // Clip image into a circle
+    const cx = photoX + photoSize / 2;
+    const cy = photoY + photoSize / 2;
+    const r = photoSize / 2;
+    doc.saveGraphicsState();
+    doc.circle(cx, cy, r, null as any);
+    (doc as any).internal.out('W n');
     doc.addImage(photoDataUrl, 'JPEG', photoX, photoY, photoSize, photoSize);
+    doc.restoreGraphicsState();
   }
 
   const textMaxW = photoDataUrl ? CONTENT_W - photoSize - 6 : CONTENT_W;
