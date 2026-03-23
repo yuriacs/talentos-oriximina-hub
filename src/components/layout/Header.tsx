@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 const navLinks = [
   { href: '/', label: 'Início' },
   { href: '/explorar', label: 'Explorar Perfis' },
+  { href: '/cadastro-empresa', label: 'Empresas' },
   { href: '/sobre', label: 'Sobre' },
   { href: '/como-funciona', label: 'Como Funciona' },
 ];
