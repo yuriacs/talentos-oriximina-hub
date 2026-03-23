@@ -27,7 +27,6 @@ export function HeroSection() {
     { icon: Award, value: '500+', label: 'Competências Registradas', link: undefined },
   ];
 
-export function HeroSection() {
   return (
     <section className="relative overflow-hidden min-h-[600px]">
       {/* Background */}
@@ -81,10 +80,8 @@ export function HeroSection() {
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 animate-fade-up [animation-delay:400ms]">
             {stats.map((stat) => {
-              const isClickable = stat.label === 'Jovens Cadastrados';
-
               const content = (
-                <div className={`flex flex-col items-center p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 card-hover ${isClickable ? 'cursor-pointer hover:scale-105 transition-transform' : ''}`}>
+                <div className={`flex flex-col items-center p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 card-hover ${stat.link ? 'cursor-pointer hover:scale-105 transition-transform' : ''}`}>
                   <div className="flex items-center justify-center w-12 h-12 rounded-xl gradient-bg mb-3">
                     <stat.icon className="h-6 w-6 text-white" />
                   </div>
@@ -97,8 +94,8 @@ export function HeroSection() {
                 </div>
               );
 
-              return isClickable ? (
-                <Link key={stat.label} to="/explorar">
+              return stat.link ? (
+                <Link key={stat.label} to={stat.link}>
                   {content}
                 </Link>
               ) : (
