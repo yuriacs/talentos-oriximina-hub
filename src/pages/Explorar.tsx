@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
-import { ProfileCard } from '@/components/ui/profile-card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { SkillChip } from '@/components/ui/skill-chip';
+import { availabilityLabels } from '@/data/mockData';
+import { supabase } from '@/integrations/supabase/client';
+import { Link } from 'react-router-dom';
 import {
   Select,
   SelectContent,
@@ -11,13 +16,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { mockProfiles, availabilityLabels } from '@/data/mockData';
 import {
   Search,
   SlidersHorizontal,
   X,
   Users,
   Filter,
+  MapPin,
+  Briefcase,
+  FolderOpen,
+  MessageCircle,
+  BadgeCheck,
+  Loader2,
 } from 'lucide-react';
 import {
   Sheet,
@@ -29,36 +39,87 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 
-const areas = [
-  'Curso de Soldador',
-];
+interface DBProfile {
+  id: string;
+  full_name: string;
+  photo: string | null;
+  bio: string | null;
+  city: string | null;
+  professional_objective: string | null;
+  is_verified: boolean;
+  area: string | null;
+}
+
+interface DBSkill {
+  id: string;
+  profile_id: string;
+  name: string;
+  category: string;
+  level: string;
+}
+
+interface DBAvailability {
+  profile_id: string;
+  type: string;
+}
 
 export default function Explorar() {
+  const [profiles, setProfiles] = useState<DBProfile[]>([]);
+  const [allSkills, setAllSkills] = useState<DBSkill[]>([]);
+  const [allAvailability, setAllAvailability] = useState<DBAvailability[]>([]);
+  const [allProjectCounts, setAllProjectCounts] = useState<Record<string, number>>({});
+  const [loading, setLoading] = useState(true);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArea, setSelectedArea] = useState<string>('all');
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
   const [showVerifiedOnly, setShowVerifiedOnly] = useState(false);
 
-  const soldadorBaseProfiles = mockProfiles.filter((profile) =>
-    profile.professionalObjective.toLowerCase().includes('curso de soldador')
-  );
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('id, full_name, photo, bio, city, professional_objective, is_verified, area')
+        .eq('status', 'PUBLISHED');
 
-  const filteredProfiles = soldadorBaseProfiles.filter((profile) => {
-    const matchesSearch =
-      profile.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      profile.bio.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      profile.professionalObjective.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      profile.skills.some((s) => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      const ids = (profilesData || []).map(p => p.id);
+      setProfiles(profilesData || []);
 
-    const matchesArea =
-      selectedArea === 'all' ||
-      profile.professionalObjective.toLowerCase().includes(selectedArea.toLowerCase());
+      if (ids.length > 0) {
+        const [skillsRes, availRes, projRes] = await Promise.all([
+          supabase.from('skills').select('id, profile_id, name, category, level').in('profile_id', ids),
+          supabase.from('availability').select('profile_id, type').in('profile_id', ids),
+          supabase.from('projects').select('id, profile_id').in('profile_id', ids),
+        ]);
+        setAllSkills(skillsRes.data || []);
+        setAllAvailability(availRes.data || []);
+        const counts: Record<string, number> = {};
+        (projRes.data || []).forEach(p => { counts[p.profile_id] = (counts[p.profile_id] || 0) + 1; });
+        setAllProjectCounts(counts);
+      }
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
 
-    const matchesAvailability =
-      selectedAvailability.length === 0 ||
-      profile.availability.some((a) => selectedAvailability.includes(a));
+  const areas = [...new Set(profiles.map(p => p.area || p.professional_objective).filter(Boolean))] as string[];
 
-    const matchesVerified = !showVerifiedOnly || profile.isVerified;
+  const filteredProfiles = profiles.filter((profile) => {
+    const matchesSearch = !searchQuery ||
+      profile.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (profile.bio || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (profile.professional_objective || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      allSkills.filter(s => s.profile_id === profile.id).some(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const matchesArea = selectedArea === 'all' ||
+      (profile.area || profile.professional_objective || '').toLowerCase().includes(selectedArea.toLowerCase());
+
+    const profileAvail = allAvailability.filter(a => a.profile_id === profile.id).map(a => a.type);
+    const matchesAvailability = selectedAvailability.length === 0 ||
+      profileAvail.some(a => selectedAvailability.includes(a));
+
+    const matchesVerified = !showVerifiedOnly || profile.is_verified;
 
     return matchesSearch && matchesArea && matchesAvailability && matchesVerified;
   });
@@ -70,26 +131,18 @@ export default function Explorar() {
     setShowVerifiedOnly(false);
   };
 
-  const hasActiveFilters =
-    searchQuery ||
-    selectedArea !== 'all' ||
-    selectedAvailability.length > 0 ||
-    showVerifiedOnly;
+  const hasActiveFilters = searchQuery || selectedArea !== 'all' || selectedAvailability.length > 0 || showVerifiedOnly;
 
   const FiltersContent = () => (
     <div className="space-y-6">
       <div className="space-y-3">
         <Label className="text-sm font-medium">Área de Atuação</Label>
         <Select value={selectedArea} onValueChange={setSelectedArea}>
-          <SelectTrigger>
-            <SelectValue placeholder="Todas as áreas" />
-          </SelectTrigger>
+          <SelectTrigger><SelectValue placeholder="Todas as áreas" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todas as áreas</SelectItem>
             {areas.map((area) => (
-              <SelectItem key={area} value={area.toLowerCase()}>
-                {area}
-              </SelectItem>
+              <SelectItem key={area} value={area.toLowerCase()}>{area}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -105,15 +158,11 @@ export default function Explorar() {
                 checked={selectedAvailability.includes(key)}
                 onCheckedChange={(checked) => {
                   setSelectedAvailability(
-                    checked
-                      ? [...selectedAvailability, key]
-                      : selectedAvailability.filter((a) => a !== key)
+                    checked ? [...selectedAvailability, key] : selectedAvailability.filter((a) => a !== key)
                   );
                 }}
               />
-              <Label htmlFor={key} className="text-sm font-normal cursor-pointer">
-                {label}
-              </Label>
+              <Label htmlFor={key} className="text-sm font-normal cursor-pointer">{label}</Label>
             </div>
           ))}
         </div>
@@ -125,15 +174,12 @@ export default function Explorar() {
           checked={showVerifiedOnly}
           onCheckedChange={(checked) => setShowVerifiedOnly(checked as boolean)}
         />
-        <Label htmlFor="verified" className="text-sm font-normal cursor-pointer">
-          Apenas perfis verificados
-        </Label>
+        <Label htmlFor="verified" className="text-sm font-normal cursor-pointer">Apenas perfis verificados</Label>
       </div>
 
       {hasActiveFilters && (
         <Button variant="outline" onClick={clearFilters} className="w-full">
-          <X className="h-4 w-4 mr-2" />
-          Limpar Filtros
+          <X className="h-4 w-4 mr-2" />Limpar Filtros
         </Button>
       )}
     </div>
@@ -149,7 +195,7 @@ export default function Explorar() {
                 Explorar <span className="gradient-text">Talentos</span>
               </h1>
               <p className="text-muted-foreground text-lg">
-                Participantes do Curso de Soldador da Escola de Governo de Oriximiná.
+                Descubra jovens talentos de Oriximiná prontos para o mercado de trabalho.
               </p>
             </div>
           </div>
@@ -161,13 +207,10 @@ export default function Explorar() {
               <div className="sticky top-24 space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="font-display font-semibold flex items-center gap-2">
-                    <Filter className="h-4 w-4" />
-                    Filtros
+                    <Filter className="h-4 w-4" />Filtros
                   </h2>
                   {hasActiveFilters && (
-                    <Button variant="ghost" size="sm" onClick={clearFilters}>
-                      Limpar
-                    </Button>
+                    <Button variant="ghost" size="sm" onClick={clearFilters}>Limpar</Button>
                   )}
                 </div>
                 <FiltersContent />
@@ -189,26 +232,17 @@ export default function Explorar() {
                 <Sheet>
                   <SheetTrigger asChild>
                     <Button variant="outline" className="lg:hidden gap-2">
-                      <SlidersHorizontal className="h-4 w-4" />
-                      Filtros
+                      <SlidersHorizontal className="h-4 w-4" />Filtros
                       {hasActiveFilters && (
                         <Badge variant="secondary" className="ml-1">
-                          {[
-                            selectedArea !== 'all' ? 1 : 0,
-                            selectedAvailability.length,
-                            showVerifiedOnly ? 1 : 0,
-                          ].reduce((a, b) => a + b, 0)}
+                          {[selectedArea !== 'all' ? 1 : 0, selectedAvailability.length, showVerifiedOnly ? 1 : 0].reduce((a, b) => a + b, 0)}
                         </Badge>
                       )}
                     </Button>
                   </SheetTrigger>
                   <SheetContent side="right">
-                    <SheetHeader>
-                      <SheetTitle>Filtros</SheetTitle>
-                    </SheetHeader>
-                    <div className="mt-6">
-                      <FiltersContent />
-                    </div>
+                    <SheetHeader><SheetTitle>Filtros</SheetTitle></SheetHeader>
+                    <div className="mt-6"><FiltersContent /></div>
                   </SheetContent>
                 </Sheet>
               </div>
@@ -218,44 +252,25 @@ export default function Explorar() {
                   {searchQuery && (
                     <Badge variant="secondary" className="gap-1">
                       Busca: {searchQuery}
-                      <X
-                        className="h-3 w-3 cursor-pointer"
-                        onClick={() => setSearchQuery('')}
-                      />
+                      <X className="h-3 w-3 cursor-pointer" onClick={() => setSearchQuery('')} />
                     </Badge>
                   )}
-
                   {selectedArea !== 'all' && (
                     <Badge variant="secondary" className="gap-1">
                       Área: {selectedArea}
-                      <X
-                        className="h-3 w-3 cursor-pointer"
-                        onClick={() => setSelectedArea('all')}
-                      />
+                      <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedArea('all')} />
                     </Badge>
                   )}
-
                   {selectedAvailability.map((avail) => (
                     <Badge key={avail} variant="secondary" className="gap-1">
                       {availabilityLabels[avail]}
-                      <X
-                        className="h-3 w-3 cursor-pointer"
-                        onClick={() =>
-                          setSelectedAvailability(
-                            selectedAvailability.filter((a) => a !== avail)
-                          )
-                        }
-                      />
+                      <X className="h-3 w-3 cursor-pointer" onClick={() => setSelectedAvailability(selectedAvailability.filter((a) => a !== avail))} />
                     </Badge>
                   ))}
-
                   {showVerifiedOnly && (
                     <Badge variant="secondary" className="gap-1">
                       Verificados
-                      <X
-                        className="h-3 w-3 cursor-pointer"
-                        onClick={() => setShowVerifiedOnly(false)}
-                      />
+                      <X className="h-3 w-3 cursor-pointer" onClick={() => setShowVerifiedOnly(false)} />
                     </Badge>
                   )}
                 </div>
@@ -263,35 +278,100 @@ export default function Explorar() {
 
               <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
                 <Users className="h-4 w-4" />
-                <span>{filteredProfiles.length} participantes do Curso de Soldador</span>
+                <span>{filteredProfiles.length} talentos encontrados</span>
               </div>
 
-              {filteredProfiles.length > 0 ? (
+              {loading ? (
+                <div className="flex items-center justify-center py-20">
+                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                </div>
+              ) : filteredProfiles.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {filteredProfiles.map((profile, index) => (
-                    <div
-                      key={profile.id}
-                      className="animate-fade-up"
-                      style={{ animationDelay: `${index * 50}ms` }}
-                    >
-                      <ProfileCard profile={profile} />
-                    </div>
-                  ))}
+                  {filteredProfiles.map((profile, index) => {
+                    const profileSkills = allSkills.filter(s => s.profile_id === profile.id);
+                    const profileAvail = allAvailability.filter(a => a.profile_id === profile.id).map(a => a.type);
+                    const projectCount = allProjectCounts[profile.id] || 0;
+                    const initials = profile.full_name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+
+                    return (
+                      <div key={profile.id} className="animate-fade-up" style={{ animationDelay: `${index * 50}ms` }}>
+                        <Card className="group card-hover overflow-hidden border-border/50 hover:border-primary/30">
+                          <CardContent className="p-0">
+                            <div className="h-20 gradient-hero-bg relative">
+                              {profile.is_verified && (
+                                <div className="absolute top-3 right-3">
+                                  <Badge className="bg-background/90 text-primary border-0 gap-1">
+                                    <BadgeCheck className="h-3 w-3" />Verificado
+                                  </Badge>
+                                </div>
+                              )}
+                            </div>
+                            <div className="px-5 -mt-10 relative z-10">
+                              <Avatar className="h-20 w-20 ring-4 ring-background shadow-lg">
+                                <AvatarImage src={profile.photo || undefined} alt={profile.full_name} />
+                                <AvatarFallback className="gradient-bg text-primary-foreground text-xl font-semibold">{initials}</AvatarFallback>
+                              </Avatar>
+                            </div>
+                            <div className="p-5 pt-3 space-y-4">
+                              <div>
+                                <h3 className="font-display text-lg font-semibold text-foreground">{profile.full_name}</h3>
+                                <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+                                  <Briefcase className="h-3.5 w-3.5" />
+                                  <span>{profile.professional_objective || profile.area || 'Não informado'}</span>
+                                </div>
+                                <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+                                  <MapPin className="h-3.5 w-3.5" />
+                                  <span>{profile.city || 'Oriximiná'}</span>
+                                </div>
+                              </div>
+                              {profile.bio && (
+                                <p className="text-sm text-muted-foreground line-clamp-2">{profile.bio}</p>
+                              )}
+                              {profileSkills.length > 0 && (
+                                <div className="flex flex-wrap gap-1.5">
+                                  {profileSkills.slice(0, 4).map((skill) => (
+                                    <SkillChip key={skill.id} name={skill.name} category={skill.category as any} size="sm" />
+                                  ))}
+                                  {profileSkills.length > 4 && (
+                                    <span className="px-2 py-0.5 text-xs text-muted-foreground bg-muted rounded-full">+{profileSkills.length - 4}</span>
+                                  )}
+                                </div>
+                              )}
+                              <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                                  <span className="flex items-center gap-1">
+                                    <FolderOpen className="h-4 w-4" />{projectCount} projetos
+                                  </span>
+                                </div>
+                                <div className="flex gap-1">
+                                  {profileAvail.slice(0, 2).map((avail) => (
+                                    <Badge key={avail} variant="secondary" className="text-xs">{availabilityLabels[avail]}</Badge>
+                                  ))}
+                                </div>
+                              </div>
+                              <div className="flex gap-2 pt-2">
+                                <Link to={`/perfil/${profile.id}`} className="flex-1">
+                                  <Button variant="outline" className="w-full group-hover:border-primary/50">Ver Perfil</Button>
+                                </Link>
+                                <Button size="icon" variant="ghost" className="text-muted-foreground hover:text-primary">
+                                  <MessageCircle className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-16">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
                     <Search className="h-8 w-8 text-muted-foreground" />
                   </div>
-                  <h3 className="font-display text-xl font-semibold mb-2">
-                    Nenhum perfil encontrado
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    Tente ajustar os filtros ou buscar por outros termos.
-                  </p>
-                  <Button variant="outline" onClick={clearFilters}>
-                    Limpar Filtros
-                  </Button>
+                  <h3 className="font-display text-xl font-semibold mb-2">Nenhum perfil encontrado</h3>
+                  <p className="text-muted-foreground mb-4">Tente ajustar os filtros ou buscar por outros termos.</p>
+                  <Button variant="outline" onClick={clearFilters}>Limpar Filtros</Button>
                 </div>
               )}
             </div>

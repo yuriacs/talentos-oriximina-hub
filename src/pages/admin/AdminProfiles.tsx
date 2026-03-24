@@ -134,6 +134,16 @@ export default function AdminProfiles() {
                     <CheckCircle className={`h-4 w-4 mr-1 ${profile.is_verified ? 'text-green-600' : ''}`} />
                     {profile.is_verified ? 'Desverificar' : 'Verificar'}
                   </Button>
+                  {profile.status === 'DRAFT' && (
+                    <Button variant="ghost" size="sm" className="text-primary" onClick={() => updateProfileStatus(profile.id, 'PUBLISHED')}>
+                      <CheckCircle className="h-4 w-4 mr-1" /> Publicar
+                    </Button>
+                  )}
+                  {profile.status === 'PUBLISHED' && (
+                    <Button variant="ghost" size="sm" className="text-orange-500" onClick={() => updateProfileStatus(profile.id, 'DRAFT')}>
+                      <ShieldOff className="h-4 w-4 mr-1" /> Despublicar
+                    </Button>
+                  )}
                   {profile.status !== 'BLOCKED' ? (
                     <Button variant="ghost" size="sm" className="text-destructive" onClick={() => updateProfileStatus(profile.id, 'BLOCKED')}>
                       <ShieldOff className="h-4 w-4 mr-1" /> Bloquear
