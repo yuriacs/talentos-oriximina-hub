@@ -75,7 +75,7 @@ export function HeroSection() {
                   <span className="font-display text-3xl font-bold text-white drop-shadow">
                     {stat.value}
                   </span>
-                  <span className="text-sm text-white/70 mt-1">
+                  <span className="text-sm text-white/70 mt-1 rounded-sm">
                     {stat.label}
                   </span>
                 </div>
