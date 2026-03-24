@@ -18,6 +18,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProfiles from "./pages/admin/AdminProfiles";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminLogs from "./pages/admin/AdminLogs";
+import AdminCompanies from "./pages/admin/AdminCompanies";
 import CadastroEmpresa from "./pages/CadastroEmpresa";
 
 const queryClient = new QueryClient();
