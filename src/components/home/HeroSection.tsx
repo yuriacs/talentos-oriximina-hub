@@ -22,7 +22,7 @@ export function HeroSection() {
   }, []);
 
   const stats = [
-    { icon: Users, value: '40+', label: 'Jovens Cadastrados', link: '/explorar' },
+    { icon: Users, value: '40+', label: "Banco de Talentos da Juventude\nCadastre seu perfil", link: '/explorar' },
     { icon: Building2, value: `${companyCount}`, label: 'Empresas Cadastradas', link: '/cadastro-empresa' },
     { icon: Award, value: '500+', label: 'Competências Registradas', link: undefined },
   ];
@@ -75,7 +75,7 @@ export function HeroSection() {
                   <span className="font-display text-3xl font-bold text-white drop-shadow">
                     {stat.value}
                   </span>
-                  <span className="text-sm text-white/70 mt-1 rounded-sm">
+                  <span className="text-sm text-white/70 mt-1 rounded-sm whitespace-pre-line text-center">
                     {stat.label}
                   </span>
                 </div>
