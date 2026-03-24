@@ -2,12 +2,13 @@ import { Navigate, Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Layout } from '@/components/layout/Layout';
 import { cn } from '@/lib/utils';
-import { BarChart3, Users, AlertTriangle, ScrollText, ArrowLeft } from 'lucide-react';
+import { BarChart3, Users, AlertTriangle, ScrollText, Building2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const adminNav = [
   { href: '/admin', label: 'Dashboard', icon: BarChart3 },
   { href: '/admin/perfis', label: 'Perfis', icon: Users },
+  { href: '/admin/empresas', label: 'Empresas', icon: Building2 },
   { href: '/admin/denuncias', label: 'Denúncias', icon: AlertTriangle },
   { href: '/admin/logs', label: 'Logs', icon: ScrollText },
 ];

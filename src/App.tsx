@@ -18,6 +18,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProfiles from "./pages/admin/AdminProfiles";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminLogs from "./pages/admin/AdminLogs";
+import AdminCompanies from "./pages/admin/AdminCompanies";
 import CadastroEmpresa from "./pages/CadastroEmpresa";
 
 const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="perfis" element={<AdminProfiles />} />
+              <Route path="empresas" element={<AdminCompanies />} />
               <Route path="denuncias" element={<AdminReports />} />
               <Route path="logs" element={<AdminLogs />} />
             </Route>
