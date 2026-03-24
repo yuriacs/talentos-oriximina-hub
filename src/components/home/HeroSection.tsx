@@ -60,6 +60,9 @@ export function HeroSection() {
             Um universo de talentos, sonhos, propósitos e network. Se conecte e brilhe.
           </p>
 
+          {/* Spacer to maintain layout */}
+          <div className="pt-4 h-12" />
+
 
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 animate-fade-up [animation-delay:400ms]">
