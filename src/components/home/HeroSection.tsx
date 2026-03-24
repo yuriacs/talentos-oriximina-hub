@@ -60,22 +60,6 @@ export function HeroSection() {
             Um universo de talentos, sonhos, propósitos e network. Se conecte e brilhe.
           </p>
 
-          {/* Botões */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 animate-fade-up [animation-delay:300ms]">
-            <Link to="/cadastro">
-              <Button size="lg" className="gradient-bg hover:opacity-90 transition-opacity gap-2 px-8 h-12 text-base shadow-glow">
-                <Sparkles className="h-5 w-5" />
-                Criar Meu Perfil
-              </Button>
-            </Link>
-
-            <Link to="/explorar">
-              <Button size="lg" variant="outline" className="gap-2 px-8 h-12 text-base bg-white/10 border-white/40 text-white hover:bg-white/20 hover:text-white backdrop-blur-sm">
-                Explorar Perfis
-                <ArrowRight className="h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
 
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 animate-fade-up [animation-delay:400ms]">
