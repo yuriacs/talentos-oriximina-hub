@@ -47,9 +47,9 @@ export default function Cadastro() {
       toast.error('Erro ao criar conta', { description: error.message });
     } else {
       toast.success('Conta criada com sucesso!', {
-        description: 'Verifique seu e-mail para confirmar o cadastro.'
+        description: 'Vamos personalizar seu perfil!'
       });
-      navigate('/login');
+      navigate('/meu-perfil');
     }
     setIsLoading(false);
   };

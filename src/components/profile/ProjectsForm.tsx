@@ -16,7 +16,7 @@ interface Props {
 
 export default function ProjectsForm({ projects, onAdd, onDelete }: Props) {
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ title: '', problem: '', solution: '', technologies: '', results: '' });
+  const [form, setForm] = useState({ title: '', problem: '', solution: '', results: '' });
   const [adding, setAdding] = useState(false);
 
   const handleAdd = async () => {
@@ -26,11 +26,10 @@ export default function ProjectsForm({ projects, onAdd, onDelete }: Props) {
       title: form.title.trim(),
       problem: form.problem,
       solution: form.solution,
-      technologies: form.technologies.split(',').map(t => t.trim()).filter(Boolean),
       results: form.results || null,
     });
     if (error) toast.error('Erro ao adicionar');
-    else { toast.success('Projeto adicionado!'); setForm({ title: '', problem: '', solution: '', technologies: '', results: '' }); setShowForm(false); }
+    else { toast.success('Projeto adicionado!'); setForm({ title: '', problem: '', solution: '', results: '' }); setShowForm(false); }
     setAdding(false);
   };
 
@@ -61,10 +60,6 @@ export default function ProjectsForm({ projects, onAdd, onDelete }: Props) {
             <div className="space-y-2">
               <Label>Solução</Label>
               <Textarea value={form.solution} onChange={e => setForm(f => ({ ...f, solution: e.target.value }))} rows={2} maxLength={500} />
-            </div>
-            <div className="space-y-2">
-              <Label>Tecnologias (separadas por vírgula)</Label>
-              <Input value={form.technologies} onChange={e => setForm(f => ({ ...f, technologies: e.target.value }))} placeholder="React, TypeScript, Node.js" maxLength={200} />
             </div>
             <div className="space-y-2">
               <Label>Resultados</Label>
