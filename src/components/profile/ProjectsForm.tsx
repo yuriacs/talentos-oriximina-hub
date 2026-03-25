@@ -78,11 +78,6 @@ export default function ProjectsForm({ projects, onAdd, onDelete }: Props) {
             <div className="min-w-0">
               <p className="font-medium">{p.title}</p>
               {p.problem && <p className="text-sm text-muted-foreground mt-1">{p.problem}</p>}
-              {p.technologies && p.technologies.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {p.technologies.map((t, i) => <span key={i} className="text-xs px-2 py-0.5 rounded bg-muted">{t}</span>)}
-                </div>
-              )}
             </div>
             <Button variant="ghost" size="icon" onClick={() => handleDelete(p.id)} className="text-destructive shrink-0">
               <Trash2 className="h-4 w-4" />
