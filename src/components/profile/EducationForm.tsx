@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Tables, TablesInsert } from '@/integrations/supabase/types';
@@ -45,7 +46,22 @@ export default function EducationForm({ education, onAdd, onDelete }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label>Nível *</Label>
-                <Input value={form.level} onChange={e => setForm(f => ({ ...f, level: e.target.value }))} placeholder="Ex: Ensino Médio, Técnico, Superior" maxLength={50} />
+                <Select value={form.level} onValueChange={val => setForm(f => ({ ...f, level: val }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o nível" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Ensino Fundamental">Ensino Fundamental</SelectItem>
+                    <SelectItem value="Ensino Médio">Ensino Médio</SelectItem>
+                    <SelectItem value="Técnico">Técnico</SelectItem>
+                    <SelectItem value="Tecnólogo">Tecnólogo</SelectItem>
+                    <SelectItem value="Superior (Graduação)">Superior (Graduação)</SelectItem>
+                    <SelectItem value="Pós-graduação">Pós-graduação</SelectItem>
+                    <SelectItem value="Mestrado">Mestrado</SelectItem>
+                    <SelectItem value="Doutorado">Doutorado</SelectItem>
+                    <SelectItem value="Curso Livre">Curso Livre</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label>Curso *</Label>

@@ -18,7 +18,7 @@ import SocioeducationalForm from '@/components/profile/SocioeducationalForm';
 import ProfessionalStatusForm from '@/components/profile/ProfessionalStatusForm';
 import WorkPreferencesForm from '@/components/profile/WorkPreferencesForm';
 import MobilityForm from '@/components/profile/MobilityForm';
-import SoftSkillsForm from '@/components/profile/SoftSkillsForm';
+
 import InclusionForm from '@/components/profile/InclusionForm';
 import ResourcesForm from '@/components/profile/ResourcesForm';
 import PortfolioLinksForm from '@/components/profile/PortfolioLinksForm';
@@ -56,11 +56,10 @@ export default function EditarPerfil() {
   const { user, isLoading: authLoading } = useAuth();
   const {
     profile, skills, education, experiences, projects, certifications, languages,
-    availability, softSkills,
+    availability,
     loading, updateProfile, addSkill, deleteSkill,
     addEducation, deleteEducation, addExperience, deleteExperience,
     addProject, deleteProject, toggleAvailability,
-    addSoftSkill, updateSoftSkill, deleteSoftSkill,
   } = useProfile();
 
   if (authLoading || loading) {
@@ -70,7 +69,7 @@ export default function EditarPerfil() {
   if (!profile) return <Layout><div className="flex items-center justify-center min-h-[60vh]"><p className="text-muted-foreground">Perfil não encontrado</p></div></Layout>;
 
   const p = profile as any;
-  const score = computeScore(p, skills, projects, availability, softSkills);
+  const score = computeScore(p, skills, projects, availability, []);
   const level = getProfileLevel(score);
   const LevelIcon = level.icon;
 
@@ -81,7 +80,7 @@ export default function EditarPerfil() {
     { label: '1+ projeto', done: projects.length >= 1, pts: 15 },
     { label: 'Disponibilidade definida', done: availability.length >= 1, pts: 5 },
     { label: 'Perfil socioeducacional', done: !!p.age_range && !!p.education_level, pts: 5 },
-    { label: 'Soft skills (3+)', done: softSkills.length >= 3, pts: 5 },
+    
     { label: 'Links/portfólio', done: !!(p.portfolio_url || p.linkedin_url || p.github_url), pts: 10 },
     { label: 'Vídeo de apresentação', done: !!p.video_url, pts: 20 },
   ];
@@ -107,7 +106,7 @@ export default function EditarPerfil() {
       professionalObjective: profile.professional_objective,
       photoUrl: profile.photo || null,
       skills: skills.map(s => ({ name: s.name, level: s.level, category: s.category })),
-      softSkills: softSkills.map(s => ({ name: s.name, rating: s.rating })),
+      softSkills: [],
       languages: languages.map(l => ({ name: l.name, level: l.level })),
       experiences: experiences.map(e => ({
         place: e.place, type: e.type, start_date: e.start_date,
@@ -193,10 +192,7 @@ export default function EditarPerfil() {
         {/* Section 6: Competências */}
         <SkillsForm skills={skills} onAdd={addSkill} onDelete={deleteSkill} />
 
-        {/* Section 7: Soft Skills */}
-        <SoftSkillsForm softSkills={softSkills} onAdd={addSoftSkill} onUpdate={updateSoftSkill} onDelete={deleteSoftSkill} />
-
-        {/* Section 8: Projetos e Portfólio */}
+        {/* Section 7: Projetos e Portfólio */}
         <ProjectsForm projects={projects} onAdd={addProject} onDelete={deleteProject} />
         <PortfolioLinksForm profile={profile} onSave={updateProfile} />
 
