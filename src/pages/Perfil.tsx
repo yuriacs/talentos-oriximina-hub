@@ -122,7 +122,7 @@ export default function Perfil() {
   return (
     <Layout>
       {/* Header with gradient */}
-      <div className="min-h-[14rem] md:min-h-[18rem] lg:min-h-[20rem] gradient-hero-bg relative font-thin">
+      <div className="min-h-[8rem] md:min-h-[10rem] lg:min-h-[11rem] gradient-hero-bg relative font-thin">
         <div className="container px-4 md:px-6 pt-24 md:pt-10 lg:pt-12">
           <Link to="/explorar" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors">
             <ArrowLeft className="h-4 w-4" />
