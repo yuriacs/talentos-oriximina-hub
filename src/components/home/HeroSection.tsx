@@ -14,6 +14,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 export function HeroSection() {
   const [companyCount, setCompanyCount] = useState(0);
+  const [isPulsing, setIsPulsing] = useState(true);
 
   useEffect(() => {
     supabase.from('companies').select('id', { count: 'exact', head: true }).then(({ count }) => {
