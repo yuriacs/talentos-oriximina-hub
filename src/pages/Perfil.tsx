@@ -131,7 +131,7 @@ export default function Perfil() {
         </div>
       </div>
 
-      <div className="container px-4 md:px-6 -mt-10 md:-mt-14 lg:-mt-16 pb-16">
+      <div className="container px-4 md:px-6 mt-6 md:mt-8 lg:mt-10 pb-16">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main column */}
           <div className="lg:col-span-2 space-y-6">
