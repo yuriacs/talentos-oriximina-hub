@@ -20,6 +20,8 @@ export function HeroSection() {
     supabase.from('companies').select('id', { count: 'exact', head: true }).then(({ count }) => {
       setCompanyCount(count ?? 0);
     });
+    const timer = setTimeout(() => setIsPulsing(false), 30000);
+    return () => clearTimeout(timer);
   }, []);
 
   const stats = [
