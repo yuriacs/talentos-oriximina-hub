@@ -40,7 +40,7 @@ export function Header() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-0.1 group">
           <div className="flex items-center justify-center transition-transform group-hover:scale-105">
-            <img src="/LIKE (1).png" alt="Logo" className="h-14 w-14 object-contain drop-shadow-md" />
+            <img src="/logo-observatorio.png" alt="Observatório da Juventude" className="h-14 w-14 object-contain drop-shadow-md" />
           </div>
           <div className="flex flex-col">
             <span className="font-display text-lg font-bold leading-none text-white drop-shadow">
