@@ -14,16 +14,19 @@ import { supabase } from '@/integrations/supabase/client';
 
 export function HeroSection() {
   const [companyCount, setCompanyCount] = useState(0);
+  const [isPulsing, setIsPulsing] = useState(true);
 
   useEffect(() => {
     supabase.from('companies').select('id', { count: 'exact', head: true }).then(({ count }) => {
       setCompanyCount(count ?? 0);
     });
+    const timer = setTimeout(() => setIsPulsing(false), 30000);
+    return () => clearTimeout(timer);
   }, []);
 
   const stats = [
-    { icon: Users, value: '40+', label: "Banco de Talentos da Juventude", cta: "Cadastre-se aqui →", link: '/cadastro' },
-    { icon: Building2, value: `${companyCount}`, label: "Empresas Amigas da Juventude", cta: "Cadastre sua empresa aqui →", link: '/cadastro-empresa' },
+    { icon: Users, value: '40+', label: "Banco de Talentos da Juventude", cta: "Cadastre-se aqui", link: '/cadastro' },
+    { icon: Building2, value: `${companyCount}`, label: "Empresas Amigas da Juventude", cta: "Cadastre sua empresa aqui", link: '/cadastro-empresa' },
     { icon: Award, value: '10+', label: 'Projetos Publicados', cta: undefined, link: undefined },
   ];
 
@@ -79,7 +82,7 @@ export function HeroSection() {
                     {stat.label}
                   </span>
                   {stat.cta && (
-                    <span className="mt-3 inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-white/20 text-white text-xs font-semibold tracking-wide border border-white/30 hover:bg-white/30 transition-colors">
+                    <span className={`mt-3 inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-white/20 text-white text-xs font-semibold tracking-wide border border-white/30 hover:bg-white/30 transition-colors ${isPulsing ? 'animate-pulse' : ''}`}>
                       {stat.cta}
                     </span>
                   )}
