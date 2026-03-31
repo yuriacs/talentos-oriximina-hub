@@ -71,14 +71,14 @@ export function HeroSection() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 animate-fade-up [animation-delay:400ms]">
             {stats.map((stat) => {
               const content = (
-                <div className={`flex flex-col items-center p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 card-hover ${stat.link ? 'cursor-pointer hover:scale-105 transition-transform' : ''}`}>
+                <div className={`flex flex-col items-center p-6 rounded-2xl backdrop-blur-md border card-hover transition-all duration-300 ${stat.topLabel ? 'bg-primary/20 border-primary/40 shadow-[0_0_25px_rgba(14,165,233,0.15)] hover:shadow-[0_0_35px_rgba(14,165,233,0.25)] hover:scale-105 cursor-pointer' : stat.link ? 'bg-white/10 border-white/20 cursor-pointer hover:scale-105' : 'bg-white/10 border-white/20'}`}>
                   {stat.icon && (
                     <div className="flex items-center justify-center w-12 h-12 rounded-xl gradient-bg mb-3">
                       <stat.icon className="h-6 w-6 text-white" />
                     </div>
                   )}
                   {stat.topLabel && (
-                    <span className="font-display text-2xl font-bold text-white drop-shadow mb-1">
+                    <span className="font-display text-3xl font-bold text-[#38bdf8] drop-shadow-[0_0_12px_rgba(56,189,248,0.5)] mb-1">
                       {stat.topLabel}
                     </span>
                   )}
@@ -90,7 +90,12 @@ export function HeroSection() {
                   <span className="text-sm text-white/70 mt-1 text-center">
                     {stat.label}
                   </span>
-                  {stat.cta && (
+                  {stat.cta && stat.topLabel && (
+                    <span className={`mt-4 inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-bold tracking-wide shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all ${isPulsing ? 'animate-pulse' : ''}`}>
+                      {stat.cta}
+                    </span>
+                  )}
+                  {stat.cta && !stat.topLabel && (
                     <span className={`mt-3 inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-white/20 text-white text-xs font-semibold tracking-wide border border-white/30 hover:bg-white/30 transition-colors ${isPulsing ? 'animate-pulse' : ''}`}>
                       {stat.cta}
                     </span>
