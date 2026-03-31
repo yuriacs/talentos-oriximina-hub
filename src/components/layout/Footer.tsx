@@ -22,8 +22,8 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-4">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 transition-transform group-hover:scale-195">
-                <img src="/LIKE (1).png" alt="Logo" className="h-12 w-12 object-contain" />
+            <div className="flex items-center justify-center transition-transform group-hover:scale-105">
+                <img src="/logo-observatorio.png" alt="Observatório da Juventude" className="h-12 w-12 object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="font-display text-xl font-bold gradient-text">
