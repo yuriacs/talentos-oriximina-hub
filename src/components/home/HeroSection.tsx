@@ -25,7 +25,7 @@ export function HeroSection() {
   }, []);
 
   const stats = [
-    { icon: Users, topLabel: 'Vitrine', value: null, label: "Banco de Talentos da Juventude", cta: "Cadastre-se aqui", link: '/cadastro' },
+    { icon: null, topLabel: 'Vitrine', value: null, label: "Banco de Talentos da Juventude", cta: "Cadastre-se aqui", link: '/cadastro' },
     { icon: Building2, topLabel: null, value: `${companyCount}`, label: "Empresas Amigas da Juventude", cta: "Cadastre sua empresa aqui", link: '/cadastro-empresa' },
     { icon: Award, topLabel: null, value: '10+', label: 'Projetos Publicados', cta: undefined, link: undefined },
   ];
@@ -72,9 +72,11 @@ export function HeroSection() {
             {stats.map((stat) => {
               const content = (
                 <div className={`flex flex-col items-center p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 card-hover ${stat.link ? 'cursor-pointer hover:scale-105 transition-transform' : ''}`}>
-                  <div className="flex items-center justify-center w-12 h-12 rounded-xl gradient-bg mb-3">
-                    <stat.icon className="h-6 w-6 text-white" />
-                  </div>
+                  {stat.icon && (
+                    <div className="flex items-center justify-center w-12 h-12 rounded-xl gradient-bg mb-3">
+                      <stat.icon className="h-6 w-6 text-white" />
+                    </div>
+                  )}
                   {stat.topLabel && (
                     <span className="font-display text-2xl font-bold text-white drop-shadow mb-1">
                       {stat.topLabel}
