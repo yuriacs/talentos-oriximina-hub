@@ -24,7 +24,7 @@ export function HeroSection() {
   const stats = [
     { icon: null, topLabel: 'SELO', label: "Cadastre sua empresa e conecte sua marca com a juventude", cta: "Bora fazer a diferença ?", link: '/cadastro-empresa' },
     { icon: null, topLabel: 'VITRINE', label: "Banco de Talentos da Juventude\nesse espaço é seu ", cta: "Conecte-se aqui", link: '/cadastro' },
-    { icon: null, topLabel: '​PESQUISA', label: '​Conhecendo as Juventudes', cta: "Me ajuda a te conhecer", link: undefined },
+    { icon: null, topLabel: '​PESQUISA', label: '​Conhecendo as Juventudes de Oriximiná', cta: "Me ajuda a te conhecer", link: undefined },
   ];
 
   return (
