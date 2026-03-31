@@ -70,7 +70,7 @@ export function HeroSection() {
               const content = (
                 <div className={`flex flex-col items-center p-6 rounded-2xl backdrop-blur-md border card-hover transition-all duration-300 bg-primary/20 border-primary/40 shadow-[0_0_25px_rgba(14,165,233,0.15)] hover:shadow-[0_0_35px_rgba(14,165,233,0.25)] hover:scale-105 ${stat.link ? 'cursor-pointer' : ''}`}>
                   {stat.topLabel && (
-                    <span className="font-display text-3xl font-bold text-[#38bdf8] drop-shadow-[0_0_12px_rgba(56,189,248,0.5)] mb-1">
+                    <span className="text-3xl font-semibold tracking-wide text-[#38bdf8] drop-shadow-[0_0_12px_rgba(56,189,248,0.5)] mb-1" style={{ fontFamily: "'Nunito', 'Quicksand', sans-serif" }}>
                       {stat.topLabel}
                     </span>
                   )}
