@@ -22,9 +22,9 @@ export function HeroSection() {
   }, []);
 
   const stats = [
-    { icon: null, topLabel: 'SELO', label: "EMPRESA AMIGA DA JUVENTUDE", cta: "CADASTRE SUA EMPRESA AQUI", link: '/cadastro-empresa' },
-    { icon: null, topLabel: 'VITRINE', label: "BANCO DE TALENTOS DA JUVENTUDE", cta: "CADASTRE-SE AQUI", link: '/cadastro' },
-    { icon: null, topLabel: 'PROJETOS', label: 'PUBLICADOS PELA JUVENTUDE', cta: undefined, link: undefined },
+    { icon: null, topLabel: 'SELO', label: "Empresa Amiga da Juventude", cta: "Cadastre sua empresa aqui", link: '/cadastro-empresa' },
+    { icon: null, topLabel: 'VITRINE', label: "Banco de Talentos da Juventude", cta: "Cadastre-se aqui", link: '/cadastro' },
+    { icon: null, topLabel: 'PROJETOS', label: 'Publicados pela Juventude', cta: undefined, link: undefined },
   ];
 
   return (
@@ -70,7 +70,7 @@ export function HeroSection() {
               const content = (
                 <div className={`flex flex-col items-center p-6 rounded-2xl backdrop-blur-md border card-hover transition-all duration-300 bg-primary/20 border-primary/40 shadow-[0_0_25px_rgba(14,165,233,0.15)] hover:shadow-[0_0_35px_rgba(14,165,233,0.25)] hover:scale-105 ${stat.link ? 'cursor-pointer' : ''}`}>
                   {stat.topLabel && (
-                    <span className="font-display text-3xl font-bold text-[#38bdf8] drop-shadow-[0_0_12px_rgba(56,189,248,0.5)] mb-1">
+                    <span className="text-3xl font-semibold tracking-wide text-[#38bdf8] drop-shadow-[0_0_12px_rgba(56,189,248,0.5)] mb-1" style={{ fontFamily: "'Nunito', 'Quicksand', sans-serif" }}>
                       {stat.topLabel}
                     </span>
                   )}
