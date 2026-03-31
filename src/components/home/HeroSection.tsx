@@ -25,9 +25,9 @@ export function HeroSection() {
   }, []);
 
   const stats = [
-    { icon: null, topLabel: 'Vitrine', value: null, label: "Banco de Talentos da Juventude", cta: "Cadastre-se aqui", link: '/cadastro' },
-    { icon: Building2, topLabel: null, value: `${companyCount}`, label: "Empresas Amigas da Juventude", cta: "Cadastre sua empresa aqui", link: '/cadastro-empresa' },
-    { icon: Award, topLabel: null, value: '10+', label: 'Projetos Publicados', cta: undefined, link: undefined },
+    { icon: null, topLabel: 'Vitrine', label: "Banco de Talentos da Juventude", cta: "Cadastre-se aqui", link: '/cadastro' },
+    { icon: null, topLabel: 'Selo', label: "Empresa Amiga da Juventude", cta: "Cadastre sua empresa aqui", link: '/cadastro-empresa' },
+    { icon: null, topLabel: 'Projetos', label: 'Publicados pela Juventude', cta: undefined, link: undefined },
   ];
 
   return (
