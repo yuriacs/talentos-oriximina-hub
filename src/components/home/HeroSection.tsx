@@ -22,9 +22,9 @@ export function HeroSection() {
   }, []);
 
   const stats = [
-    { icon: null, topLabel: 'VITRINE', label: "Banco de Talentos da Juventude", cta: "Cadastre-se aqui", link: '/cadastro' },
-    { icon: null, topLabel: 'Selo', label: "Empresa Amiga da Juventude", cta: "Cadastre sua empresa aqui", link: '/cadastro-empresa' },
-    { icon: null, topLabel: 'Projetos', label: 'Publicados pela Juventude', cta: undefined, link: undefined },
+    { icon: null, topLabel: 'SELO', label: "EMPRESA AMIGA DA JUVENTUDE", cta: "CADASTRE SUA EMPRESA AQUI", link: '/cadastro-empresa' },
+    { icon: null, topLabel: 'VITRINE', label: "BANCO DE TALENTOS DA JUVENTUDE", cta: "CADASTRE-SE AQUI", link: '/cadastro' },
+    { icon: null, topLabel: 'PROJETOS', label: 'PUBLICADOS PELA JUVENTUDE', cta: undefined, link: undefined },
   ];
 
   return (
