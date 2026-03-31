@@ -24,7 +24,7 @@ export function CTASection() {
           
           <p className="text-lg md:text-xl text-white/80 max-w-xl mx-auto">
             Junte-se a dezenas de jovens de Oriximiná que já estão construindo 
-            seu futuro profissional através do BTJO.
+            seu futuro profissional através do Observatório da Juventude de Oriximiná.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
