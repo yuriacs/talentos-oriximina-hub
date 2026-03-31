@@ -75,9 +75,16 @@ export function HeroSection() {
                   <div className="flex items-center justify-center w-12 h-12 rounded-xl gradient-bg mb-3">
                     <stat.icon className="h-6 w-6 text-white" />
                   </div>
-                  <span className="font-display text-3xl font-bold text-white drop-shadow">
-                    {stat.value}
-                  </span>
+                  {stat.topLabel && (
+                    <span className="font-display text-2xl font-bold text-white drop-shadow mb-1">
+                      {stat.topLabel}
+                    </span>
+                  )}
+                  {stat.value && (
+                    <span className="font-display text-3xl font-bold text-white drop-shadow">
+                      {stat.value}
+                    </span>
+                  )}
                   <span className="text-sm text-white/70 mt-1 text-center">
                     {stat.label}
                   </span>
