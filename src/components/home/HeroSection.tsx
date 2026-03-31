@@ -22,9 +22,9 @@ export function HeroSection() {
   }, []);
 
   const stats = [
-    { icon: null, topLabel: 'SELO', label: "Empresa Amiga da Juventude", cta: "Cadastre sua empresa aqui", link: '/cadastro-empresa' },
-    { icon: null, topLabel: 'VITRINE', label: "Banco de Talentos da Juventude", cta: "Cadastre-se aqui", link: '/cadastro' },
-    { icon: null, topLabel: 'PROJETOS', label: 'Publicados pela Juventude', cta: undefined, link: undefined },
+    { icon: null, topLabel: 'SELO', label: "Cadastre sua empresa e conecte sua marca com a juventude", cta: "Bora fazer a diferença ?", link: '/cadastro-empresa' },
+    { icon: null, topLabel: 'VITRINE', label: "Banco de Talentos da Juventude\nesse espaço é seu ", cta: "Conecte-se aqui", link: '/cadastro' },
+    { icon: null, topLabel: '​PESQUISA', label: '​Conhecendo as Juventudes', cta: undefined, link: undefined },
   ];
 
   return (
