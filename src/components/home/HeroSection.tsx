@@ -22,9 +22,9 @@ export function HeroSection() {
   }, []);
 
   const stats = [
-    { icon: null, topLabel: 'SELO', label: "Empresa Amiga da Juventude", cta: "Cadastre sua empresa aqui", link: '/cadastro-empresa' },
-    { icon: null, topLabel: 'VITRINE', label: "Banco de Talentos da Juventude", cta: "Cadastre-se aqui", link: '/cadastro' },
-    { icon: null, topLabel: 'PROJETOS', label: 'Publicados pela Juventude', cta: undefined, link: undefined },
+    { icon: null, topLabel: 'SELO', label: "Cadastre sua empresa e conecte sua marca com a juventude", cta: "Bora fazer a diferença ?", link: '/cadastro-empresa' },
+    { icon: null, topLabel: 'VITRINE', label: "Banco de Talentos da Juventude\nesse espaço é seu ", cta: "Conecte-se aqui", link: '/cadastro' },
+    { icon: null, topLabel: '​PESQUISA', label: '​Conhecendo as Juventudes', cta: undefined, link: undefined },
   ];
 
   return (
@@ -74,11 +74,11 @@ export function HeroSection() {
                       {stat.topLabel}
                     </span>
                   )}
-                  <span className="text-sm text-white/70 mt-1 text-center">
+                  <span className="text-sm text-white/70 mt-1 text-center whitespace-pre-line">
                     {stat.label}
                   </span>
                   {stat.cta && (
-                    <span className={`mt-4 inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-bold tracking-wide shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all ${isPulsing ? 'animate-pulse' : ''}`}>
+                    <span className={`mt-4 inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-primary text-primary-foreground font-bold tracking-wide shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all text-xs ${isPulsing ? 'animate-pulse' : ''}`}>
                       {stat.cta}
                     </span>
                   )}
