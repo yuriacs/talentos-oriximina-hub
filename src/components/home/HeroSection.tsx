@@ -4,9 +4,6 @@ import { Badge } from '@/components/ui/badge';
 import {
   ArrowRight,
   Sparkles,
-  Users,
-  Building2,
-  Award,
   MapPin
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
