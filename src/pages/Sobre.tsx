@@ -155,8 +155,8 @@ export default function Sobre() {
         <div className="container px-4 md:px-6">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
-              <div className="mb-6">
-                <img src="/selo-empresa-amiga.png" alt="Selo Empresa Amiga da Juventude" className="h-32 w-auto mx-auto" />
+              <div className="mb-8">
+                <img src="/selo-empresa-amiga.png" alt="Selo Empresa Amiga da Juventude" className="h-52 w-auto mx-auto drop-shadow-[0_0_30px_rgba(14,165,233,0.3)]" />
               </div>
               <h2 className="font-display text-3xl md:text-4xl font-bold mb-6">
                 Selo <span className="gradient-text">Empresa Amiga da Juventude</span>
