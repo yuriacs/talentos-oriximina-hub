@@ -16,7 +16,15 @@ import {
   Award,
   Building2,
   Heart,
-  ShieldCheck
+  ShieldCheck,
+  Footprints,
+  Search,
+  GraduationCap,
+  FileUser,
+  BadgeCheck,
+  Briefcase,
+  TrendingUp,
+  CheckCircle2
 } from 'lucide-react';
 
 const observatorioItems = [
@@ -202,6 +210,126 @@ export default function Sobre() {
                   </p>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trilha Juventudes em Movimento */}
+      <section className="py-16 md:py-20">
+        <div className="container px-4 md:px-6">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl gradient-bg mb-6">
+              <Footprints className="h-8 w-8 text-primary-foreground" />
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mb-6">
+              O que é a <span className="gradient-text">Trilha Juventudes em Movimento</span>?
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              É onde a teoria das leis e dos dados do Observatório se transforma em oportunidade real 
+              para o jovem de Oriximiná. Um programa completo de capacitação profissional voltado para 
+              jovens de 14 a 29 anos, com foco na inserção no mercado de trabalho por meio de parcerias 
+              institucionais e acesso a oportunidades reais.
+            </p>
+          </div>
+
+          {/* Fases da Trilha */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <Card className="border-border/50 card-hover relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
+              <CardContent className="p-6 pl-8">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">1</span>
+                  <h3 className="font-display font-semibold text-lg">Observatório da Juventude</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Divulgação e inscrição. O cérebro da SEMJU: centro de pesquisa, coleta de dados e monitoramento de resultados.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/50 card-hover relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
+              <CardContent className="p-6 pl-8">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">2</span>
+                  <h3 className="font-display font-semibold text-lg">Escolinha da SEMJU</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Capacitação do jovem com oficinas práticas, cursos rápidos e orientações profissionais sem custo.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/50 card-hover relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
+              <CardContent className="p-6 pl-8">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">3</span>
+                  <h3 className="font-display font-semibold text-lg">Cursos Parceiros</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Participação nos cursos do SENAI, SEBRAE e outros parceiros para qualificação técnica profissional.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/50 card-hover relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
+              <CardContent className="p-6 pl-8">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">4</span>
+                  <h3 className="font-display font-semibold text-lg">Vitrine Banco de Talentos</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  O currículo do jovem fica visível para empresas que buscam Jovens Aprendizes e Estagiários.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/50 card-hover relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
+              <CardContent className="p-6 pl-8">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">5</span>
+                  <h3 className="font-display font-semibold text-lg">Selo Empresa Amiga</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Seleção e prova para vagas em empresas certificadas com o Selo Empresa Amiga da Juventude.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/50 card-hover relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
+              <CardContent className="p-6 pl-8">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">6</span>
+                  <h3 className="font-display font-semibold text-lg">Primeiro Emprego</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Inserção no mercado como Jovem Aprendiz, Estagiário ou primeiro emprego remunerado.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Resultados Esperados */}
+          <div className="max-w-2xl mx-auto">
+            <h3 className="font-display text-xl font-bold text-center mb-6">Resultados Esperados</h3>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {[
+                'Jovens qualificados para o mercado',
+                'Aumento do primeiro emprego',
+                'Redução da vulnerabilidade social',
+                'Fortalecimento da economia local',
+                'Rede de apoio profissional estruturada',
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-3 p-3 rounded-lg bg-primary/5">
+                  <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />
+                  <span className="text-sm font-medium">{item}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
