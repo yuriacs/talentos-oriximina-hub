@@ -20,6 +20,7 @@ import AdminReports from "./pages/admin/AdminReports";
 import AdminLogs from "./pages/admin/AdminLogs";
 import AdminCompanies from "./pages/admin/AdminCompanies";
 import CadastroEmpresa from "./pages/CadastroEmpresa";
+import RespaldoJuridico from "./pages/RespaldoJuridico";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/perfil/:id" element={<Perfil />} />
             <Route path="/meu-perfil" element={<EditarPerfil />} />
             <Route path="/cadastro-empresa" element={<CadastroEmpresa />} />
+            <Route path="/respaldo-juridico" element={<RespaldoJuridico />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="perfis" element={<AdminProfiles />} />
