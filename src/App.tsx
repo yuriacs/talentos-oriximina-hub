@@ -20,6 +20,7 @@ import AdminReports from "./pages/admin/AdminReports";
 import AdminLogs from "./pages/admin/AdminLogs";
 import AdminCompanies from "./pages/admin/AdminCompanies";
 import CadastroEmpresa from "./pages/CadastroEmpresa";
+import RespaldoJuridico from "./pages/RespaldoJuridico";
 
 const queryClient = new QueryClient();
 
