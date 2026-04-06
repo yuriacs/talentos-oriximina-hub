@@ -40,6 +40,7 @@ const App = () => (
             <Route path="/perfil/:id" element={<Perfil />} />
             <Route path="/meu-perfil" element={<EditarPerfil />} />
             <Route path="/cadastro-empresa" element={<CadastroEmpresa />} />
+            <Route path="/respaldo-juridico" element={<RespaldoJuridico />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="perfis" element={<AdminProfiles />} />
