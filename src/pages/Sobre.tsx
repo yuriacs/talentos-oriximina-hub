@@ -233,85 +233,13 @@ export default function Sobre() {
             </p>
           </div>
 
-          {/* Fases da Trilha */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            <Card className="border-border/50 card-hover relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
-              <CardContent className="p-6 pl-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">1</span>
-                  <h3 className="font-display font-semibold text-lg">Observatório da Juventude</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Divulgação e inscrição. O cérebro da SEMJU: centro de pesquisa, coleta de dados e monitoramento de resultados.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50 card-hover relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
-              <CardContent className="p-6 pl-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">2</span>
-                  <h3 className="font-display font-semibold text-lg">Escolinha da SEMJU</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Capacitação do jovem com oficinas práticas, cursos rápidos e orientações profissionais sem custo.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50 card-hover relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
-              <CardContent className="p-6 pl-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">3</span>
-                  <h3 className="font-display font-semibold text-lg">Cursos Parceiros</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Participação nos cursos do SENAI, SEBRAE e outros parceiros para qualificação técnica profissional.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50 card-hover relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
-              <CardContent className="p-6 pl-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">4</span>
-                  <h3 className="font-display font-semibold text-lg">Vitrine Banco de Talentos</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  O currículo do jovem fica visível para empresas que buscam Jovens Aprendizes e Estagiários.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50 card-hover relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
-              <CardContent className="p-6 pl-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">5</span>
-                  <h3 className="font-display font-semibold text-lg">Selo Empresa Amiga</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Seleção e prova para vagas em empresas certificadas com o Selo Empresa Amiga da Juventude.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50 card-hover relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-full gradient-bg" />
-              <CardContent className="p-6 pl-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">6</span>
-                  <h3 className="font-display font-semibold text-lg">Primeiro Emprego</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Inserção no mercado como Jovem Aprendiz, Estagiário ou primeiro emprego remunerado.
-                </p>
-              </CardContent>
-            </Card>
+          {/* Fluxograma da Trilha */}
+          <div className="mb-12">
+            <img 
+              src="/trilha-fluxograma.png" 
+              alt="Fluxograma da Trilha Juventudes em Movimento - 6 fases: Divulgação, Participação nos cursos, Capacitação, Triagem SEMJU/SINE, Seleção/Prova, Primeiro Emprego" 
+              className="w-full max-w-5xl mx-auto rounded-2xl"
+            />
           </div>
 
           {/* Resultados Esperados */}
