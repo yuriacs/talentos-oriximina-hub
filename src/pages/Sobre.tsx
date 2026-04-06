@@ -16,7 +16,15 @@ import {
   Award,
   Building2,
   Heart,
-  ShieldCheck
+  ShieldCheck,
+  Footprints,
+  Search,
+  GraduationCap,
+  FileUser,
+  BadgeCheck,
+  Briefcase,
+  TrendingUp,
+  CheckCircle2
 } from 'lucide-react';
 
 const observatorioItems = [
