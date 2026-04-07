@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Building2, MapPin, Briefcase, Award, FileText, CheckCircle2, ArrowLeft, ArrowRight, Send } from 'lucide-react';
+import { Building2, MapPin, Briefcase, Award, FileText, CheckCircle2, ArrowLeft, ArrowRight, Send, ImagePlus, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -111,6 +111,9 @@ export default function CadastroEmpresa() {
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const logoInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -144,12 +147,45 @@ export default function CadastroEmpresa() {
   };
   const prevStep = () => setStep(s => Math.max(s - 1, 0));
 
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast({ title: 'Arquivo inválido', description: 'Selecione um arquivo de imagem.', variant: 'destructive' });
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      toast({ title: 'Arquivo muito grande', description: 'A imagem deve ter no máximo 2MB.', variant: 'destructive' });
+      return;
+    }
+    setLogoFile(file);
+    setLogoPreview(URL.createObjectURL(file));
+  };
+
+  const removeLogo = () => {
+    setLogoFile(null);
+    setLogoPreview(null);
+    if (logoInputRef.current) logoInputRef.current.value = '';
+  };
+
   const onSubmit = async (data: FormData) => {
     setSubmitting(true);
     try {
       if (!user) throw new Error('Você precisa estar logado para cadastrar uma empresa.');
+
+      let logo_url: string | null = null;
+      if (logoFile) {
+        const ext = logoFile.name.split('.').pop();
+        const path = `${user.id}/${Date.now()}.${ext}`;
+        const { error: uploadError } = await supabase.storage.from('company-logos').upload(path, logoFile);
+        if (uploadError) throw uploadError;
+        const { data: urlData } = supabase.storage.from('company-logos').getPublicUrl(path);
+        logo_url = urlData.publicUrl;
+      }
+
       const { error } = await supabase.from('companies' as any).insert({
         user_id: user.id,
+        logo_url,
         razao_social: data.razao_social,
         nome_fantasia: data.nome_fantasia,
         cnpj: data.cnpj.replace(/\D/g, ''),
