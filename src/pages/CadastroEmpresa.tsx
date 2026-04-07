@@ -317,6 +317,36 @@ export default function CadastroEmpresa() {
                   <CardDescription>Dados essenciais para emissão do diploma do Selo.</CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
+                  {/* Logo upload */}
+                  <div>
+                    <Label className="text-sm font-medium">Logotipo da Empresa</Label>
+                    <p className="text-xs text-muted-foreground mb-2">Imagem PNG ou JPG, máximo 2MB. Será exibida no diretório de empresas.</p>
+                    <div className="flex items-center gap-4">
+                      {logoPreview ? (
+                        <div className="relative">
+                          <img src={logoPreview} alt="Logo preview" className="w-20 h-20 rounded-xl object-cover border" />
+                          <button type="button" onClick={removeLogo} className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-0.5">
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => logoInputRef.current?.click()}
+                          className="w-20 h-20 rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-1 text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                        >
+                          <ImagePlus className="h-6 w-6" />
+                          <span className="text-[10px]">Upload</span>
+                        </button>
+                      )}
+                      <input ref={logoInputRef} type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
+                      {logoPreview && (
+                        <Button type="button" variant="outline" size="sm" onClick={() => logoInputRef.current?.click()}>
+                          Trocar imagem
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <FormField control={form.control} name="razao_social" render={({ field }) => (
                       <FormItem><FormLabel>Razão Social *</FormLabel><FormControl><Input placeholder="Ex: Empresa XYZ Ltda" {...field} /></FormControl><FormMessage /></FormItem>
