@@ -703,6 +703,10 @@ export type Database = {
     Functions: {
       get_my_profile_id: { Args: never; Returns: string }
       get_profile_user_id: { Args: { _profile_id: string }; Returns: string }
+      get_safe_profile_data: {
+        Args: { _profile_id: string; _requesting_user_id?: string }
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

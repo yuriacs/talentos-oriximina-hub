@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -111,6 +112,7 @@ export default function CadastroEmpresa() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -145,7 +147,9 @@ export default function CadastroEmpresa() {
   const onSubmit = async (data: FormData) => {
     setSubmitting(true);
     try {
+      if (!user) throw new Error('Você precisa estar logado para cadastrar uma empresa.');
       const { error } = await supabase.from('companies' as any).insert({
+        user_id: user.id,
         razao_social: data.razao_social,
         nome_fantasia: data.nome_fantasia,
         cnpj: data.cnpj.replace(/\D/g, ''),
@@ -180,6 +184,30 @@ export default function CadastroEmpresa() {
       setSubmitting(false);
     }
   };
+
+  if (!user) {
+    return (
+      <Layout>
+        <div className="container max-w-2xl mx-auto py-20 px-4 text-center">
+          <div className="bg-card rounded-2xl shadow-lg p-10 border">
+            <Building2 className="h-16 w-16 text-primary mx-auto mb-6" />
+            <h1 className="text-2xl font-bold text-foreground mb-3">Login Necessário</h1>
+            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+              Para cadastrar sua empresa no programa Empresa Amiga da Juventude, é necessário ter uma conta na plataforma.
+            </p>
+            <div className="flex gap-4 justify-center flex-wrap">
+              <Link to="/login">
+                <Button>Fazer Login</Button>
+              </Link>
+              <Link to="/cadastro">
+                <Button variant="outline">Criar Conta</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   if (success) {
     return (
