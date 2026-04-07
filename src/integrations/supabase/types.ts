@@ -71,6 +71,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "availability_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       certifications: {
@@ -110,6 +117,13 @@ export type Database = {
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certifications_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -252,6 +266,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "education_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       experiences: {
@@ -296,6 +317,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "experiences_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       languages: {
@@ -326,6 +354,13 @@ export type Database = {
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "languages_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -367,10 +402,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "messages_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "messages_sender_id_fkey"
             columns: ["sender_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -561,6 +610,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "projects_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       reports: {
@@ -603,10 +659,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "reports_reported_profile_id_fkey"
+            columns: ["reported_profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "reports_reporter_id_fkey"
             columns: ["reporter_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_reporter_id_fkey"
+            columns: ["reporter_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -644,6 +714,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "skills_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       soft_skills: {
@@ -676,6 +753,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "soft_skills_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_roles: {
@@ -701,7 +785,84 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_profiles: {
+        Row: {
+          accepts_remote: boolean | null
+          area: string | null
+          available_shifts: string[] | null
+          bio: string | null
+          city: string | null
+          created_at: string | null
+          current_course: string | null
+          desired_opportunity_types: string[] | null
+          education_level: string | null
+          full_name: string | null
+          github_url: string | null
+          id: string | null
+          institution_type: string | null
+          interest_areas: string[] | null
+          is_verified: boolean | null
+          linkedin_url: string | null
+          photo: string | null
+          portfolio_url: string | null
+          professional_objective: string | null
+          profile_completion: number | null
+          status: Database["public"]["Enums"]["profile_status"] | null
+          updated_at: string | null
+          video_url: string | null
+        }
+        Insert: {
+          accepts_remote?: boolean | null
+          area?: string | null
+          available_shifts?: string[] | null
+          bio?: string | null
+          city?: string | null
+          created_at?: string | null
+          current_course?: string | null
+          desired_opportunity_types?: string[] | null
+          education_level?: string | null
+          full_name?: string | null
+          github_url?: string | null
+          id?: string | null
+          institution_type?: string | null
+          interest_areas?: string[] | null
+          is_verified?: boolean | null
+          linkedin_url?: string | null
+          photo?: string | null
+          portfolio_url?: string | null
+          professional_objective?: string | null
+          profile_completion?: number | null
+          status?: Database["public"]["Enums"]["profile_status"] | null
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          accepts_remote?: boolean | null
+          area?: string | null
+          available_shifts?: string[] | null
+          bio?: string | null
+          city?: string | null
+          created_at?: string | null
+          current_course?: string | null
+          desired_opportunity_types?: string[] | null
+          education_level?: string | null
+          full_name?: string | null
+          github_url?: string | null
+          id?: string | null
+          institution_type?: string | null
+          interest_areas?: string[] | null
+          is_verified?: boolean | null
+          linkedin_url?: string | null
+          photo?: string | null
+          portfolio_url?: string | null
+          professional_objective?: string | null
+          profile_completion?: number | null
+          status?: Database["public"]["Enums"]["profile_status"] | null
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_my_profile_id: { Args: never; Returns: string }
