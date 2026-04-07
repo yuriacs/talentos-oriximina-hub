@@ -26,6 +26,7 @@ interface Company {
   instagram_url: string | null;
   linkedin_url: string | null;
   endereco_cidade: string | null;
+  logo_url: string | null;
 }
 
 export default function EmpresasAmigas() {
@@ -37,7 +38,7 @@ export default function EmpresasAmigas() {
       setLoading(true);
       const { data } = await supabase
         .from('companies')
-        .select('id, nome_fantasia, setor_atividade, porte, site_url, instagram_url, linkedin_url, endereco_cidade')
+        .select('id, nome_fantasia, setor_atividade, porte, site_url, instagram_url, linkedin_url, endereco_cidade, logo_url')
         .eq('status', 'APROVADA')
         .order('nome_fantasia');
       setCompanies(data || []);
@@ -137,9 +138,13 @@ export default function EmpresasAmigas() {
                   <Card key={company.id} className="border-border/50 card-hover overflow-hidden">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary flex-shrink-0">
-                          <Building2 className="h-6 w-6" />
-                        </div>
+                        {company.logo_url ? (
+                          <img src={company.logo_url} alt={`Logo ${company.nome_fantasia}`} className="w-12 h-12 rounded-xl object-cover flex-shrink-0" />
+                        ) : (
+                          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary flex-shrink-0">
+                            <Building2 className="h-6 w-6" />
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0">
                           <h3 className="font-display font-semibold text-lg truncate">
                             {company.nome_fantasia}
