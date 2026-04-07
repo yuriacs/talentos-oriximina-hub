@@ -79,9 +79,7 @@ export default function Explorar() {
     async function fetchData() {
       setLoading(true);
       const { data: profilesData } = await supabase
-        .from('profiles')
-        .select('id, full_name, photo, bio, city, professional_objective, is_verified, area')
-        .eq('status', 'PUBLISHED');
+        .rpc('get_public_profiles');
 
       const ids = (profilesData || []).map(p => p.id);
       setProfiles(profilesData || []);

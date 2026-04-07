@@ -706,6 +706,33 @@ export type Database = {
     Functions: {
       get_my_profile_id: { Args: never; Returns: string }
       get_profile_user_id: { Args: { _profile_id: string }; Returns: string }
+      get_public_profiles: {
+        Args: never
+        Returns: {
+          accepts_remote: boolean
+          area: string
+          available_shifts: string[]
+          bio: string
+          city: string
+          created_at: string
+          current_course: string
+          desired_opportunity_types: string[]
+          education_level: string
+          full_name: string
+          github_url: string
+          id: string
+          institution_type: string
+          interest_areas: string[]
+          is_verified: boolean
+          linkedin_url: string
+          photo: string
+          portfolio_url: string
+          professional_objective: string
+          profile_completion: number
+          updated_at: string
+          video_url: string
+        }[]
+      }
       get_safe_profile_data: {
         Args: { _profile_id: string; _requesting_user_id?: string }
         Returns: Json

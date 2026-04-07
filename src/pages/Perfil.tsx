@@ -54,7 +54,13 @@ export default function Perfil() {
     if (!id) return;
     async function fetchProfile() {
       setLoading(true);
-      const { data: p } = await supabase.from('profiles').select('*').eq('id', id).single();
+      const { data: session } = await supabase.auth.getSession();
+      const userId = session?.session?.user?.id || null;
+      const { data: safeData } = await supabase.rpc('get_safe_profile_data', {
+        _profile_id: id,
+        _requesting_user_id: userId,
+      });
+      const p = safeData as any;
       if (!p) {setLoading(false);return;}
       setProfile(p);
 

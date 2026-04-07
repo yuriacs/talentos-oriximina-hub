@@ -14,9 +14,7 @@ export function ProfilesPreview() {
     const fetchProfiles = async () => {
       setLoading(true);
       const { data: profilesData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('status', 'PUBLISHED');
+        .rpc('get_public_profiles');
 
       if (!profilesData?.length) {
         setProfiles([]);
