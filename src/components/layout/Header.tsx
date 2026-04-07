@@ -12,7 +12,7 @@ const navLinks = [
   { href: '/cadastro-empresa', label: 'Empresas Amigas da Juventude' },
   { href: '/respaldo-juridico', label: 'Respaldo Jurídico' },
   { href: '/sobre', label: 'Sobre' },
-  { href: '/como-funciona', label: 'Como Funciona' },
+  
 ];
 
 export function Header() {
