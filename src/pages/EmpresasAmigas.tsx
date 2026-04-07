@@ -38,7 +38,7 @@ export default function EmpresasAmigas() {
       const { data } = await supabase
         .from('companies')
         .select('id, nome_fantasia, setor_atividade, porte, site_url, instagram_url, linkedin_url, endereco_cidade')
-        .eq('status', 'APROVADO')
+        .eq('status', 'APROVADA')
         .order('nome_fantasia');
       setCompanies(data || []);
       setLoading(false);
