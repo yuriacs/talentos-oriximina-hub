@@ -22,6 +22,8 @@ import AdminCompanies from "./pages/admin/AdminCompanies";
 import CadastroEmpresa from "./pages/CadastroEmpresa";
 import EmpresasAmigas from "./pages/EmpresasAmigas";
 import RespaldoJuridico from "./pages/RespaldoJuridico";
+import PoliticaPrivacidade from "./pages/PoliticaPrivacidade";
+import TermosDeUso from "./pages/TermosDeUso";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +46,8 @@ const App = () => (
             <Route path="/empresas-amigas" element={<EmpresasAmigas />} />
             <Route path="/cadastro-empresa" element={<CadastroEmpresa />} />
             <Route path="/respaldo-juridico" element={<RespaldoJuridico />} />
+            <Route path="/privacidade" element={<PoliticaPrivacidade />} />
+            <Route path="/termos" element={<TermosDeUso />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="perfis" element={<AdminProfiles />} />
