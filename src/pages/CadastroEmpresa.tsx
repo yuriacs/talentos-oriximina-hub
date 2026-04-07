@@ -112,6 +112,7 @@ export default function CadastroEmpresa() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -146,7 +147,9 @@ export default function CadastroEmpresa() {
   const onSubmit = async (data: FormData) => {
     setSubmitting(true);
     try {
+      if (!user) throw new Error('Você precisa estar logado para cadastrar uma empresa.');
       const { error } = await supabase.from('companies' as any).insert({
+        user_id: user.id,
         razao_social: data.razao_social,
         nome_fantasia: data.nome_fantasia,
         cnpj: data.cnpj.replace(/\D/g, ''),
