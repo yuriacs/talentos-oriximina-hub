@@ -227,7 +227,7 @@ export default function EmpresasAmigas() {
               Cadastre-se no programa Empresa Amiga da Juventude e faça parte dessa transformação.
             </p>
             <Link to="/cadastro-empresa">
-              <Button size="lg" className="bg-white text-primary hover:bg-white/90 gap-2 font-semibold">
+              <Button size="lg" className="bg-white text-foreground hover:bg-white/90 gap-2 font-semibold">
                 Quero Participar
                 <ArrowRight className="h-5 w-5" />
               </Button>
