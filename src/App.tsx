@@ -9,7 +9,7 @@ import Explorar from "./pages/Explorar";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Sobre from "./pages/Sobre";
-import ComoFunciona from "./pages/ComoFunciona";
+
 import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
 import EditarPerfil from "./pages/EditarPerfil";
@@ -37,7 +37,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/sobre" element={<Sobre />} />
-            <Route path="/como-funciona" element={<ComoFunciona />} />
+            
             <Route path="/perfil/:id" element={<Perfil />} />
             <Route path="/meu-perfil" element={<EditarPerfil />} />
             <Route path="/cadastro-empresa" element={<CadastroEmpresa />} />
