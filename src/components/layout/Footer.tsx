@@ -4,9 +4,8 @@ import { Sparkles, Heart, MapPin } from 'lucide-react';
 const footerLinks = {
   plataforma: [
     { href: '/explorar', label: 'Explorar Perfis' },
-    { href: '/como-funciona', label: 'Como Funciona' },
+    { href: '/empresas-amigas', label: 'Empresas Amigas' },
     { href: '/sobre', label: 'Sobre o Projeto' },
-    { href: '/faq', label: 'Perguntas Frequentes' },
   ],
   legal: [
     { href: '/privacidade', label: 'Política de Privacidade' },
