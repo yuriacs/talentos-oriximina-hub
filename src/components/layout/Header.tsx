@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 const navLinks = [
   { href: '/', label: 'Início' },
   { href: '/explorar', label: 'Explorar Perfis' },
-  { href: '/cadastro-empresa', label: 'Empresas Amigas da Juventude' },
+  { href: '/empresas-amigas', label: 'Empresas Amigas da Juventude' },
   { href: '/respaldo-juridico', label: 'Respaldo Jurídico' },
   { href: '/sobre', label: 'Sobre' },
   
