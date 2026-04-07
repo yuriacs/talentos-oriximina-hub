@@ -217,17 +217,17 @@ export default function EmpresasAmigas() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 gradient-hero-bg">
+      <section className="py-16 md:py-20 bg-primary">
         <div className="container px-4 md:px-6">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-6">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-6">
               Sua empresa quer apoiar a juventude?
             </h2>
-            <p className="text-white/80 text-lg mb-8">
+            <p className="text-primary-foreground/80 text-lg mb-8">
               Cadastre-se no programa Empresa Amiga da Juventude e faça parte dessa transformação.
             </p>
             <Link to="/cadastro-empresa">
-              <Button size="lg" className="bg-white text-primary hover:bg-white/90 gap-2">
+              <Button size="lg" className="bg-white text-primary hover:bg-white/90 gap-2 font-semibold">
                 Quero Participar
                 <ArrowRight className="h-5 w-5" />
               </Button>
