@@ -130,6 +130,7 @@ export type Database = {
           id: string
           instagram_url: string | null
           linkedin_url: string | null
+          logo_url: string | null
           modalidades_vaga: string[] | null
           nome_fantasia: string
           porte: string | null
@@ -161,6 +162,7 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           linkedin_url?: string | null
+          logo_url?: string | null
           modalidades_vaga?: string[] | null
           nome_fantasia: string
           porte?: string | null
@@ -192,6 +194,7 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           linkedin_url?: string | null
+          logo_url?: string | null
           modalidades_vaga?: string[] | null
           nome_fantasia?: string
           porte?: string | null
