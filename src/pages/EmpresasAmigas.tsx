@@ -36,11 +36,7 @@ export default function EmpresasAmigas() {
   useEffect(() => {
     async function fetchCompanies() {
       setLoading(true);
-      const { data } = await supabase
-        .from('companies')
-        .select('id, nome_fantasia, setor_atividade, porte, site_url, instagram_url, linkedin_url, endereco_cidade, logo_url')
-        .eq('status', 'APROVADA')
-        .order('nome_fantasia');
+      const { data } = await supabase.rpc('get_public_companies');
       setCompanies(data || []);
       setLoading(false);
     }

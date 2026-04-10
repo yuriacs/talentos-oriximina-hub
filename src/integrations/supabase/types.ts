@@ -706,6 +706,20 @@ export type Database = {
     Functions: {
       get_my_profile_id: { Args: never; Returns: string }
       get_profile_user_id: { Args: { _profile_id: string }; Returns: string }
+      get_public_companies: {
+        Args: never
+        Returns: {
+          endereco_cidade: string
+          id: string
+          instagram_url: string
+          linkedin_url: string
+          logo_url: string
+          nome_fantasia: string
+          porte: string
+          setor_atividade: string
+          site_url: string
+        }[]
+      }
       get_public_profiles: {
         Args: never
         Returns: {
