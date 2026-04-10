@@ -704,6 +704,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      demote_from_admin: {
+        Args: { _target_user_id: string }
+        Returns: undefined
+      }
       get_my_profile_id: { Args: never; Returns: string }
       get_profile_user_id: { Args: { _profile_id: string }; Returns: string }
       get_public_companies: {
@@ -759,6 +763,10 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: never; Returns: boolean }
+      promote_to_admin: {
+        Args: { _target_user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "user"
