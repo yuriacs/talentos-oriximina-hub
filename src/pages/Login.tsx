@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Sparkles, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -75,6 +76,13 @@ export default function Login() {
                   {isLoading ? 'Entrando...' : <><span>Entrar</span><ArrowRight className="h-4 w-4" /></>}
                 </Button>
               </form>
+
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+                <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">ou</span></div>
+              </div>
+
+              <GoogleSignInButton />
 
               <div className="mt-6 text-center text-sm">
                 <span className="text-muted-foreground">Ainda não tem uma conta? </span>

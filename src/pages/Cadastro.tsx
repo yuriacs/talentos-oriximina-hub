@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Sparkles, Mail, Lock, User, ArrowRight, Eye, EyeOff, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
 
 const benefits = [
   'Portfólio profissional gratuito',
@@ -140,6 +141,13 @@ export default function Cadastro() {
                     {isLoading ? 'Criando conta...' : <><span>Criar Minha Conta</span><ArrowRight className="h-4 w-4" /></>}
                   </Button>
                 </form>
+                <div className="relative my-6">
+                  <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+                  <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">ou</span></div>
+                </div>
+
+                <GoogleSignInButton />
+
                 <div className="mt-6 text-center text-sm">
                   <span className="text-muted-foreground">Já tem uma conta? </span>
                   <Link to="/login" className="text-primary font-medium hover:underline">Fazer login</Link>
