@@ -14,8 +14,8 @@ export function HeroSection() {
   const [isPulsing, setIsPulsing] = useState(true);
 
   useEffect(() => {
-    supabase.from('companies').select('id', { count: 'exact', head: true }).then(({ count }) => {
-      setCompanyCount(count ?? 0);
+    supabase.rpc('get_public_companies').then(({ data }) => {
+      setCompanyCount(data?.length ?? 0);
     });
     const timer = setTimeout(() => setIsPulsing(false), 30000);
     return () => clearTimeout(timer);
