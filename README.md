@@ -83,6 +83,3 @@ src/
 └── data/           # Dados mockados para testes e desenvolvimento
 ```
 
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
