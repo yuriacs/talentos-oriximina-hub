@@ -15,14 +15,62 @@ export default function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isRecovery, setIsRecovery] = useState(false);
+  const [isCheckingLink, setIsCheckingLink] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') {
+    const checkRecoveryState = async () => {
+      const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      const searchParams = new URLSearchParams(window.location.search);
+      const hashType = hashParams.get('type');
+      const accessToken = hashParams.get('access_token');
+      const refreshToken = hashParams.get('refresh_token');
+      const recoveryType = searchParams.get('type');
+      const tokenHash = searchParams.get('token_hash');
+
+      if (hashType === 'recovery' && accessToken && refreshToken) {
         setIsRecovery(true);
+        setIsCheckingLink(false);
+        return;
+      }
+
+      if (recoveryType === 'recovery' && tokenHash) {
+        const { error } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: 'recovery',
+        });
+
+        if (error) {
+          toast.error('Link de recuperação inválido ou expirado', {
+            description: error.message,
+          });
+        } else {
+          setIsRecovery(true);
+        }
+
+        setIsCheckingLink(false);
+        return;
+      }
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      setIsRecovery(!!session);
+      setIsCheckingLink(false);
+    };
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
+        setIsRecovery(true);
+        setIsCheckingLink(false);
       }
     });
+
+    void checkRecoveryState();
+
     return () => subscription.unsubscribe();
   }, []);
 
@@ -67,13 +115,17 @@ export default function ResetPassword() {
 
           <Card className="border-border/50">
             <CardContent className="pt-6">
-              {!isRecovery ? (
+              {isCheckingLink ? (
+                <div className="text-center space-y-4">
+                  <p className="text-sm text-muted-foreground">Validando seu link de recuperação...</p>
+                </div>
+              ) : !isRecovery ? (
                 <div className="text-center space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    Aguardando verificação do link de recuperação...
+                    Este link de recuperação é inválido ou expirou.
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Se você chegou aqui por engano, <Link to="/recuperar-senha" className="text-primary hover:underline">solicite um novo link</Link>.
+                    Solicite <Link to="/recuperar-senha" className="text-primary hover:underline">um novo link</Link> para continuar.
                   </p>
                 </div>
               ) : (
