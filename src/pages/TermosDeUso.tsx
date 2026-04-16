@@ -23,7 +23,7 @@ export default function TermosDeUso() {
             <CardContent className="p-6 md:p-10 prose prose-sm md:prose-base max-w-none dark:prose-invert">
               <h2>1. Aceitação dos Termos</h2>
               <p>
-                Ao acessar e utilizar a plataforma <strong>Observatório da Juventude de Oriximiná</strong>
+                Ao acessar e utilizar a plataforma <strong>Observatório da Juventude</strong>
                 ("Plataforma"), você concorda integralmente com estes Termos de Uso. Caso não concorde
                 com alguma disposição, solicitamos que não utilize a Plataforma.
               </p>

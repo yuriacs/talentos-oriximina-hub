@@ -184,7 +184,7 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-2xl font-bold">Painel Administrativo</h1>
-        <p className="text-muted-foreground">Visão geral do sistema BTJO — {stats.totalProfiles} perfis cadastrados</p>
+        <p className="text-muted-foreground">Visão geral do Observatório da Juventude — {stats.totalProfiles} perfis cadastrados</p>
       </div>
 
       {/* Summary cards */}

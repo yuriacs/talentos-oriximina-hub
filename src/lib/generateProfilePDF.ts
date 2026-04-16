@@ -309,7 +309,7 @@ export async function generateProfilePDF(data: ProfilePDFData) {
     doc.setPage(i);
     doc.setFontSize(7);
     doc.setTextColor(...COLORS.light);
-    doc.text(`Banco de Talentos — Oriximiná`, ML, PAGE_H - 10);
+    doc.text(`Observatório da Juventude`, ML, PAGE_H - 10);
     doc.text(`${i}/${pages}`, PAGE_W - MR, PAGE_H - 10, { align: 'right' });
   }
 

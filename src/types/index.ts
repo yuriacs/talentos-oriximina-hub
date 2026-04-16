@@ -1,4 +1,4 @@
-// BTJO Types - Banco de Talentos Jovens de Oriximiná
+// Observatório da Juventude - Types
 
 export type UserRole = 'YOUTH' | 'ADMIN';
 export type ProfileStatus = 'DRAFT' | 'PUBLISHED' | 'BLOCKED';

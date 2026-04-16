@@ -30,12 +30,12 @@ export function Footer() {
                   Observatório
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  Da Juventude de Oriximiná
+                  Da Juventude
                 </span>
               </div>
             </Link>
             <p className="text-muted-foreground text-sm max-w-md mb-4">
-              Valorizando os talentos da juventude de Oriximiná através de uma plataforma 
+              Valorizando os talentos da juventude através de uma plataforma 
               de portfólio profissional, networking e desenvolvimento de competências.
             </p>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -82,7 +82,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground text-center md:text-left">
-              © {new Date().getFullYear()} Banco de Talentos Jovens de Oriximiná. 
+              © {new Date().getFullYear()} Observatório da Juventude. 
               Todos os direitos reservados.
             </p>
             <p className="text-sm text-muted-foreground flex items-center gap-1">

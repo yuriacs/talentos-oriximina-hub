@@ -47,7 +47,7 @@ export function Header() {
             <span className="font-display text-lg font-bold leading-none text-white drop-shadow">
               Observatório
             </span>
-            <span className="text-[15px] text-white/75 leading-none">da Juventude de Oriximiná</span>
+            <span className="text-[15px] text-white/75 leading-none">da Juventude</span>
           </div>
         </Link>
 

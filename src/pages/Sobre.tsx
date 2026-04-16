@@ -31,7 +31,7 @@ const observatorioItems = [
   {
     icon: Compass,
     title: 'O "GPS" da Gestão',
-    description: 'Coleta dados reais sobre a juventude de Oriximiná.',
+    description: 'Coleta dados reais sobre a juventude.',
   },
   {
     icon: Mic2,
@@ -46,7 +46,7 @@ const observatorioItems = [
   {
     icon: Link,
     title: 'Conexão',
-    description: 'É através dos dados do Observatório que alimentamos o nosso Banco de Talentos.',
+    description: 'É através dos dados do Observatório que alimentamos nossas oportunidades.',
   },
 ];
 
@@ -88,9 +88,9 @@ export default function Sobre() {
               O que é o <span className="gradient-text">Observatório da Juventude</span>?
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground">
-              O Observatório da Juventude de Oriximiná é o cérebro da nossa secretaria. 
+              O Observatório da Juventude é o cérebro da nossa secretaria. 
               Um centro de pesquisa e coleta de dados focado exclusivamente na realidade dos nossos jovens. 
-              Por meio dele, ouvimos quem está lá na ponta para entender: quem é o jovem de Oriximiná? 
+              Por meio dele, ouvimos quem está lá na ponta para entender: quem é o jovem? 
               O que ele estuda? Onde ele quer trabalhar? Com esses dados, deixamos de apenas "dar cursos" 
               e passamos a criar políticas públicas que realmente mudam a vida de quem mora aqui.
             </p>
@@ -121,7 +121,7 @@ export default function Sobre() {
         </div>
       </section>
 
-      {/* Vitrine Banco de Talentos */}
+      {/* Vitrine Observatório da Juventude */}
       <section className="py-16 md:py-20">
         <div className="container px-4 md:px-6">
           <div className="max-w-3xl mx-auto text-center mb-12">
@@ -129,12 +129,12 @@ export default function Sobre() {
               <Star className="h-8 w-8 text-secondary" />
             </div>
             <h2 className="font-display text-3xl md:text-4xl font-bold mb-6">
-              O que é a <span className="gradient-text">Vitrine Banco de Talentos</span>?
+              O que é a <span className="gradient-text">Vitrine do Observatório da Juventude</span>?
             </h2>
             <p className="text-lg text-muted-foreground">
-              A Vitrine do Banco de Talentos é a ferramenta que transforma o currículo do jovem em oportunidade real. 
-              Imagine que o Banco de Talentos é o "estoque" de currículos da SEMJU, e a Vitrine é onde as empresas 
-              de Oriximiná vão para buscar o profissional que precisam.
+              A Vitrine do Observatório da Juventude é a ferramenta que transforma o currículo do jovem em oportunidade real. 
+              Imagine que o Observatório é o "estoque" de currículos da SEMJU, e a Vitrine é onde as empresas 
+              vão para buscar o profissional que precisam.
             </p>
           </div>
 

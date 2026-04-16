@@ -23,7 +23,7 @@ export default function PoliticaPrivacidade() {
             <CardContent className="p-6 md:p-10 prose prose-sm md:prose-base max-w-none dark:prose-invert">
               <h2>1. Introdução</h2>
               <p>
-                O <strong>Observatório da Juventude de Oriximiná</strong> ("Plataforma"), vinculado à Secretaria
+                O <strong>Observatório da Juventude</strong> ("Plataforma"), vinculado à Secretaria
                 Municipal da Juventude (SEMJU) da Prefeitura Municipal de Oriximiná, Estado do Pará, valoriza
                 a privacidade e a proteção dos dados pessoais dos seus usuários, em conformidade com a
                 Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD) e demais normas aplicáveis.

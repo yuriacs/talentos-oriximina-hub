@@ -57,7 +57,7 @@ export default function EmpresasAmigas() {
               Empresas <span className="gradient-text">Amigas da Juventude</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-4">
-              Conheça as empresas que apoiam o Observatório da Juventude de Oriximiná
+              Conheça as empresas que apoiam o Observatório da Juventude
               e se comprometem com o desenvolvimento profissional dos jovens.
             </p>
             <p className="text-sm text-muted-foreground mb-8">
@@ -97,7 +97,7 @@ export default function EmpresasAmigas() {
                 {[
                   'Reconhecimento público pelo compromisso social',
                   'Destaque na plataforma do Observatório',
-                  'Acesso ao banco de talentos jovens',
+                  'Acesso ao Observatório da Juventude',
                   'Contribuição para o desenvolvimento local',
                 ].map((benefit) => (
                   <div key={benefit} className="flex items-center gap-3">
@@ -120,7 +120,7 @@ export default function EmpresasAmigas() {
                 Empresas Parceiras
               </h2>
               <p className="text-muted-foreground text-lg">
-                Empresas que já receberam o selo e apoiam a juventude de Oriximiná.
+                Empresas que já receberam o selo e apoiam a juventude.
               </p>
             </div>
 
