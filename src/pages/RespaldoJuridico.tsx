@@ -125,7 +125,7 @@ export default function RespaldoJuridico() {
               Respaldo <span className="gradient-text">Jurídico</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              O Observatório da Juventude de Oriximiná é fundamentado em um sólido arcabouço legal municipal, 
+              O Observatório da Juventude é fundamentado em um sólido arcabouço legal municipal, 
               garantindo que todas as ações de inserção profissional dos jovens estejam respaldadas por leis 
               e regulamentos oficiais.
             </p>
@@ -143,9 +143,9 @@ export default function RespaldoJuridico() {
                 <div>
                   <h2 className="text-xl font-bold mb-2">Compromisso com a Legalidade</h2>
                   <p className="text-muted-foreground leading-relaxed">
-                    Todas as iniciativas do Observatório — desde o Banco de Talentos até o Selo Empresa Amiga da Juventude — 
+                    Todas as iniciativas do Observatório — desde a Vitrine de Talentos até o Selo Empresa Amiga da Juventude — 
                     são amparadas por legislação municipal específica. Isso garante transparência, segurança jurídica 
-                    e continuidade das políticas públicas voltadas à juventude de Oriximiná.
+                    e continuidade das políticas públicas voltadas à juventude.
                   </p>
                 </div>
               </div>
