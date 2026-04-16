@@ -81,7 +81,7 @@ const ACOES = [
 
 const TERMO_TEXT = `TERMO DE ADESÃO E COMPROMISSO – PROGRAMA EMPRESA AMIGA DA JUVENTUDE
 
-Pelo presente instrumento, a PESSOA JURÍDICA devidamente identificada no cadastro deste portal, doravante denominada EMPRESA, declara sua adesão à plataforma de talentos de Oriximiná e manifesta seu interesse na obtenção do Selo Empresa Amiga da Juventude, sujeitando-se às seguintes cláusulas e condições:
+Pelo presente instrumento, a PESSOA JURÍDICA devidamente identificada no cadastro deste portal, doravante denominada EMPRESA, declara sua adesão ao Observatório da Juventude e manifesta seu interesse na obtenção do Selo Empresa Amiga da Juventude, sujeitando-se às seguintes cláusulas e condições:
 
 1. DO OBJETO
 1.1. O presente termo visa formalizar a participação da EMPRESA na plataforma de recrutamento gerida pela SEMJU, visando a profissionalização de adolescentes e jovens entre 14 e 29 anos no município de Oriximiná.

@@ -85,7 +85,7 @@ export default function ComoFunciona() {
               Como <span className="gradient-text">Funciona</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8">
-              Criar seu perfil profissional no BTJO é simples e gratuito. 
+              Criar seu perfil profissional no Observatório da Juventude é simples e gratuito. 
               Siga os passos abaixo para começar.
             </p>
             <Link to="/cadastro">

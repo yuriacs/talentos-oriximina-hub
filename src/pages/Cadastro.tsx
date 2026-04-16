@@ -66,7 +66,7 @@ export default function Cadastro() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-bg">
                   <Sparkles className="h-6 w-6 text-primary-foreground" />
                 </div>
-                <span className="font-display text-2xl font-bold gradient-text">BTJO</span>
+                <span className="font-display text-2xl font-bold gradient-text">Observatório</span>
               </Link>
               <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">Crie seu perfil profissional</h1>
               <p className="text-muted-foreground text-lg mb-8">Junte-se aos jovens talentos de Oriximiná e mostre suas competências para o mundo.</p>
