@@ -9,6 +9,8 @@ import Explorar from "./pages/Explorar";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Sobre from "./pages/Sobre";
+import RecuperarSenha from "./pages/RecuperarSenha";
+import ResetPassword from "./pages/ResetPassword";
 
 import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
@@ -40,6 +42,8 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/sobre" element={<Sobre />} />
+            <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             
             <Route path="/perfil/:id" element={<Perfil />} />
             <Route path="/meu-perfil" element={<EditarPerfil />} />
