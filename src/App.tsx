@@ -9,6 +9,8 @@ import Explorar from "./pages/Explorar";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Sobre from "./pages/Sobre";
+import RecuperarSenha from "./pages/RecuperarSenha";
+import ResetPassword from "./pages/ResetPassword";
 
 import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
