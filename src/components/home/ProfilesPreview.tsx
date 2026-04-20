@@ -49,8 +49,16 @@ export function ProfilesPreview() {
           projectCount: pCount,
           availability: pAvail,
           area: (p as any).area || '',
-        };
-      });
+          _score:
+            ((p as any).profile_completion || 0) +
+            pSkills.length * 2 +
+            pCount * 3 +
+            pAvail.length +
+            (p.bio ? 2 : 0) +
+            (p.photo ? 2 : 0) +
+            (p.professional_objective ? 1 : 0),
+        } as ProfileCardData & { _score: number };
+      }).sort((a: any, b: any) => b._score - a._score);
 
       setProfiles(cards);
       setLoading(false);
