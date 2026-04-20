@@ -48,6 +48,7 @@ interface DBProfile {
   professional_objective: string | null;
   is_verified: boolean;
   area: string | null;
+  profile_completion?: number | null;
 }
 
 interface DBSkill {
