@@ -69,8 +69,8 @@ export function ProfilesPreview() {
               <span className="gradient-text">Talentos</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl">
-              Participantes do Curso de Soldador da Escola de Governo de Oriximiná —
-              jovens prontos para o mercado industrial.
+              Conheça os talentos de Oriximiná — jovens qualificados e prontos
+              para contribuir com o mercado de trabalho.
             </p>
           </div>
           <Link to="/explorar">
