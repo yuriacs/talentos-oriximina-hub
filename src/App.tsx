@@ -18,6 +18,7 @@ import EditarPerfil from "./pages/EditarPerfil";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProfiles from "./pages/admin/AdminProfiles";
+import AdminUsers from "./pages/admin/AdminUsers";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminLogs from "./pages/admin/AdminLogs";
 import AdminCompanies from "./pages/admin/AdminCompanies";
@@ -55,6 +56,7 @@ const App = () => (
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="perfis" element={<AdminProfiles />} />
+              <Route path="usuarios" element={<AdminUsers />} />
               <Route path="empresas" element={<AdminCompanies />} />
               <Route path="denuncias" element={<AdminReports />} />
               <Route path="logs" element={<AdminLogs />} />
