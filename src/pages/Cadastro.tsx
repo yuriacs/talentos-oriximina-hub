@@ -18,10 +18,20 @@ const benefits = [
   'Destaque suas competências',
 ];
 
+function calculateAge(birthDate: string): number {
+  const today = new Date();
+  const birth = new Date(birthDate);
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age;
+}
+
 export default function Cadastro() {
-  const [formData, setFormData] = useState({ fullName: '', email: '', password: '', confirmPassword: '' });
+  const [formData, setFormData] = useState({ fullName: '', email: '', password: '', confirmPassword: '', birthDate: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [confirmAdult, setConfirmAdult] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { signUp } = useAuth();
   const navigate = useNavigate();
@@ -34,6 +44,25 @@ export default function Cadastro() {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       toast.error('As senhas não coincidem');
+      return;
+    }
+    if (!formData.birthDate) {
+      toast.error('Informe sua data de nascimento');
+      return;
+    }
+    const age = calculateAge(formData.birthDate);
+    if (isNaN(age) || age < 0 || age > 120) {
+      toast.error('Data de nascimento inválida');
+      return;
+    }
+    if (age < 18) {
+      toast.error('Cadastro restrito a maiores de 18 anos', {
+        description: 'É necessário ter pelo menos 18 anos para criar uma conta.',
+      });
+      return;
+    }
+    if (!confirmAdult) {
+      toast.error('Confirme que você tem 18 anos ou mais');
       return;
     }
     if (!acceptTerms) {
@@ -129,7 +158,26 @@ export default function Cadastro() {
                       <Input id="confirmPassword" name="confirmPassword" type={showPassword ? 'text' : 'password'} placeholder="Repita sua senha" value={formData.confirmPassword} onChange={handleChange} className="pl-10" required />
                     </div>
                   </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="birthDate">Data de Nascimento</Label>
+                    <Input
+                      id="birthDate"
+                      name="birthDate"
+                      type="date"
+                      value={formData.birthDate}
+                      onChange={handleChange}
+                      max={new Date().toISOString().split('T')[0]}
+                      required
+                    />
+                    <p className="text-xs text-muted-foreground">É necessário ter 18 anos ou mais para se cadastrar.</p>
+                  </div>
                   <div className="flex items-start space-x-2 pt-2">
+                    <Checkbox id="adult" checked={confirmAdult} onCheckedChange={(checked) => setConfirmAdult(checked as boolean)} />
+                    <Label htmlFor="adult" className="text-sm font-normal leading-snug cursor-pointer">
+                      Confirmo que tenho 18 anos ou mais e que as informações fornecidas são verdadeiras.
+                    </Label>
+                  </div>
+                  <div className="flex items-start space-x-2">
                     <Checkbox id="terms" checked={acceptTerms} onCheckedChange={(checked) => setAcceptTerms(checked as boolean)} />
                     <Label htmlFor="terms" className="text-sm font-normal leading-snug cursor-pointer">
                       Concordo com os{' '}
