@@ -48,6 +48,7 @@ interface DBProfile {
   professional_objective: string | null;
   is_verified: boolean;
   area: string | null;
+  profile_completion?: number | null;
 }
 
 interface DBSkill {
@@ -120,6 +121,24 @@ export default function Explorar() {
     const matchesVerified = !showVerifiedOnly || profile.is_verified;
 
     return matchesSearch && matchesArea && matchesAvailability && matchesVerified;
+  }).sort((a, b) => {
+    const scoreA =
+      (a.profile_completion || 0) +
+      allSkills.filter(s => s.profile_id === a.id).length * 2 +
+      (allProjectCounts[a.id] || 0) * 3 +
+      allAvailability.filter(av => av.profile_id === a.id).length +
+      (a.bio ? 2 : 0) +
+      (a.photo ? 2 : 0) +
+      (a.professional_objective ? 1 : 0);
+    const scoreB =
+      (b.profile_completion || 0) +
+      allSkills.filter(s => s.profile_id === b.id).length * 2 +
+      (allProjectCounts[b.id] || 0) * 3 +
+      allAvailability.filter(av => av.profile_id === b.id).length +
+      (b.bio ? 2 : 0) +
+      (b.photo ? 2 : 0) +
+      (b.professional_objective ? 1 : 0);
+    return scoreB - scoreA;
   });
 
   const clearFilters = () => {
