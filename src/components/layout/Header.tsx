@@ -10,6 +10,7 @@ const navLinks = [
   { href: '/', label: 'Início' },
   { href: '/explorar', label: 'Explorar Perfis' },
   { href: '/empresas-amigas', label: 'Empresas Amigas da Juventude' },
+  { href: '/dados-juventude', label: 'Dados da Juventude' },
   { href: '/respaldo-juridico', label: 'Respaldo Jurídico' },
   { href: '/sobre', label: 'Sobre' },
   

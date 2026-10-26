@@ -44,5 +44,6 @@ The database schema lives in `supabase/migrations/`. Key tables:
 - `user_roles` — admin/user roles
 - `skills`, `soft_skills`, `education`, `experiences`, `projects`, `certifications`, `languages`, `availability`
 - `messages`, `reports`, `admin_logs`
+- `survey_questions`, `survey_responses` — pesquisa "Conhecendo as Juventudes" (admin-only). The public page `/dados-juventude` reads only aggregates via the `get_public_survey_dashboard()` RPC; admins import the Google Forms `.xlsx` and choose public questions at `/admin/pesquisa`
 
 RLS policies protect all tables. Admin email: `admin@btjo.com` and `yurimaxqi@gmail.com` get admin role on signup.
