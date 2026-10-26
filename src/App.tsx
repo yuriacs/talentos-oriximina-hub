@@ -22,6 +22,8 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminLogs from "./pages/admin/AdminLogs";
 import AdminCompanies from "./pages/admin/AdminCompanies";
+import AdminSurvey from "./pages/admin/AdminSurvey";
+import DadosJuventude from "./pages/DadosJuventude";
 import CadastroEmpresa from "./pages/CadastroEmpresa";
 import EmpresasAmigas from "./pages/EmpresasAmigas";
 import RespaldoJuridico from "./pages/RespaldoJuridico";
@@ -53,11 +55,13 @@ const App = () => (
             <Route path="/respaldo-juridico" element={<RespaldoJuridico />} />
             <Route path="/privacidade" element={<PoliticaPrivacidade />} />
             <Route path="/termos" element={<TermosDeUso />} />
+            <Route path="/dados-juventude" element={<DadosJuventude />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="perfis" element={<AdminProfiles />} />
               <Route path="usuarios" element={<AdminUsers />} />
               <Route path="empresas" element={<AdminCompanies />} />
+              <Route path="pesquisa" element={<AdminSurvey />} />
               <Route path="denuncias" element={<AdminReports />} />
               <Route path="logs" element={<AdminLogs />} />
             </Route>

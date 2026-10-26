@@ -678,6 +678,63 @@ export type Database = {
           },
         ]
       }
+      survey_questions: {
+        Row: {
+          is_public: boolean
+          key: string
+          kind: string
+          label: string
+          options: string[] | null
+          position: number
+          question: string
+          updated_at: string
+        }
+        Insert: {
+          is_public?: boolean
+          key: string
+          kind: string
+          label: string
+          options?: string[] | null
+          position?: number
+          question: string
+          updated_at?: string
+        }
+        Update: {
+          is_public?: boolean
+          key?: string
+          kind?: string
+          label?: string
+          options?: string[] | null
+          position?: number
+          question?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      survey_responses: {
+        Row: {
+          answers: Json
+          id: string
+          imported_at: string
+          imported_by: string | null
+          submitted_at: string
+        }
+        Insert: {
+          answers?: Json
+          id?: string
+          imported_at?: string
+          imported_by?: string | null
+          submitted_at: string
+        }
+        Update: {
+          answers?: Json
+          id?: string
+          imported_at?: string
+          imported_by?: string | null
+          submitted_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -751,6 +808,7 @@ export type Database = {
           video_url: string
         }[]
       }
+      get_public_survey_dashboard: { Args: never; Returns: Json }
       get_safe_profile_data: {
         Args: { _profile_id: string; _requesting_user_id?: string }
         Returns: Json
