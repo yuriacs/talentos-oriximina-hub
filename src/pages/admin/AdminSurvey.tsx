@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Download, Eye, EyeOff, ExternalLink, FileSpreadsheet, Search, Upload, Users, CalendarClock, Globe } from 'lucide-react';
+import { AlertTriangle, Download, Eye, EyeOff, ExternalLink, FileSpreadsheet, Search, Upload, Users, CalendarClock, Globe } from 'lucide-react';
 import { toast } from 'sonner';
 import { QuestionChartGrid } from '@/components/survey/SurveyCharts';
 import {
@@ -36,13 +36,22 @@ export default function AdminSurvey() {
   const [questions, setQuestions] = useState<SurveyQuestion[]>([]);
   const [responses, setResponses] = useState<SurveyResponse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const fetchData = async () => {
     const [q, r] = await Promise.all([
       supabase.from('survey_questions').select('*').order('position'),
       supabase.from('survey_responses').select('id, submitted_at, answers').order('submitted_at', { ascending: false }),
     ]);
-    if (q.error || r.error) toast.error('Erro ao carregar a pesquisa');
+    const error = q.error || r.error;
+    if (error) {
+      // PGRST205: tabela inexistente — a migração da pesquisa não foi aplicada
+      setLoadError(error.code === 'PGRST205' ? 'missing_tables' : error.message);
+    } else if (!q.data?.length) {
+      setLoadError('no_questions');
+    } else {
+      setLoadError(null);
+    }
     setQuestions((q.data as SurveyQuestion[]) || []);
     setResponses((r.data as unknown as SurveyResponse[]) || []);
     setLoading(false);
@@ -52,6 +61,42 @@ export default function AdminSurvey() {
 
   if (loading) {
     return <div className="flex items-center justify-center h-64"><p className="text-muted-foreground">Carregando...</p></div>;
+  }
+
+  if (loadError) {
+    return (
+      <div className="space-y-6">
+        <h1 className="font-display text-2xl font-bold">Pesquisa Conhecendo as Juventudes</h1>
+        <Card className="border-destructive/50">
+          <CardHeader className="flex flex-row items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
+            <div className="space-y-1.5">
+              <CardTitle className="text-lg">
+                {loadError === 'missing_tables'
+                  ? 'O banco de dados ainda não está preparado para a pesquisa'
+                  : loadError === 'no_questions'
+                    ? 'Nenhuma pergunta da pesquisa cadastrada'
+                    : 'Erro ao carregar a pesquisa'}
+              </CardTitle>
+              <CardDescription>
+                {loadError === 'missing_tables' || loadError === 'no_questions' ? (
+                  <>
+                    Execute o arquivo <code className="text-foreground">supabase/migrations/20261026120000_survey_dashboard.sql</code>{' '}
+                    no SQL Editor do Supabase (ou peça ao Lovable para aplicar a migração) e recarregue esta página.
+                    A importação fica bloqueada até lá.
+                  </>
+                ) : (
+                  loadError
+                )}
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Button variant="outline" onClick={() => { setLoading(true); fetchData(); }}>Tentar novamente</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (

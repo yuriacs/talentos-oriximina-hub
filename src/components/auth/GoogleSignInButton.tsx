@@ -1,31 +1,20 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { lovable } from '@/integrations/lovable/index';
+import { supabase } from '@/integrations/supabase/client';
 
 export function GoogleSignInButton() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
-    try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
-      });
-
-      if (result.error) {
-        toast.error('Erro ao entrar com Google', {
-          description: result.error instanceof Error ? result.error.message : 'Tente novamente',
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      if (result.redirected) {
-        return;
-      }
-    } catch {
-      toast.error('Erro ao entrar com Google');
+    // Redireciona para o Google; o Supabase devolve a sessão ao voltar
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) {
+      toast.error('Erro ao entrar com Google', { description: error.message });
       setIsLoading(false);
     }
   };

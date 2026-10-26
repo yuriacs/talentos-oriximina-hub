@@ -170,3 +170,6 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.get_public_survey_dashboard() TO anon, authenticated;
+
+-- Faz a API do Supabase enxergar as novas tabelas imediatamente
+NOTIFY pgrst, 'reload schema';
