@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, FileCheck, AlertTriangle, BarChart3, GraduationCap, Briefcase, Accessibility, Wifi, Monitor } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Download } from 'lucide-react';
+import { toast } from 'sonner';
+import { downloadJson, exportAllData } from '@/lib/exportAllData';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -131,6 +135,23 @@ export default function AdminDashboard() {
   });
   const [profiles, setProfiles] = useState<ProfileRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState<string | null>(null);
+
+  const handleExport = async () => {
+    setExporting('iniciando');
+    try {
+      const data = await exportAllData(setExporting);
+      downloadJson(data, `backup-observatorio-${data.exported_at.slice(0, 10)}.json`);
+      const rows = Object.values(data.tables).reduce((n, t) => n + t.length, 0);
+      toast.success(`Exportados ${data.users.length} usuários e ${rows} registros`);
+      if (data.users_may_be_truncated) {
+        toast.warning('A lista de usuários chegou ao limite de 200 e pode estar incompleta');
+      }
+    } catch (e) {
+      toast.error('Erro ao exportar', { description: e instanceof Error ? e.message : String(e) });
+    }
+    setExporting(null);
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -182,9 +203,15 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-bold">Painel Administrativo</h1>
-        <p className="text-muted-foreground">Visão geral do Observatório da Juventude — {stats.totalProfiles} perfis cadastrados</p>
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+        <div>
+          <h1 className="font-display text-2xl font-bold">Painel Administrativo</h1>
+          <p className="text-muted-foreground">Visão geral do Observatório da Juventude — {stats.totalProfiles} perfis cadastrados</p>
+        </div>
+        <Button variant="outline" size="sm" className="gap-2" onClick={handleExport} disabled={!!exporting}>
+          <Download className="h-4 w-4" />
+          {exporting ? `Exportando ${exporting}...` : 'Exportar todos os dados'}
+        </Button>
       </div>
 
       {/* Summary cards */}
