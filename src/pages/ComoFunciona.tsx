@@ -78,7 +78,7 @@ export default function ComoFunciona() {
     <Layout>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 gradient-hero-bg opacity-5" />
+        <div className="pointer-events-none absolute inset-0 gradient-hero-bg opacity-5" />
         <div className="container px-4 md:px-6 py-16 md:py-24">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-6">

@@ -78,7 +78,7 @@ export default function Sobre() {
     <Layout>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 gradient-hero-bg opacity-5" />
+        <div className="pointer-events-none absolute inset-0 gradient-hero-bg opacity-5" />
         <div className="container px-4 md:px-6 py-16 md:py-24">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl gradient-bg mb-6">

@@ -31,11 +31,11 @@ export function HeroSection() {
     <section className="relative overflow-hidden min-h-[600px]">
       {/* Background */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/hero-space.png')" }}
       />
-      <div className="absolute inset-0 bg-black/45" />
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-black/60" />
+      <div className="pointer-events-none absolute inset-0 bg-black/45" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-black/60" />
 
       <div className="container relative px-4 md:px-6 py-16 md:py-24 lg:py-32">
         <div className="max-w-4xl mx-auto text-center space-y-8">
