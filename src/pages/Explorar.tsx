@@ -367,11 +367,13 @@ export default function Explorar() {
                                 </div>
                               </div>
                               <div className="flex gap-2 pt-2">
-                                <Link to={`/perfil/${profile.id}`} className="flex-1">
-                                  <Button variant="outline" className="w-full group-hover:border-primary/50">Ver Perfil</Button>
-                                </Link>
-                                <Button size="icon" variant="ghost" className="text-muted-foreground hover:text-primary">
-                                  <MessageCircle className="h-4 w-4" />
+                                <Button asChild variant="outline" className="flex-1 group-hover:border-primary/50">
+                                  <Link to={`/perfil/${profile.id}`}>Ver Perfil</Link>
+                                </Button>
+                                <Button asChild size="icon" variant="ghost" className="text-muted-foreground hover:text-primary">
+                                  <Link to={`/perfil/${profile.id}#contato`} aria-label={`Entrar em contato com ${profile.full_name}`}>
+                                    <MessageCircle className="h-4 w-4" />
+                                  </Link>
                                 </Button>
                               </div>
                             </div>

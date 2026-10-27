@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Save, Monitor } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
+import { useStepSave } from './stepSave';
 
 interface Props {
   profile: Tables<'profiles'>;
@@ -25,11 +26,16 @@ export default function ResourcesForm({ profile, onSave }: Props) {
   });
   const [saving, setSaving] = useState(false);
 
+  const save = async () => {
+    const { error } = await onSave(form as any);
+    if (error) { toast.error('Erro ao salvar'); return false; }
+    return true;
+  };
+  const { inWizard } = useStepSave('resources', form, save);
+
   const handleSave = async () => {
     setSaving(true);
-    const { error } = await onSave(form as any);
-    if (error) toast.error('Erro ao salvar');
-    else toast.success('Recursos salvos!');
+    if (await save()) toast.success('Recursos salvos!');
     setSaving(false);
   };
 
@@ -68,9 +74,11 @@ export default function ResourcesForm({ profile, onSave }: Props) {
           </div>
         </div>
 
-        <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
-          <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar'}
-        </Button>
+        {!inWizard && (
+          <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
+            <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar'}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

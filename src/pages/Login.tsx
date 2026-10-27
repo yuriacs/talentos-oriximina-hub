@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,7 @@ import { Sparkles, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
+import { getRedirectPath, withRedirect } from '@/lib/redirect';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -17,6 +18,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { signIn } = useAuth();
   const navigate = useNavigate();
+  const redirect = getRedirectPath(useLocation().search);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +30,7 @@ export default function Login() {
       toast.error('Erro ao fazer login', { description: error.message });
     } else {
       toast.success('Login realizado com sucesso!');
-      navigate('/');
+      navigate(redirect ?? '/');
     }
     setIsLoading(false);
   };
@@ -82,11 +84,11 @@ export default function Login() {
                 <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">ou</span></div>
               </div>
 
-              <GoogleSignInButton />
+              <GoogleSignInButton redirectPath={redirect} />
 
               <div className="mt-6 text-center text-sm">
                 <span className="text-muted-foreground">Ainda não tem uma conta? </span>
-                <Link to="/cadastro" className="text-primary font-medium hover:underline">Criar perfil</Link>
+                <Link to={withRedirect('/cadastro', redirect)} className="text-primary font-medium hover:underline">Criar conta</Link>
               </div>
             </CardContent>
           </Card>

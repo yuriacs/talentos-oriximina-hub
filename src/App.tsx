@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
+import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import Index from "./pages/Index";
 import Explorar from "./pages/Explorar";
 import Login from "./pages/Login";
@@ -29,6 +30,7 @@ import EmpresasAmigas from "./pages/EmpresasAmigas";
 import RespaldoJuridico from "./pages/RespaldoJuridico";
 import PoliticaPrivacidade from "./pages/PoliticaPrivacidade";
 import TermosDeUso from "./pages/TermosDeUso";
+import ComoFunciona from "./pages/ComoFunciona";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/explorar" element={<Explorar />} />
@@ -55,6 +58,7 @@ const App = () => (
             <Route path="/respaldo-juridico" element={<RespaldoJuridico />} />
             <Route path="/privacidade" element={<PoliticaPrivacidade />} />
             <Route path="/termos" element={<TermosDeUso />} />
+            <Route path="/como-funciona" element={<ComoFunciona />} />
             <Route path="/dados-juventude" element={<DadosJuventude />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />

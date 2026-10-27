@@ -7,6 +7,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useStepSave } from './stepSave';
+
+const hasText = (draft: object) => Object.values(draft).some(v => typeof v === 'string' && v.trim() !== '');
 import type { Tables, TablesInsert } from '@/integrations/supabase/types';
 
 interface Props {
@@ -23,14 +26,16 @@ export default function EducationForm({ education, onAdd, onDelete }: Props) {
   const handleAdd = async () => {
     if (!form.level.trim() || !form.course.trim() || !form.institution.trim()) {
       toast.error('Preencha todos os campos obrigatórios');
-      return;
+      return false;
     }
     setAdding(true);
     const { error } = await onAdd(form);
-    if (error) toast.error('Erro ao adicionar');
-    else { toast.success('Formação adicionada!'); setForm({ level: '', course: '', institution: '', year: new Date().getFullYear(), current: false }); setShowForm(false); }
     setAdding(false);
+    if (error) { toast.error('Erro ao adicionar'); return false; }
+    toast.success('Formação adicionada!'); setForm({ level: '', course: '', institution: '', year: new Date().getFullYear(), current: false }); setShowForm(false);
+    return true;
   };
+  useStepSave('education-draft', showForm && hasText(form) ? form : null, handleAdd, true);
 
   return (
     <Card>

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
-export function GoogleSignInButton() {
+export function GoogleSignInButton({ redirectPath }: { redirectPath?: string | null }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
@@ -11,7 +11,7 @@ export function GoogleSignInButton() {
     // Redireciona para o Google; o Supabase devolve a sessão ao voltar
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: window.location.origin + (redirectPath ?? '') },
     });
     if (error) {
       toast.error('Erro ao entrar com Google', { description: error.message });

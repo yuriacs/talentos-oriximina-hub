@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SkillChip } from '@/components/ui/skill-chip';
 import { availabilityLabels } from '@/data/mockData';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { withRedirect } from '@/lib/redirect';
 import {
   MapPin,
   Briefcase,
@@ -41,6 +43,9 @@ function extractFromBio(bio: string) {
 
 export default function Perfil() {
   const { id } = useParams();
+  const { user } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
   const [skills, setSkills] = useState<any[]>([]);
   const [projects, setProjects] = useState<any[]>([]);
@@ -84,6 +89,13 @@ export default function Perfil() {
     fetchProfile();
   }, [id]);
 
+  // Vindo de /perfil/:id#contato (botão de mensagem do Explorar): rola até o contato
+  useEffect(() => {
+    if (!loading && location.hash) {
+      document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: 'center' });
+    }
+  }, [loading, location.hash]);
+
   if (loading) {
     return (
       <Layout>
@@ -117,10 +129,22 @@ export default function Perfil() {
 
   const { email, phone, age } = extractFromBio(profile.bio || '');
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
+  const handleShare = async () => {
+    if (navigator.share) {
+      await navigator.share({ title: profile.full_name, url: window.location.href }).catch(() => {});
+      return;
+    }
+    await navigator.clipboard.writeText(window.location.href);
     toast.success('Link copiado para a área de transferência!');
   };
+
+  // Contato liberado pelo jovem: WhatsApp (conforme a visibilidade escolhida) ou e-mail da bio
+  const whatsappDigits = (profile.whatsapp || phone || '').replace(/\D/g, '');
+  const contactHref = whatsappDigits
+    ? `https://wa.me/${whatsappDigits.length <= 11 ? `55${whatsappDigits}` : whatsappDigits}`
+    : email
+      ? `mailto:${email}`
+      : null;
 
   const hardSkills = skills.filter((s) => s.category === 'HARD');
   const softSkills = skills.filter((s) => s.category === 'SOFT');
@@ -130,7 +154,16 @@ export default function Perfil() {
       {/* Header with gradient */}
       <div className="min-h-[8rem] md:min-h-[10rem] lg:min-h-[11rem] gradient-hero-bg relative font-thin">
         <div className="container px-4 md:px-6 pt-24 md:pt-10 lg:pt-12">
-          <Link to="/explorar" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+          <Link
+            to="/explorar"
+            onClick={e => {
+              // Volta para a página de onde veio (início, explorar, admin...); sem histórico, vai para Explorar
+              if ((window.history.state?.idx ?? 0) > 0) {
+                e.preventDefault();
+                navigate(-1);
+              }
+            }}
+            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors">
             <ArrowLeft className="h-4 w-4" />
             Voltar
           </Link>
@@ -175,18 +208,34 @@ export default function Perfil() {
                         </div>
                       </div>
 
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="icon" onClick={handleShare}>
+                      <div id="contato" className="flex gap-2 scroll-mt-24">
+                        <Button variant="outline" size="icon" onClick={handleShare} aria-label="Compartilhar perfil">
                           <Share2 className="h-4 w-4" />
                         </Button>
-                        <Button className="gradient-bg hover:opacity-90 gap-2">
-                          <MessageCircle className="h-4 w-4" />
-                          Enviar Mensagem
-                        </Button>
+                        {contactHref ? (
+                          <Button asChild className="gradient-bg hover:opacity-90 gap-2">
+                            <a href={contactHref} target="_blank" rel="noopener noreferrer">
+                              <MessageCircle className="h-4 w-4" />
+                              {whatsappDigits ? 'Chamar no WhatsApp' : 'Enviar e-mail'}
+                            </a>
+                          </Button>
+                        ) : !user ? (
+                          <Button asChild className="gradient-bg hover:opacity-90 gap-2">
+                            <Link to={withRedirect('/login', location.pathname)}>
+                              <MessageCircle className="h-4 w-4" />
+                              Entrar para ver contato
+                            </Link>
+                          </Button>
+                        ) : null}
                       </div>
                     </div>
 
                     {/* Contact info (email, phone, age) */}
+                    {!contactHref && user &&
+                    <p className="mt-4 text-sm text-muted-foreground">
+                        Este jovem preferiu não exibir contato público no momento.
+                      </p>
+                    }
                     {(email || phone || age) &&
                     <div className="flex flex-wrap items-center gap-4 mt-4 text-sm">
                         {age &&

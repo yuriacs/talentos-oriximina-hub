@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Save, GraduationCap } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
+import { useStepSave } from './stepSave';
 
 interface Props {
   profile: Tables<'profiles'>;
@@ -40,11 +41,16 @@ export default function SocioeducationalForm({ profile, onSave }: Props) {
   });
   const [saving, setSaving] = useState(false);
 
+  const save = async () => {
+    const { error } = await onSave(form as any);
+    if (error) { toast.error('Erro ao salvar'); return false; }
+    return true;
+  };
+  const { inWizard } = useStepSave('socio', form, save);
+
   const handleSave = async () => {
     setSaving(true);
-    const { error } = await onSave(form as any);
-    if (error) toast.error('Erro ao salvar');
-    else toast.success('Dados socioeducacionais salvos!');
+    if (await save()) toast.success('Dados socioeducacionais salvos!');
     setSaving(false);
   };
 
@@ -112,9 +118,11 @@ export default function SocioeducationalForm({ profile, onSave }: Props) {
           <Label>Curso Atual <span className="text-muted-foreground text-xs">(opcional)</span></Label>
           <Input value={form.current_course} onChange={e => set('current_course', e.target.value)} placeholder="Ex: Técnico em Informática" maxLength={100} />
         </div>
-        <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
-          <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar'}
-        </Button>
+        {!inWizard && (
+          <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
+            <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar'}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
