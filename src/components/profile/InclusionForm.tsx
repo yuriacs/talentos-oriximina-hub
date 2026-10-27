@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Save, Accessibility } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
+import { useStepSave } from './stepSave';
 
 interface Props {
   profile: Tables<'profiles'>;
@@ -24,11 +25,16 @@ export default function InclusionForm({ profile, onSave }: Props) {
   });
   const [saving, setSaving] = useState(false);
 
+  const save = async () => {
+    const { error } = await onSave(form as any);
+    if (error) { toast.error('Erro ao salvar'); return false; }
+    return true;
+  };
+  const { inWizard } = useStepSave('inclusion', form, save);
+
   const handleSave = async () => {
     setSaving(true);
-    const { error } = await onSave(form as any);
-    if (error) toast.error('Erro ao salvar');
-    else toast.success('Dados de inclusão salvos!');
+    if (await save()) toast.success('Dados de inclusão salvos!');
     setSaving(false);
   };
 
@@ -75,9 +81,11 @@ export default function InclusionForm({ profile, onSave }: Props) {
           <Switch checked={form.social_programs_interest} onCheckedChange={v => setForm(f => ({ ...f, social_programs_interest: v }))} />
         </div>
 
-        <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
-          <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar'}
-        </Button>
+        {!inWizard && (
+          <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
+            <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar'}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

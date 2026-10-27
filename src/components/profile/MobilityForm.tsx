@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Save, MapPin } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
+import { useStepSave } from './stepSave';
 
 interface Props {
   profile: Tables<'profiles'>;
@@ -41,11 +42,16 @@ export default function MobilityForm({ profile, onSave }: Props) {
     });
   };
 
+  const save = async () => {
+    const { error } = await onSave(form as any);
+    if (error) { toast.error('Erro ao salvar'); return false; }
+    return true;
+  };
+  const { inWizard } = useStepSave('mobility', form, save);
+
   const handleSave = async () => {
     setSaving(true);
-    const { error } = await onSave(form as any);
-    if (error) toast.error('Erro ao salvar');
-    else toast.success('Disponibilidade e mobilidade salvas!');
+    if (await save()) toast.success('Disponibilidade e mobilidade salvas!');
     setSaving(false);
   };
 
@@ -100,9 +106,11 @@ export default function MobilityForm({ profile, onSave }: Props) {
           ))}
         </div>
 
-        <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
-          <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar'}
-        </Button>
+        {!inWizard && (
+          <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
+            <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar'}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

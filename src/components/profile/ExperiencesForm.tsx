@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useStepSave } from './stepSave';
+
+const hasText = (draft: object) => Object.values(draft).some(v => typeof v === 'string' && v.trim() !== '');
 import type { Tables, TablesInsert } from '@/integrations/supabase/types';
 
 interface Props {
@@ -23,7 +26,7 @@ export default function ExperiencesForm({ experiences, onAdd, onDelete }: Props)
   const handleAdd = async () => {
     if (!form.type.trim() || !form.place.trim() || !form.start_date) {
       toast.error('Preencha tipo, local e data de início');
-      return;
+      return false;
     }
     setAdding(true);
     const { error } = await onAdd({
@@ -34,10 +37,12 @@ export default function ExperiencesForm({ experiences, onAdd, onDelete }: Props)
       current: form.current,
       description: form.description,
     });
-    if (error) toast.error('Erro ao adicionar');
-    else { toast.success('Experiência adicionada!'); setForm({ type: '', place: '', start_date: '', end_date: '', current: false, description: '' }); setShowForm(false); }
     setAdding(false);
+    if (error) { toast.error('Erro ao adicionar'); return false; }
+    toast.success('Experiência adicionada!'); setForm({ type: '', place: '', start_date: '', end_date: '', current: false, description: '' }); setShowForm(false);
+    return true;
   };
+  useStepSave('experiences-draft', showForm && hasText(form) ? form : null, handleAdd, true);
 
   return (
     <Card>

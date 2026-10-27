@@ -7,7 +7,12 @@ interface AuthContext {
   session: Session | null;
   isAdmin: boolean;
   isLoading: boolean;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
+  signUp: (
+    email: string,
+    password: string,
+    fullName: string,
+    redirectPath?: string | null,
+  ) => Promise<{ error: any; needsConfirmation: boolean }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
@@ -57,16 +62,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string) => {
-    const { error } = await supabase.auth.signUp({
+  const signUp = async (email: string, password: string, fullName: string, redirectPath?: string | null) => {
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: window.location.origin + (redirectPath ?? '/meu-perfil'),
         data: { full_name: fullName },
       },
     });
-    return { error };
+    // Sem sessão = o Supabase exige confirmar o e-mail antes do primeiro login
+    return { error, needsConfirmation: !error && !data.session };
   };
 
   const signIn = async (email: string, password: string) => {

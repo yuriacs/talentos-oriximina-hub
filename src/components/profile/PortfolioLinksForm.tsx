@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Save, Link2, Linkedin, Instagram, Globe, Video } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
+import { useStepSave } from './stepSave';
+import { isValidUrl, normalizeUrl } from '@/lib/br';
 
 interface Props {
   profile: Tables<'profiles'>;
@@ -22,11 +24,19 @@ export default function PortfolioLinksForm({ profile, onSave }: Props) {
   });
   const [saving, setSaving] = useState(false);
 
+  const save = async () => {
+    const invalid = Object.values(form).find(v => !isValidUrl(v));
+    if (invalid) { toast.error(`Link inválido: ${invalid}`); return false; }
+    // Aceita "linkedin.com/in/fulano" sem https://
+    const { error } = await onSave(Object.fromEntries(Object.entries(form).map(([k, v]) => [k, normalizeUrl(v) || null])) as any);
+    if (error) { toast.error('Erro ao salvar'); return false; }
+    return true;
+  };
+  const { inWizard } = useStepSave('links', form, save);
+
   const handleSave = async () => {
     setSaving(true);
-    const { error } = await onSave(form as any);
-    if (error) toast.error('Erro ao salvar');
-    else toast.success('Links salvos!');
+    if (await save()) toast.success('Links salvos!');
     setSaving(false);
   };
 
@@ -59,9 +69,11 @@ export default function PortfolioLinksForm({ profile, onSave }: Props) {
             <Input value={form.video_url} onChange={e => set('video_url', e.target.value)} placeholder="https://youtube.com/watch?v=..." maxLength={200} />
           </div>
         </div>
-        <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
-          <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar'}
-        </Button>
+        {!inWizard && (
+          <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
+            <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar'}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Plus, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { useStepSave } from './stepSave';
 import type { Tables, TablesInsert } from '@/integrations/supabase/types';
 
 interface Props {
@@ -25,13 +26,15 @@ export default function SkillsForm({ skills, onAdd, onDelete }: Props) {
   const [adding, setAdding] = useState(false);
 
   const handleAdd = async () => {
-    if (!name.trim()) { toast.error('Informe o nome da competência'); return; }
+    if (!name.trim()) { toast.error('Informe o nome da competência'); return false; }
     setAdding(true);
     const { error } = await onAdd({ name: name.trim(), category, level });
-    if (error) toast.error('Erro ao adicionar');
-    else { toast.success('Competência adicionada!'); setName(''); }
     setAdding(false);
+    if (error) { toast.error('Erro ao adicionar'); return false; }
+    toast.success('Competência adicionada!'); setName('');
+    return true;
   };
+  useStepSave('skills-draft', name.trim(), handleAdd, true);
 
   const handleDelete = async (id: string) => {
     const { error } = await onDelete(id);

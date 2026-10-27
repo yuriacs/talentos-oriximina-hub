@@ -11,16 +11,25 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import type { Tables } from '@/integrations/supabase/types';
+import { useStepSave } from './stepSave';
+import { maskPhone } from '@/lib/br';
 
 const areaOptions = [
-  'Tecnologia',
-  'Design',
-  'Comunicação',
-  'Gestão',
-  'Saúde',
-  'Educação',
-  'Meio Ambiente',
+  'Administração e Gestão',
+  'Agropecuária',
   'Arte e Cultura',
+  'Comércio e Vendas',
+  'Comunicação',
+  'Construção Civil',
+  'Design',
+  'Educação',
+  'Esporte',
+  'Indústria e Mineração',
+  'Meio Ambiente',
+  'Saúde',
+  'Tecnologia',
+  'Turismo e Gastronomia',
+  'Outra',
 ];
 
 interface Props {
@@ -28,13 +37,13 @@ interface Props {
   onSave: (updates: Partial<Tables<'profiles'>>) => Promise<{ error: any }>;
 }
 
+// Só opções que o site realmente aplica (ver get_safe_profile_data)
 const visibilityOptions = [
-  { value: 'INTERNAL_ONLY', label: 'Apenas mensagens internas' },
-  { value: 'EMAIL_LOGGED', label: 'Mostrar e-mail para logados' },
-  { value: 'WHATSAPP_LOGGED', label: 'Mostrar WhatsApp para logados' },
-  { value: 'ALL', label: 'Mostrar para todos' },
-  { value: 'HIDDEN', label: 'Ocultar tudo' },
+  { value: 'WHATSAPP_LOGGED', label: 'Só para quem entrou no site (empresas)' },
+  { value: 'ALL', label: 'Para qualquer visitante' },
+  { value: 'HIDDEN', label: 'Não mostrar meu WhatsApp' },
 ];
+const normalizeVisibility = (v: string) => (visibilityOptions.some(o => o.value === v) ? v : 'HIDDEN');
 
 export default function BasicInfoForm({ profile, onSave }: Props) {
   const { user } = useAuth();
@@ -47,7 +56,7 @@ export default function BasicInfoForm({ profile, onSave }: Props) {
     city: profile.city || 'Oriximiná',
     professional_objective: profile.professional_objective || '',
     whatsapp: profile.whatsapp || '',
-    contact_visibility: profile.contact_visibility || 'INTERNAL_ONLY',
+    contact_visibility: normalizeVisibility(profile.contact_visibility || 'WHATSAPP_LOGGED') as typeof profile.contact_visibility,
     area: (profile as any).area || '',
   });
   const [saving, setSaving] = useState(false);
@@ -91,12 +100,17 @@ export default function BasicInfoForm({ profile, onSave }: Props) {
     setUploading(false);
   };
 
-  const handleSave = async () => {
-    if (!form.full_name.trim()) { toast.error('Nome é obrigatório'); return; }
-    setSaving(true);
+  const save = async () => {
+    if (!form.full_name.trim()) { toast.error('Nome é obrigatório'); return false; }
     const { error } = await onSave(form as any);
-    if (error) toast.error('Erro ao salvar');
-    else toast.success('Informações salvas!');
+    if (error) { toast.error('Erro ao salvar'); return false; }
+    return true;
+  };
+  const { inWizard } = useStepSave('basic', form, save);
+
+  const handleSave = async () => {
+    setSaving(true);
+    if (await save()) toast.success('Informações salvas!');
     setSaving(false);
   };
 
@@ -166,13 +180,13 @@ export default function BasicInfoForm({ profile, onSave }: Props) {
           </div>
         </div>
         <div className="space-y-2">
-          <Label>Bio Profissional</Label>
-          <Textarea value={form.bio} onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} placeholder="Fale um pouco sobre você..." rows={3} maxLength={500} />
-          <p className="text-xs text-muted-foreground">{form.bio.length}/500</p>
+          <Label>Sobre você <span className="text-xs font-normal text-muted-foreground">(necessário para publicar)</span></Label>
+          <Textarea value={form.bio} onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} placeholder="Ex.: Tenho 20 anos, moro no bairro Santa Luzia e estudo Administração. Gosto de atender pessoas e organizar tarefas." rows={4} maxLength={500} />
+          <p className="text-xs text-muted-foreground">Conte quem você é, o que estuda e o que sabe fazer. {form.bio.length}/500</p>
         </div>
         <div className="space-y-2">
-          <Label>Objetivo Profissional</Label>
-          <Textarea value={form.professional_objective} onChange={e => setForm(f => ({ ...f, professional_objective: e.target.value }))} placeholder="O que você busca alcançar?" rows={2} maxLength={300} />
+          <Label>Objetivo profissional <span className="text-xs font-normal text-muted-foreground">(necessário para publicar)</span></Label>
+          <Textarea value={form.professional_objective} onChange={e => setForm(f => ({ ...f, professional_objective: e.target.value }))} placeholder="Ex.: Conseguir meu primeiro estágio na área administrativa." rows={2} maxLength={300} />
         </div>
         <div className="space-y-2">
           <Label>Área de Atuação</Label>
@@ -186,10 +200,10 @@ export default function BasicInfoForm({ profile, onSave }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>WhatsApp (opcional)</Label>
-            <Input value={form.whatsapp} onChange={e => setForm(f => ({ ...f, whatsapp: e.target.value }))} placeholder="(93) 99999-9999" maxLength={20} />
+            <Input type="tel" inputMode="tel" value={form.whatsapp} onChange={e => setForm(f => ({ ...f, whatsapp: maskPhone(e.target.value) }))} placeholder="(93) 99999-9999" maxLength={15} />
           </div>
           <div className="space-y-2">
-            <Label>Visibilidade do Contato</Label>
+            <Label>Quem pode ver seu WhatsApp?</Label>
             <Select value={form.contact_visibility} onValueChange={v => setForm(f => ({ ...f, contact_visibility: v as typeof f.contact_visibility }))}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -198,9 +212,11 @@ export default function BasicInfoForm({ profile, onSave }: Props) {
             </Select>
           </div>
         </div>
-        <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
-          <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar Informações'}
-        </Button>
+        {!inWizard && (
+          <Button onClick={handleSave} disabled={saving} className="gap-2 gradient-bg hover:opacity-90">
+            <Save className="h-4 w-4" />{saving ? 'Salvando...' : 'Salvar Informações'}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
