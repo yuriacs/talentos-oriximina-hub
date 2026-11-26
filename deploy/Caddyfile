@@ -1,0 +1,14 @@
+# HTTPS automático para o Observatório (usado pelo serviço "caddy" do docker-compose).
+# O certificado é emitido e renovado sozinho pelo Let's Encrypt; para isso o
+# domínio (SITE_DOMAIN no .env) precisa apontar para o IP desta VPS e as
+# portas 80 e 443 precisam estar liberadas.
+{$SITE_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	reverse_proxy web:80
+}

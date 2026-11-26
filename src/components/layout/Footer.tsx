@@ -1,0 +1,100 @@
+import { Link } from 'react-router-dom';
+import { Heart, MapPin, ShieldCheck } from 'lucide-react';
+import { DPO_EMAIL } from '@/lib/privacy';
+
+const footerLinks = {
+  plataforma: [
+    { href: '/explorar', label: 'Explorar Perfis' },
+    { href: '/empresas-amigas', label: 'Empresas Amigas' },
+    { href: '/sobre', label: 'Sobre o Projeto' },
+  ],
+  legal: [
+    { href: '/privacidade', label: 'Política de Privacidade' },
+    { href: '/termos', label: 'Termos de Uso' },
+    { href: '/respaldo-juridico', label: 'Respaldo Jurídico' },
+  ],
+};
+
+export function Footer() {
+  return (
+    <footer className="border-t border-border bg-muted/30">
+      <div className="container px-4 md:px-6 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
+          {/* Brand */}
+          <div className="md:col-span-2">
+            <Link to="/" className="flex items-center gap-2 mb-4">
+            <div className="flex items-center justify-center transition-transform group-hover:scale-105">
+                <img src="/logo-observatorio.png" alt="Observatório da Juventude" className="h-12 w-12 object-contain" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display text-xl font-bold gradient-text">
+                  Observatório
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  Da Juventude
+                </span>
+              </div>
+            </Link>
+            <p className="text-muted-foreground text-sm max-w-md mb-4">
+              Valorizando os talentos da juventude através de uma plataforma 
+              de portfólio profissional, networking e desenvolvimento de competências.
+            </p>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <MapPin className="h-4 w-4 text-primary" />
+              <span>Oriximiná, Pará - Brasil</span>
+            </div>
+          </div>
+
+          {/* Links */}
+          <div>
+            <h4 className="font-display font-semibold text-foreground mb-4">Plataforma</h4>
+            <ul className="space-y-3">
+              {footerLinks.plataforma.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-display font-semibold text-foreground mb-4">Legal</h4>
+            <ul className="space-y-3">
+              {footerLinks.legal.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              <li className="text-sm text-muted-foreground">
+                <span className="flex items-center gap-1 font-medium text-foreground"><ShieldCheck className="h-4 w-4 text-primary" /> Encarregado de dados (LGPD)</span>
+                <a href={`mailto:${DPO_EMAIL}`} className="hover:text-primary transition-colors break-all">{DPO_EMAIL}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom */}
+        <div className="mt-12 pt-8 border-t border-border">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground text-center md:text-left">
+              © {new Date().getFullYear()} Observatório da Juventude · Prefeitura Municipal de Oriximiná / SEMJU.
+            </p>
+            <p className="text-sm text-muted-foreground flex items-center gap-1">
+              Feito com <Heart className="h-4 w-4 text-destructive fill-destructive" /> para a juventude
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}

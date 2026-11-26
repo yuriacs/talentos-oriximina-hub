@@ -1,0 +1,80 @@
+# Observatório da Juventude — Postgres + API + site (+ HTTPS opcional).
+# Passo a passo completo de instalação: docs/DEPLOY.md
+#
+#   VPS sozinha (com HTTPS automático):  docker compose --profile https up -d --build
+#   Atrás do proxy HTTPS da Prefeitura:  docker compose up -d --build
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: observatorio
+      POSTGRES_USER: observatorio
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env}
+      TZ: America/Sao_Paulo
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U observatorio -d observatorio"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://observatorio:${POSTGRES_PASSWORD}@db:5432/observatorio
+      APP_URL: ${APP_URL:?defina APP_URL no .env}
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+    volumes:
+      - uploads:/data/uploads
+
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      # Por padrão só aceita conexões do próprio servidor (o Caddy ou o proxy
+      # da Prefeitura na mesma máquina). Para um proxy em outra máquina, use
+      # WEB_BIND=0.0.0.0 no .env e libere a porta só para o IP desse proxy.
+      - "${WEB_BIND:-127.0.0.1}:${WEB_PORT:-8080}:80"
+
+  # HTTPS automático com certificado gratuito (Let's Encrypt).
+  # Só sobe com: docker compose --profile https up -d
+  caddy:
+    image: caddy:2-alpine
+    profiles: ["https"]
+    restart: unless-stopped
+    depends_on:
+      - web
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:-}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  db-data:
+  uploads:
+  caddy-data:
+  caddy-config:

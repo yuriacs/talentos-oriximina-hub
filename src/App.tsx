@@ -1,0 +1,82 @@
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/hooks/useAuth";
+import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { ConsentGate } from "@/components/privacy/ConsentGate";
+import Index from "./pages/Index";
+import Explorar from "./pages/Explorar";
+import Login from "./pages/Login";
+import Cadastro from "./pages/Cadastro";
+import Sobre from "./pages/Sobre";
+import RecuperarSenha from "./pages/RecuperarSenha";
+import ResetPassword from "./pages/ResetPassword";
+
+import Perfil from "./pages/Perfil";
+import NotFound from "./pages/NotFound";
+import EditarPerfil from "./pages/EditarPerfil";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminProfiles from "./pages/admin/AdminProfiles";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminReports from "./pages/admin/AdminReports";
+import AdminLogs from "./pages/admin/AdminLogs";
+import AdminCompanies from "./pages/admin/AdminCompanies";
+import AdminSurvey from "./pages/admin/AdminSurvey";
+import DadosJuventude from "./pages/DadosJuventude";
+import CadastroEmpresa from "./pages/CadastroEmpresa";
+import EmpresasAmigas from "./pages/EmpresasAmigas";
+import RespaldoJuridico from "./pages/RespaldoJuridico";
+import PoliticaPrivacidade from "./pages/PoliticaPrivacidade";
+import TermosDeUso from "./pages/TermosDeUso";
+import ComoFunciona from "./pages/ComoFunciona";
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <AuthProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ScrollToTop />
+          <ConsentGate />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/explorar" element={<Explorar />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/sobre" element={<Sobre />} />
+            <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            
+            <Route path="/perfil/:id" element={<Perfil />} />
+            <Route path="/meu-perfil" element={<EditarPerfil />} />
+            <Route path="/empresas-amigas" element={<EmpresasAmigas />} />
+            <Route path="/cadastro-empresa" element={<CadastroEmpresa />} />
+            <Route path="/respaldo-juridico" element={<RespaldoJuridico />} />
+            <Route path="/privacidade" element={<PoliticaPrivacidade />} />
+            <Route path="/termos" element={<TermosDeUso />} />
+            <Route path="/como-funciona" element={<ComoFunciona />} />
+            <Route path="/dados-juventude" element={<DadosJuventude />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="perfis" element={<AdminProfiles />} />
+              <Route path="usuarios" element={<AdminUsers />} />
+              <Route path="empresas" element={<AdminCompanies />} />
+              <Route path="pesquisa" element={<AdminSurvey />} />
+              <Route path="denuncias" element={<AdminReports />} />
+              <Route path="logs" element={<AdminLogs />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
+
+export default App;
