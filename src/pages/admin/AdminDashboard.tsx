@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { downloadJson, exportAllData } from '@/lib/exportAllData';
+import { logAdminAction } from '@/lib/adminLog';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -138,11 +139,13 @@ export default function AdminDashboard() {
   const [exporting, setExporting] = useState<string | null>(null);
 
   const handleExport = async () => {
+    if (!confirm('O arquivo terá TODOS os dados pessoais da plataforma, inclusive dados sensíveis. Guarde-o só em local seguro da Prefeitura e apague quando não precisar mais. Continuar?')) return;
     setExporting('iniciando');
     try {
       const data = await exportAllData(setExporting);
       downloadJson(data, `backup-observatorio-${data.exported_at.slice(0, 10)}.json`);
       const rows = Object.values(data.tables).reduce((n, t) => n + t.length, 0);
+      await logAdminAction('full_data_export', { users: data.users.length, rows });
       toast.success(`Exportados ${data.users.length} usuários e ${rows} registros`);
       if (data.users_may_be_truncated) {
         toast.warning('A lista de usuários chegou ao limite de 200 e pode estar incompleta');

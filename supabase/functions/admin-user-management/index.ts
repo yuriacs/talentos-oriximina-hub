@@ -13,13 +13,21 @@ function generateTempPassword(length = 12): string {
   const nums = "23456789";
   const syms = "!@#$%&*";
   const all = upper + lower + nums + syms;
-  const pick = (s: string) => s[Math.floor(Math.random() * s.length)];
-  let pwd = pick(upper) + pick(lower) + pick(nums) + pick(syms);
-  for (let i = pwd.length; i < length; i++) pwd += pick(all);
-  return pwd
-    .split("")
-    .sort(() => Math.random() - 0.5)
-    .join("");
+  // Gerador criptográfico (Math.random é previsível)
+  const rand = (max: number) => {
+    const buf = new Uint32Array(1);
+    crypto.getRandomValues(buf);
+    return buf[0] % max;
+  };
+  const pick = (s: string) => s[rand(s.length)];
+  const chars = [pick(upper), pick(lower), pick(nums), pick(syms)];
+  while (chars.length < length) chars.push(pick(all));
+  // Embaralhamento Fisher–Yates
+  for (let i = chars.length - 1; i > 0; i--) {
+    const j = rand(i + 1);
+    [chars[i], chars[j]] = [chars[j], chars[i]];
+  }
+  return chars.join("");
 }
 
 Deno.serve(async (req) => {

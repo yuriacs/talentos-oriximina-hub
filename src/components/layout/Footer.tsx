@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Sparkles, Heart, MapPin } from 'lucide-react';
+import { Heart, MapPin, ShieldCheck } from 'lucide-react';
+import { DPO_EMAIL } from '@/lib/privacy';
 
 const footerLinks = {
   plataforma: [
@@ -74,6 +75,10 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li className="text-sm text-muted-foreground">
+                <span className="flex items-center gap-1 font-medium text-foreground"><ShieldCheck className="h-4 w-4 text-primary" /> Encarregado de dados (LGPD)</span>
+                <a href={`mailto:${DPO_EMAIL}`} className="hover:text-primary transition-colors break-all">{DPO_EMAIL}</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -82,8 +87,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground text-center md:text-left">
-              © {new Date().getFullYear()} Observatório da Juventude. 
-              Todos os direitos reservados.
+              © {new Date().getFullYear()} Observatório da Juventude · Prefeitura Municipal de Oriximiná / SEMJU.
             </p>
             <p className="text-sm text-muted-foreground flex items-center gap-1">
               Feito com <Heart className="h-4 w-4 text-destructive fill-destructive" /> para a juventude

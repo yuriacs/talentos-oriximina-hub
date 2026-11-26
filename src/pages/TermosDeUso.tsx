@@ -1,6 +1,8 @@
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent } from '@/components/ui/card';
+import { Link } from 'react-router-dom';
 import { FileText } from 'lucide-react';
+import { DPO_EMAIL, MIN_AGE, TERMS_UPDATED_LABEL, TERMS_VERSION } from '@/lib/privacy';
 
 export default function TermosDeUso() {
   return (
@@ -15,7 +17,7 @@ export default function TermosDeUso() {
               Termos de <span className="gradient-text">Uso</span>
             </h1>
             <p className="text-muted-foreground">
-              Última atualização: 07 de abril de 2026
+              Versão {TERMS_VERSION} · Última atualização: {TERMS_UPDATED_LABEL}
             </p>
           </div>
 
@@ -45,10 +47,10 @@ export default function TermosDeUso() {
               <h2>3. Cadastro e Conta</h2>
               <h3>3.1. Requisitos</h3>
               <ul>
-                <li>O cadastro é gratuito e aberto a jovens residentes ou vinculados ao município de Oriximiná.</li>
+                <li>O cadastro é gratuito e aberto a pessoas com {MIN_AGE} anos ou mais, residentes ou vinculadas ao município de Oriximiná.</li>
                 <li>O usuário deve fornecer informações verídicas e manter seus dados atualizados.</li>
                 <li>É necessário um endereço de e-mail válido para criação da conta.</li>
-                <li>Menores de 18 anos devem contar com ciência dos pais ou responsáveis legais.</li>
+                <li>Contas de pessoas com menos de {MIN_AGE} anos serão excluídas.</li>
               </ul>
 
               <h3>3.2. Responsabilidade pela Conta</h3>
@@ -63,7 +65,7 @@ export default function TermosDeUso() {
               <ul>
                 <li>O usuário pode criar seu perfil profissional preenchendo informações sobre formação, competências, experiências e projetos.</li>
                 <li>Perfis iniciam com status "Rascunho" e podem ser publicados pelo usuário quando desejar.</li>
-                <li>Perfis publicados são visíveis publicamente na Plataforma.</li>
+                <li>Perfis publicados são visíveis publicamente na Plataforma. O usuário pode retirar o perfil da vitrine a qualquer momento.</li>
                 <li>Perfis completos podem receber um selo de verificação pela administração.</li>
               </ul>
 
@@ -107,7 +109,7 @@ export default function TermosDeUso() {
               <ul>
                 <li>Qualquer usuário pode denunciar perfis ou conteúdos que violem estes Termos.</li>
                 <li>A administração analisará denúncias e poderá bloquear perfis que violem as regras.</li>
-                <li>O usuário bloqueado será notificado e poderá solicitar revisão da decisão.</li>
+                <li>O usuário bloqueado verá o status “Bloqueado” em Meu perfil e poderá pedir a revisão da decisão pelo e-mail da SEMJU.</li>
               </ul>
 
               <h2>8. Propriedade Intelectual</h2>
@@ -127,15 +129,15 @@ export default function TermosDeUso() {
               <h2>10. Suspensão e Encerramento</h2>
               <ul>
                 <li>A SEMJU reserva-se o direito de suspender ou encerrar contas que violem estes Termos.</li>
-                <li>O usuário pode solicitar a exclusão de sua conta e dados a qualquer momento.</li>
-                <li>Dados anonimizados utilizados para estatísticas poderão ser mantidos mesmo após exclusão da conta.</li>
+                <li>O usuário pode excluir sua conta e seus dados a qualquer momento, pela opção “Excluir minha conta” em Meu perfil.</li>
+                <li>Estatísticas agregadas, que não identificam ninguém, poderão ser mantidas após a exclusão da conta.</li>
               </ul>
 
-              <h2>11. Alterações dos Termos</h2>
+              <h2>11. Privacidade e Alterações dos Termos</h2>
               <p>
-                Estes Termos podem ser atualizados periodicamente. Alterações significativas serão
-                comunicadas através da Plataforma. A continuidade de uso após alterações implica
-                concordância com a versão atualizada.
+                O tratamento de dados pessoais segue a <Link to="/privacidade">Política de Privacidade</Link>, que faz
+                parte destes Termos. Quando os Termos ou a Política mudarem de forma relevante, a nova versão será
+                apresentada no próximo acesso e o uso da conta dependerá de novo aceite.
               </p>
 
               <h2>12. Legislação Aplicável</h2>
@@ -150,7 +152,7 @@ export default function TermosDeUso() {
               <ul>
                 <li><strong>Órgão responsável:</strong> Secretaria Municipal da Juventude (SEMJU)</li>
                 <li><strong>Endereço:</strong> Prefeitura Municipal de Oriximiná — Pará, Brasil</li>
-                <li><strong>E-mail:</strong> semju@oriximina.pa.gov.br</li>
+                <li><strong>E-mail:</strong> <a href={`mailto:${DPO_EMAIL}`}>{DPO_EMAIL}</a></li>
               </ul>
             </CardContent>
           </Card>

@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
 import { getRedirectPath, withRedirect } from '@/lib/redirect';
 import { cn } from '@/lib/utils';
+import { MIN_AGE } from '@/lib/privacy';
 
 const benefits = [
   'Portfólio profissional gratuito',
@@ -20,7 +21,6 @@ const benefits = [
   'Destaque suas competências',
 ];
 
-const MIN_AGE = 18;
 const MIN_PASSWORD = 8;
 
 function calculateAge(birthDate: string): number {

@@ -17,7 +17,7 @@ export type Database = {
       admin_logs: {
         Row: {
           action: string
-          admin_id: string
+          admin_id: string | null
           created_at: string
           details: Json | null
           id: string
@@ -25,7 +25,7 @@ export type Database = {
         }
         Insert: {
           action: string
-          admin_id: string
+          admin_id?: string | null
           created_at?: string
           details?: Json | null
           id?: string
@@ -33,7 +33,7 @@ export type Database = {
         }
         Update: {
           action?: string
-          admin_id?: string
+          admin_id?: string | null
           created_at?: string
           details?: Json | null
           id?: string
@@ -210,6 +210,33 @@ export type Database = {
           updated_at?: string
           user_id?: string | null
           whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      consent_records: {
+        Row: {
+          created_at: string
+          document: string
+          granted: boolean
+          id: string
+          user_id: string
+          version: string
+        }
+        Insert: {
+          created_at?: string
+          document: string
+          granted?: boolean
+          id?: string
+          user_id: string
+          version: string
+        }
+        Update: {
+          created_at?: string
+          document?: string
+          granted?: boolean
+          id?: string
+          user_id?: string
+          version?: string
         }
         Relationships: []
       }
@@ -415,6 +442,7 @@ export type Database = {
           profile_completion: number
           race_color: string | null
           salary_range: string | null
+          sensitive_data_consent_at: string | null
           social_programs_interest: boolean | null
           status: Database["public"]["Enums"]["profile_status"]
           updated_at: string
@@ -461,6 +489,7 @@ export type Database = {
           profile_completion?: number
           race_color?: string | null
           salary_range?: string | null
+          sensitive_data_consent_at?: string | null
           social_programs_interest?: boolean | null
           status?: Database["public"]["Enums"]["profile_status"]
           updated_at?: string
@@ -507,6 +536,7 @@ export type Database = {
           profile_completion?: number
           race_color?: string | null
           salary_range?: string | null
+          sensitive_data_consent_at?: string | null
           social_programs_interest?: boolean | null
           status?: Database["public"]["Enums"]["profile_status"]
           updated_at?: string
@@ -761,6 +791,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      anonymize_survey_names: { Args: never; Returns: number }
+      delete_my_account: { Args: never; Returns: undefined }
       demote_from_admin: {
         Args: { _target_user_id: string }
         Returns: undefined
@@ -823,6 +855,14 @@ export type Database = {
       is_admin: { Args: never; Returns: boolean }
       promote_to_admin: {
         Args: { _target_user_id: string }
+        Returns: undefined
+      }
+      set_my_profile_published: {
+        Args: { _publish: boolean }
+        Returns: undefined
+      }
+      set_sensitive_data_consent: {
+        Args: { _granted: boolean; _version: string }
         Returns: undefined
       }
     }

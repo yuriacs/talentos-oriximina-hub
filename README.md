@@ -37,6 +37,12 @@ O projeto foi construído com as tecnologias mais modernas do ecossistema JavaSc
 - **Sistema de Denúncias:** Gestão de reports feitos por usuários sobre perfis inapropriados.
 - **Logs de Auditoria:** Registro de ações administrativas para segurança.
 
+## 🔒 Proteção de Dados (LGPD)
+
+A plataforma é um serviço público da Prefeitura de Oriximiná (SEMJU) e trata dados de jovens, inclusive dados sensíveis.
+Leia [`docs/LGPD.md`](docs/LGPD.md) antes de mexer em cadastro, perfis, admin ou banco de dados. Constantes de privacidade
+(versão dos termos, e-mail do encarregado, idade mínima) ficam em `src/lib/privacy.ts`.
+
 ## 🛠️ Como Executar o Projeto
 
 ### Pré-requisitos

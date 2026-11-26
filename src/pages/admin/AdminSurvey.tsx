@@ -16,6 +16,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { AlertTriangle, Download, Eye, EyeOff, ExternalLink, FileSpreadsheet, Search, Upload, Users, CalendarClock, Globe } from 'lucide-react';
 import { toast } from 'sonner';
 import { QuestionChartGrid } from '@/components/survey/SurveyCharts';
+import { logAdminAction } from '@/lib/adminLog';
 import {
   CHARTABLE_KINDS,
   KIND_LABELS,
@@ -237,7 +238,7 @@ function FullDashboard({ questions, responses }: { questions: SurveyQuestion[]; 
                       <li key={r.id ?? r.submitted_at} className="text-sm rounded-md bg-muted/50 px-3 py-2">
                         {answerToText(r.answers[q.key])}
                         <span className="block text-xs text-muted-foreground mt-1">
-                          {answerToText(r.answers.nome) || 'Sem nome'} · {answerToText(r.answers.idade)}
+                          {new Date(r.submitted_at).toLocaleDateString('pt-BR')} · {answerToText(r.answers.idade)}
                         </span>
                       </li>
                     ))}
@@ -272,6 +273,7 @@ function ResponsesTable({ questions, responses }: { questions: SurveyQuestion[];
     a.download = `pesquisa-juventudes-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
+    logAdminAction('survey_csv_exported', { rows: visible.length, filtered: !!search.trim() });
   };
 
   return (
@@ -279,7 +281,7 @@ function ResponsesTable({ questions, responses }: { questions: SurveyQuestion[];
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Buscar em qualquer resposta (nome, e-mail, texto...)" value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
+          <Input placeholder="Buscar em qualquer resposta (e-mail, texto...)" value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
         </div>
         <Button variant="outline" className="gap-2" onClick={exportCsv} disabled={!visible.length}>
           <Download className="h-4 w-4" />Exportar CSV
@@ -292,7 +294,6 @@ function ResponsesTable({ questions, responses }: { questions: SurveyQuestion[];
             <TableHeader>
               <TableRow>
                 <TableHead>Data</TableHead>
-                <TableHead>Nome</TableHead>
                 <TableHead className="hidden md:table-cell">Idade</TableHead>
                 <TableHead className="hidden lg:table-cell">Onde mora</TableHead>
                 <TableHead className="hidden lg:table-cell">E-mail</TableHead>
@@ -303,7 +304,6 @@ function ResponsesTable({ questions, responses }: { questions: SurveyQuestion[];
               {visible.map((r) => (
                 <TableRow key={r.id ?? r.submitted_at} className="cursor-pointer" onClick={() => setSelected(r)}>
                   <TableCell className="whitespace-nowrap text-muted-foreground">{formatDateTime(r.submitted_at)}</TableCell>
-                  <TableCell className="font-medium">{answerToText(r.answers.nome) || '—'}</TableCell>
                   <TableCell className="hidden md:table-cell">{answerToText(r.answers.idade)}</TableCell>
                   <TableCell className="hidden lg:table-cell">{answerToText(r.answers.moradia)}</TableCell>
                   <TableCell className="hidden lg:table-cell text-muted-foreground">{answerToText(r.answers.email_contato)}</TableCell>
@@ -321,7 +321,7 @@ function ResponsesTable({ questions, responses }: { questions: SurveyQuestion[];
       <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
         <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{selected && (answerToText(selected.answers.nome) || 'Resposta sem nome')}</DialogTitle>
+            <DialogTitle>{selected && `Resposta de ${new Date(selected.submitted_at).toLocaleString('pt-BR')}`}</DialogTitle>
           </DialogHeader>
           {selected && (
             <dl className="space-y-4">
@@ -448,6 +448,16 @@ function ImportSheet({
     }
   };
 
+  const removeNames = async () => {
+    if (!confirm('Remover definitivamente o nome de todas as respostas da pesquisa? Não dá para desfazer.')) return;
+    setBusy(true);
+    const { data, error } = await supabase.rpc('anonymize_survey_names');
+    setBusy(false);
+    if (error) { toast.error('Não foi possível remover os nomes', { description: error.message }); return; }
+    toast.success(`Nome removido de ${data ?? 0} respostas`);
+    await onImported();
+  };
+
   const runImport = async () => {
     if (!parsed) return;
     setBusy(true);
@@ -506,6 +516,19 @@ function ImportSheet({
             onChange={(e) => { handleFile(e.target.files?.[0]); e.target.value = ''; }}
           />
         </label>
+
+        <p className="text-xs text-muted-foreground">
+          A coluna de nome não é importada (LGPD: só guardamos o necessário). O e-mail é mantido apenas para quem pediu
+          contato.
+        </p>
+
+        {responses.some((r) => 'nome' in r.answers) && (
+          <div className="rounded-lg border border-amber-500/40 bg-amber-500/5 p-4 space-y-2 text-sm">
+            <p className="flex items-center gap-2 font-medium"><AlertTriangle className="h-4 w-4 text-amber-600" /> Há respostas antigas com o nome do respondente</p>
+            <p className="text-muted-foreground">Os nomes não são usados no painel. Remova-os para reduzir o risco de exposição de dados de jovens e adolescentes.</p>
+            <Button variant="outline" size="sm" disabled={busy} onClick={removeNames}>Remover nomes das respostas</Button>
+          </div>
+        )}
 
         {parsed && (
           <div className="rounded-lg bg-muted/50 p-4 space-y-2 text-sm">

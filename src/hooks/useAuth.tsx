@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { TERMS_VERSION } from '@/lib/privacy';
 import { supabase } from '@/integrations/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 
@@ -68,7 +69,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       password,
       options: {
         emailRedirectTo: window.location.origin + (redirectPath ?? '/meu-perfil'),
-        data: { full_name: fullName },
+        // Registro do aceite dos Termos/Política (gravado em consent_records pelo banco)
+        data: { full_name: fullName, terms_version: TERMS_VERSION, age_confirmed: true },
       },
     });
     // Sem sessão = o Supabase exige confirmar o e-mail antes do primeiro login

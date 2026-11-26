@@ -8,13 +8,15 @@ import { Save, GraduationCap } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
 import { useStepSave } from './stepSave';
+import { SensitiveConsentBox } from '@/components/privacy/SensitiveConsentBox';
 
 interface Props {
   profile: Tables<'profiles'>;
   onSave: (updates: Partial<Tables<'profiles'>>) => Promise<{ error: any }>;
 }
 
-const ageRanges = ['14-17', '18-21', '22-25', '26-29', '30+'];
+// Cadastro só para maiores de 18 anos (ver src/lib/privacy.ts)
+const ageRanges = ['18-21', '22-25', '26-29', '30+'];
 const genderOptions = ['Masculino', 'Feminino', 'Não-binário', 'Prefiro não informar'];
 const raceOptions = ['Branca', 'Preta', 'Parda', 'Amarela', 'Indígena', 'Prefiro não informar'];
 const educationLevels = [
@@ -40,9 +42,11 @@ export default function SocioeducationalForm({ profile, onSave }: Props) {
     current_course: p.current_course || '',
   });
   const [saving, setSaving] = useState(false);
+  const [consentedAt, setConsentedAt] = useState<string | null>(p.sensitive_data_consent_at ?? null);
 
   const save = async () => {
-    const { error } = await onSave(form as any);
+    // Campo vazio vira null: '' contaria como dado sensível informado
+    const { error } = await onSave({ ...form, race_color: form.race_color || null } as any);
     if (error) { toast.error('Erro ao salvar'); return false; }
     return true;
   };
@@ -65,6 +69,11 @@ export default function SocioeducationalForm({ profile, onSave }: Props) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        <SensitiveConsentBox
+          consentedAt={consentedAt}
+          hasExistingData={!!p.race_color}
+          onChange={(at) => { setConsentedAt(at); if (!at) set('race_color', ''); }}
+        />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label>Faixa Etária</Label>
@@ -85,8 +94,8 @@ export default function SocioeducationalForm({ profile, onSave }: Props) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Raça/Cor <span className="text-muted-foreground text-xs">(opcional)</span></Label>
-            <Select value={form.race_color} onValueChange={v => set('race_color', v)}>
+            <Label>Raça/Cor <span className="text-muted-foreground text-xs">(opcional, dado sensível)</span></Label>
+            <Select value={form.race_color} onValueChange={v => set('race_color', v)} disabled={!consentedAt}>
               <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
               <SelectContent>
                 {raceOptions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}

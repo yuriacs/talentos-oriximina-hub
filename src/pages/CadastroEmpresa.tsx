@@ -105,7 +105,7 @@ const TERMO_TEXT = `TERMO DE ADESÃO E COMPROMISSO – PROGRAMA EMPRESA AMIGA DA
 Pelo presente instrumento, a PESSOA JURÍDICA devidamente identificada no cadastro deste portal, doravante denominada EMPRESA, declara sua adesão ao Observatório da Juventude e manifesta seu interesse na obtenção do Selo Empresa Amiga da Juventude, sujeitando-se às seguintes cláusulas e condições:
 
 1. DO OBJETO
-1.1. O presente termo visa formalizar a participação da EMPRESA na plataforma de recrutamento gerida pela SEMJU, visando a profissionalização de adolescentes e jovens entre 14 e 29 anos no município de Oriximiná.
+1.1. O presente termo visa formalizar a participação da EMPRESA na plataforma de recrutamento gerida pela SEMJU, visando a profissionalização de jovens de Oriximiná. O cadastro de jovens no Banco de Talentos é aberto a pessoas a partir de 18 anos; ações com adolescentes (como Jovem Aprendiz) seguem a legislação própria e não usam dados desta plataforma.
 
 2. DOS COMPROMISSOS DA EMPRESA
 2.1. A EMPRESA compromete-se a manter seu perfil atualizado, incluindo áreas de atuação, turnos disponíveis e pretensão salarial oferecida.
@@ -114,10 +114,14 @@ Pelo presente instrumento, a PESSOA JURÍDICA devidamente identificada no cadast
 • Oferecer cursos de formação e capacitação profissional.
 • Manter parcerias para programas de Jovem Aprendiz ou realizar contribuições aos fundos municipais da juventude.
 
-3. DO ACESSO AOS DADOS E CONTATO
-3.1. A EMPRESA declara estar ciente de que terá acesso aos dados biográficos, socioeducacionais, competências e vídeos de apresentação dos jovens cadastrados.
-3.2. O contato com o candidato poderá ser realizado diretamente pela EMPRESA através das informações de WhatsApp e portfólio disponibilizadas pelo site.
-3.3. A EMPRESA obriga-se a utilizar os dados dos candidatos exclusivamente para fins de recrutamento e seleção, respeitando a privacidade dos usuários.
+3. DO ACESSO AOS DADOS E PROTEÇÃO DE DADOS PESSOAIS (LEI Nº 13.709/2018 – LGPD)
+3.1. A EMPRESA terá acesso apenas aos dados que cada jovem decidiu tornar públicos no perfil (apresentação, formação, competências, projetos, links e vídeo). Dados sensíveis (raça/cor, deficiência) e dados socioeconômicos nunca são compartilhados com empresas.
+3.2. O WhatsApp do jovem só é exibido quando ele autoriza, e o contato deve ocorrer exclusivamente para oportunidades de trabalho, estágio ou capacitação.
+3.3. Os dados obtidos pela plataforma passam a ser tratados pela EMPRESA sob sua própria responsabilidade, como controladora, devendo ser usados exclusivamente para recrutamento e seleção, sem venda, repasse a terceiros, envio de propaganda ou formação de bancos de dados paralelos.
+3.4. A EMPRESA eliminará os dados de candidatos não selecionados ao fim de cada processo seletivo e atenderá aos pedidos dos jovens para acesso, correção ou eliminação.
+3.5. A EMPRESA comunicará à SEMJU, em até 2 (dois) dias úteis, qualquer incidente de segurança envolvendo dados obtidos pela plataforma.
+3.6. É vedada qualquer forma de discriminação na seleção, nos termos da legislação trabalhista e do art. 6º, IX, da LGPD.
+3.7. O descumprimento destas regras autoriza a SEMJU a suspender o acesso e cancelar o Selo, sem prejuízo das sanções legais.
 
 4. DA CONCESSÃO DO SELO E BENEFÍCIOS
 4.1. A oferta de vagas e a efetivação de contratações via plataforma servirão como base para a outorga do Selo Empresa Amiga da Juventude pela Prefeitura Municipal de Oriximiná.

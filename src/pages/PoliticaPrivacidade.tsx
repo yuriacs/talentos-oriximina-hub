@@ -1,6 +1,18 @@
+import { Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Shield } from 'lucide-react';
+import { DPO_EMAIL, MIN_AGE, TERMS_UPDATED_LABEL, TERMS_VERSION } from '@/lib/privacy';
+
+const legalBases: [string, string][] = [
+  ['Criar e manter sua conta e seu perfil profissional', 'Execução de políticas públicas previstas em lei (art. 7º, III, e art. 23 da LGPD; Leis Municipais nº 9.154/2017 e nº 9.637/2025)'],
+  ['Mostrar seu perfil na vitrine pública e seu WhatsApp para empresas', 'Consentimento (art. 7º, I). A publicação e a exibição do contato são escolhas suas e podem ser desfeitas a qualquer momento'],
+  ['Raça/cor e informações sobre deficiência (opcionais)', 'Consentimento específico e destacado (art. 11, I), dado em campo próprio na tela de perfil'],
+  ['Indicadores e estatísticas para políticas de juventude', 'Execução de políticas públicas (art. 7º, III, e art. 11, II, “b”), sempre com dados agregados, sem identificar pessoas'],
+  ['Gestão do programa “Empresa Amiga da Juventude” e concessão do Selo', 'Execução de políticas públicas (art. 7º, III; Lei Municipal nº 9.637/2025) e execução do Termo de Adesão (art. 7º, V)'],
+  ['Segurança da plataforma, análise de denúncias e registros de auditoria', 'Cumprimento de obrigação legal e execução de políticas públicas (art. 7º, II e III)'],
+  ['Avisos sobre novas pesquisas e projetos', 'Consentimento (art. 7º, I), apenas para quem informou o e-mail com esse fim'],
+];
 
 export default function PoliticaPrivacidade() {
   return (
@@ -15,141 +27,172 @@ export default function PoliticaPrivacidade() {
               Política de <span className="gradient-text">Privacidade</span>
             </h1>
             <p className="text-muted-foreground">
-              Última atualização: 07 de abril de 2026
+              Versão {TERMS_VERSION} · Última atualização: {TERMS_UPDATED_LABEL}
             </p>
           </div>
 
           <Card className="border-border/50">
             <CardContent className="p-6 md:p-10 prose prose-sm md:prose-base max-w-none dark:prose-invert">
-              <h2>1. Introdução</h2>
-              <p>
-                O <strong>Observatório da Juventude</strong> ("Plataforma"), vinculado à Secretaria
-                Municipal da Juventude (SEMJU) da Prefeitura Municipal de Oriximiná, Estado do Pará, valoriza
-                a privacidade e a proteção dos dados pessoais dos seus usuários, em conformidade com a
-                Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD) e demais normas aplicáveis.
-              </p>
-              <p>
-                Esta Política descreve como coletamos, utilizamos, armazenamos e protegemos as informações
-                fornecidas por jovens cadastrados e empresas participantes do programa "Empresa Amiga da Juventude"
-                (Lei Municipal nº 9.637/2025).
-              </p>
-
-              <h2>2. Dados Coletados</h2>
-              <h3>2.1. Dados de Jovens Cadastrados</h3>
+              <h2>Resumo</h2>
               <ul>
-                <li><strong>Dados de identificação:</strong> nome completo, faixa etária, gênero, raça/cor (autodeclaração IBGE) e cidade.</li>
-                <li><strong>Dados de contato:</strong> e-mail e, opcionalmente, WhatsApp (com controle de visibilidade pelo usuário).</li>
-                <li><strong>Dados acadêmicos e profissionais:</strong> formação, cursos, certificações, experiências, competências técnicas e socioemocionais, projetos e portfólio.</li>
-                <li><strong>Dados socioeducacionais:</strong> situação profissional, nível de habilidade digital, acesso a computador e internet.</li>
-                <li><strong>Dados de inclusão:</strong> condição de PcD, tipo de deficiência e necessidades de acessibilidade (fornecimento voluntário).</li>
-                <li><strong>Dados de mídia:</strong> foto de perfil e, opcionalmente, vídeo de apresentação.</li>
-              </ul>
-              <p>
-                <strong>Importante:</strong> A Plataforma <strong>não coleta e não exibe</strong> documentos pessoais como
-                CPF, RG ou endereço completo, em conformidade com a LGPD e por questões de segurança.
-              </p>
-
-              <h3>2.2. Dados de Empresas</h3>
-              <ul>
-                <li><strong>Dados jurídicos:</strong> razão social, nome fantasia, CNPJ, porte e setor de atividade.</li>
-                <li><strong>Dados de contato:</strong> e-mail, WhatsApp, endereço comercial, site e redes sociais.</li>
-                <li><strong>Dados do responsável:</strong> nome e cargo do responsável pela inscrição.</li>
-                <li><strong>Dados de adesão:</strong> ações de profissionalização, modalidades de vaga e termos aceitos.</li>
+                <li>O Observatório da Juventude é um serviço público da Prefeitura de Oriximiná, gerido pela SEMJU.</li>
+                <li>O Banco de Talentos é para pessoas com {MIN_AGE} anos ou mais.</li>
+                <li>Seu perfil só aparece na vitrine se você publicar. Você pode tirar do ar quando quiser.</li>
+                <li>Raça/cor e deficiência são opcionais, pedem autorização própria e nunca aparecem no perfil público.</li>
+                <li>Não vendemos dados e não usamos rastreadores de publicidade.</li>
+                <li>Em “Meu perfil” você baixa todos os seus dados ou exclui sua conta sozinho, na hora.</li>
               </ul>
 
-              <h2>3. Finalidade do Tratamento</h2>
-              <p>Os dados pessoais são tratados para as seguintes finalidades:</p>
-              <ul>
-                <li>Criação e manutenção de perfis profissionais dos jovens na Plataforma.</li>
-                <li>Conexão entre jovens e empresas para oportunidades de estágio, emprego e capacitação.</li>
-                <li>Geração de estatísticas e indicadores para políticas públicas de juventude (dados anonimizados).</li>
-                <li>Gestão do programa "Empresa Amiga da Juventude" e concessão do selo.</li>
-                <li>Comunicação institucional sobre oportunidades e programas da SEMJU.</li>
-                <li>Segurança e prevenção contra abusos na Plataforma.</li>
-              </ul>
-
-              <h2>4. Base Legal</h2>
-              <p>O tratamento de dados pessoais é realizado com base nas seguintes hipóteses da LGPD:</p>
-              <ul>
-                <li><strong>Consentimento</strong> (art. 7º, I): obtido no momento do cadastro mediante aceite expresso dos Termos de Uso e desta Política.</li>
-                <li><strong>Execução de políticas públicas</strong> (art. 7º, III): para fins de implementação de programas de juventude previstos em lei municipal.</li>
-                <li><strong>Interesse legítimo</strong> (art. 7º, IX): para aprimoramento da Plataforma e geração de indicadores estatísticos.</li>
-              </ul>
-
-              <h2>5. Compartilhamento de Dados</h2>
-              <p>Os dados poderão ser compartilhados nas seguintes hipóteses:</p>
-              <ul>
-                <li><strong>Perfis publicados:</strong> informações dos perfis com status "Publicado" são visíveis para qualquer visitante da Plataforma, respeitando as configurações de visibilidade de contato definidas pelo próprio jovem.</li>
-                <li><strong>Empresas aprovadas:</strong> empresas com selo "Empresa Amiga da Juventude" podem acessar informações dos perfis publicados para fins de recrutamento.</li>
-                <li><strong>Órgãos públicos:</strong> dados anonimizados podem ser compartilhados com órgãos da administração pública para fins de políticas de juventude.</li>
-                <li><strong>Obrigação legal:</strong> quando exigido por lei ou determinação judicial.</li>
-              </ul>
+              <h2>1. Quem é o responsável pelos seus dados</h2>
               <p>
-                <strong>A Plataforma não vende, aluga ou comercializa dados pessoais em nenhuma circunstância.</strong>
+                <strong>Controlador:</strong> Prefeitura Municipal de Oriximiná (PA), por meio da Secretaria Municipal da
+                Juventude (SEMJU), que decide como e para que os dados são usados na plataforma{' '}
+                <strong>Observatório da Juventude</strong> (“Plataforma”), que inclui o Banco de Talentos, o programa
+                “Empresa Amiga da Juventude” e o painel público “Dados da Juventude”.
+              </p>
+              <p>
+                <strong>Encarregado pelo tratamento de dados pessoais (art. 41 da LGPD):</strong> atendimento pelo e-mail{' '}
+                <a href={`mailto:${DPO_EMAIL}`}>{DPO_EMAIL}</a>. É por esse canal que você exerce seus direitos, tira
+                dúvidas ou comunica qualquer problema com seus dados.
               </p>
 
-              <h2>6. Armazenamento e Segurança</h2>
+              <h2>2. Quais dados tratamos</h2>
+              <h3>2.1. Jovens com conta no Banco de Talentos</h3>
               <ul>
-                <li>Os dados são armazenados em servidores seguros com criptografia em trânsito (TLS/SSL) e em repouso.</li>
-                <li>O acesso ao banco de dados é controlado por políticas de segurança em nível de linha (Row Level Security), garantindo que cada usuário acesse apenas seus próprios dados.</li>
-                <li>Senhas são armazenadas com hash criptográfico e nunca em texto simples.</li>
-                <li>A Plataforma emprega autenticação segura e controle de acesso baseado em papéis (RBAC).</li>
+                <li><strong>Conta:</strong> nome, e-mail e senha (guardada só em forma criptografada). Se você entrar com o Google, recebemos do Google seu nome e e-mail.</li>
+                <li><strong>Idade:</strong> pedimos a data de nascimento no cadastro só para confirmar que você tem {MIN_AGE} anos ou mais. <strong>Ela não é guardada.</strong> No perfil você pode informar uma faixa etária.</li>
+                <li><strong>Perfil profissional:</strong> foto, apresentação, objetivo, área, cidade, formação, experiências, cursos, competências, idiomas, projetos, links de portfólio e vídeo.</li>
+                <li><strong>Perfil socioeducacional e preferências:</strong> faixa etária, gênero (opcional), escolaridade, tipo de instituição, situação profissional, pretensão salarial, turnos, disponibilidade para deslocamento, acesso a computador e internet, nível de habilidade digital e interesse em programas sociais.</li>
+                <li><strong>Dados sensíveis (opcionais):</strong> raça/cor (autodeclaração, padrão IBGE), se é pessoa com deficiência, tipo de deficiência e necessidades de acessibilidade. Só são gravados depois da sua autorização específica.</li>
+                <li><strong>Contato:</strong> WhatsApp (opcional), com exibição controlada por você.</li>
+                <li><strong>Registros:</strong> data e versão dos documentos que você aceitou, denúncias que fizer e mensagens trocadas na Plataforma.</li>
+              </ul>
+              <p>Não pedimos CPF, RG nem endereço residencial.</p>
+
+              <h3>2.2. Responsáveis por empresas</h3>
+              <ul>
+                <li>Dados da empresa: razão social, nome fantasia, CNPJ, endereço comercial, porte, setor, site, redes sociais e logomarca.</li>
+                <li>Dados do responsável pelo cadastro: nome, cargo, e-mail e WhatsApp.</li>
+                <li>Dados da adesão: modalidades de vaga, faixa salarial, turnos, ações de profissionalização e data de aceite do Termo de Adesão.</li>
               </ul>
 
-              <h2>7. Direitos do Titular</h2>
-              <p>Em conformidade com a LGPD, o titular dos dados possui os seguintes direitos:</p>
+              <h3>2.3. Pesquisa “Conhecendo as Juventudes”</h3>
+              <p>
+                As respostas do formulário da pesquisa (aplicado pela SEMJU no Google Forms) são importadas para a
+                Plataforma <strong>sem o nome</strong> de quem respondeu. O e-mail só é mantido para quem pediu para ser
+                avisado sobre novas pesquisas. Respostas abertas e e-mails são vistos apenas pela equipe da SEMJU. O
+                painel público mostra somente totais agregados, e opções com menos de 3 respostas são agrupadas para
+                que ninguém possa ser identificado.
+              </p>
+
+              <h3>2.4. Dados técnicos</h3>
+              <p>
+                Para manter você conectado, o site guarda um token de sessão no armazenamento do seu navegador. O
+                provedor de banco de dados e autenticação registra dados técnicos de acesso (como endereço IP e
+                horário de login) para segurança. Não usamos cookies de publicidade, ferramentas de análise de
+                comportamento nem pixels de redes sociais.
+              </p>
+
+              <h2>3. Para que usamos e com qual base legal</h2>
+              <div className="not-prose overflow-x-auto">
+                <table className="w-full text-sm border">
+                  <thead className="bg-muted/50">
+                    <tr><th className="text-left p-2 border">Finalidade</th><th className="text-left p-2 border">Base legal (LGPD)</th></tr>
+                  </thead>
+                  <tbody>
+                    {legalBases.map(([purpose, basis]) => (
+                      <tr key={purpose}><td className="p-2 border align-top">{purpose}</td><td className="p-2 border align-top">{basis}</td></tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p>
+                Não usamos seus dados para decisões automatizadas que afetem seus interesses, nem para fins diferentes
+                dos descritos aqui.
+              </p>
+
+              <h2>4. Quem pode ver seus dados</h2>
               <ul>
-                <li><strong>Acesso:</strong> solicitar informações sobre quais dados são tratados.</li>
-                <li><strong>Correção:</strong> atualizar ou corrigir dados incompletos, inexatos ou desatualizados, diretamente na Plataforma.</li>
-                <li><strong>Eliminação:</strong> solicitar a exclusão dos dados pessoais tratados com base no consentimento.</li>
-                <li><strong>Portabilidade:</strong> solicitar a transferência dos dados a outro serviço (via exportação PDF).</li>
-                <li><strong>Revogação do consentimento:</strong> retirar o consentimento a qualquer momento.</li>
-                <li><strong>Informação:</strong> ser informado sobre entidades com as quais os dados são compartilhados.</li>
+                <li><strong>Qualquer visitante:</strong> somente perfis publicados por você, com nome, foto, apresentação, formação, competências, projetos, links e vídeo. O WhatsApp só aparece se você escolher “Para qualquer visitante”.</li>
+                <li><strong>Empresas aprovadas no programa:</strong> o mesmo conteúdo público e, se você permitir, seu WhatsApp. Empresas nunca veem dados sensíveis nem socioeconômicos e se comprometem, no Termo de Adesão, a usar seus dados só para recrutamento.</li>
+                <li><strong>Equipe da SEMJU:</strong> servidores designados como administradores acessam os cadastros para moderar perfis, aprovar empresas e produzir indicadores. Todo acesso administrativo exige login e ações relevantes ficam registradas.</li>
+                <li><strong>Outros órgãos públicos:</strong> apenas dados agregados ou anonimizados, ou dados pessoais quando houver base legal e finalidade pública específica (art. 26 da LGPD).</li>
+                <li><strong>Autoridades:</strong> quando houver obrigação legal ou ordem judicial.</li>
+              </ul>
+              <p><strong>A Plataforma não vende, aluga nem comercializa dados pessoais.</strong></p>
+
+              <h2>5. Fornecedores e transferência internacional</h2>
+              <p>A Plataforma usa serviços de terceiros que tratam dados em nome da Prefeitura (operadores):</p>
+              <ul>
+                <li><strong>Supabase:</strong> banco de dados, autenticação e armazenamento de fotos e logomarcas.</li>
+                <li><strong>Vercel:</strong> hospedagem do site.</li>
+                <li><strong>Google:</strong> login com conta Google (só se você escolher essa opção) e o formulário da pesquisa.</li>
               </ul>
               <p>
-                Para exercer seus direitos, entre em contato pelo e-mail:{' '}
-                <strong>semju@oriximina.pa.gov.br</strong>.
+                Os servidores desses fornecedores podem estar fora do Brasil. Essas transferências internacionais se
+                apoiam no art. 33 da LGPD e nas cláusulas de proteção de dados dos contratos desses fornecedores.
               </p>
 
-              <h2>8. Controle de Visibilidade</h2>
-              <p>
-                O jovem cadastrado possui controle sobre a visibilidade de suas informações de contato,
-                podendo configurar as seguintes opções:
-              </p>
+              <h2>6. Por quanto tempo guardamos</h2>
               <ul>
-                <li><strong>Apenas interno:</strong> contato visível somente para administradores.</li>
-                <li><strong>E-mail para logados:</strong> e-mail visível para usuários autenticados.</li>
-                <li><strong>WhatsApp para logados:</strong> WhatsApp visível para usuários autenticados.</li>
-                <li><strong>Todos:</strong> informações visíveis para qualquer visitante.</li>
-                <li><strong>Oculto:</strong> nenhuma informação de contato visível.</li>
+                <li><strong>Conta e perfil:</strong> enquanto você mantiver a conta. Ao excluir a conta, os dados são apagados na hora do banco principal. Cópias de segurança do fornecedor são substituídas automaticamente em poucos dias.</li>
+                <li><strong>Dados sensíveis:</strong> até você revogar a autorização, o que os apaga imediatamente.</li>
+                <li><strong>Registro de aceites:</strong> enquanto a conta existir, para comprovar o consentimento (art. 8º, §2º).</li>
+                <li><strong>Empresas:</strong> durante a adesão ao programa e a validade do Selo e, depois, pelo prazo exigido pelas regras de arquivo da administração pública.</li>
+                <li><strong>Registros administrativos (auditoria):</strong> pelo tempo necessário à prestação de contas e à defesa da administração.</li>
+                <li><strong>Pesquisa:</strong> respostas sem identificação são mantidas como série histórica. O e-mail é apagado a pedido.</li>
               </ul>
 
-              <h2>9. Cookies e Tecnologias de Rastreamento</h2>
-              <p>
-                A Plataforma utiliza cookies essenciais para manter a sessão de autenticação do usuário.
-                Não utilizamos cookies de rastreamento publicitário ou de terceiros para fins de marketing.
-              </p>
-
-              <h2>10. Dados de Menores</h2>
-              <p>
-                A Plataforma pode ser utilizada por jovens a partir de 14 anos.
-                Para menores de 18 anos, recomenda-se que o cadastro seja realizado com conhecimento
-                e supervisão dos pais ou responsáveis legais, conforme previsto no art. 14 da LGPD.
-              </p>
-
-              <h2>11. Alterações desta Política</h2>
-              <p>
-                Esta Política pode ser atualizada periodicamente. Alterações significativas serão
-                comunicadas através da Plataforma. A continuidade de uso após alterações implica
-                concordância com a versão atualizada.
-              </p>
-
-              <h2>12. Contato</h2>
-              <p>Para dúvidas ou solicitações sobre privacidade e proteção de dados:</p>
+              <h2>7. Seus direitos</h2>
+              <p>Pelo art. 18 da LGPD, você pode, a qualquer momento:</p>
               <ul>
-                <li><strong>Órgão responsável:</strong> Secretaria Municipal da Juventude (SEMJU)</li>
-                <li><strong>Endereço:</strong> Prefeitura Municipal de Oriximiná — Pará, Brasil</li>
-                <li><strong>E-mail:</strong> semju@oriximina.pa.gov.br</li>
+                <li>confirmar se tratamos seus dados e <strong>acessá-los</strong>;</li>
+                <li><strong>corrigir</strong> dados incompletos, inexatos ou desatualizados;</li>
+                <li>pedir <strong>anonimização, bloqueio ou eliminação</strong> de dados desnecessários, excessivos ou tratados em desacordo com a LGPD;</li>
+                <li>receber seus dados em formato aberto (<strong>portabilidade</strong>);</li>
+                <li><strong>eliminar</strong> os dados tratados com base no seu consentimento e <strong>revogar o consentimento</strong>;</li>
+                <li>saber com quem seus dados são compartilhados e quais as consequências de não dar consentimento;</li>
+                <li><strong>peticionar</strong> à Autoridade Nacional de Proteção de Dados (ANPD).</li>
+              </ul>
+              <p>Boa parte disso você faz sozinho, em <Link to="/meu-perfil">Meu perfil</Link>:</p>
+              <ul>
+                <li><strong>Corrigir:</strong> edite qualquer etapa do perfil.</li>
+                <li><strong>Acessar e portar:</strong> “Baixar meus dados” gera um arquivo com tudo o que temos sobre você.</li>
+                <li><strong>Revogar:</strong> “Tirar meu perfil da vitrine” e “Revogar e apagar” dados sensíveis.</li>
+                <li><strong>Excluir:</strong> “Excluir minha conta” apaga tudo de forma definitiva.</li>
+              </ul>
+              <p>
+                Para os demais pedidos, escreva para <a href={`mailto:${DPO_EMAIL}`}>{DPO_EMAIL}</a>. Responderemos em
+                até 15 dias (art. 19, II, da LGPD). Podemos pedir uma confirmação de identidade antes de atender.
+              </p>
+
+              <h2>8. Segurança</h2>
+              <ul>
+                <li>Conexão criptografada (HTTPS) e dados criptografados em repouso pelo fornecedor.</li>
+                <li>Regras de acesso no próprio banco de dados (Row Level Security): cada pessoa só acessa os próprios dados, e as páginas públicas recebem apenas campos não sensíveis.</li>
+                <li>Senhas guardadas apenas como hash criptográfico.</li>
+                <li>Acesso administrativo restrito a servidores designados, com registro das ações.</li>
+                <li>Em caso de incidente de segurança que possa causar risco ou dano relevante, comunicaremos a ANPD e as pessoas afetadas (art. 48 da LGPD).</li>
+              </ul>
+
+              <h2>9. Idade mínima</h2>
+              <p>
+                O Banco de Talentos é destinado a pessoas com {MIN_AGE} anos ou mais, o que é confirmado no cadastro.
+                Se identificarmos uma conta de pessoa com menos de {MIN_AGE} anos, ela será excluída. Responsáveis
+                que encontrarem dados de um menor podem pedir a exclusão pelo e-mail do Encarregado.
+              </p>
+
+              <h2>10. Mudanças nesta Política</h2>
+              <p>
+                Quando esta Política mudar de forma relevante, a versão e a data acima serão atualizadas e, no próximo
+                acesso, pediremos que você leia e aceite a nova versão antes de continuar usando sua conta.
+              </p>
+
+              <h2>11. Contato</h2>
+              <ul>
+                <li><strong>Controlador:</strong> Prefeitura Municipal de Oriximiná — Secretaria Municipal da Juventude (SEMJU), Oriximiná, Pará</li>
+                <li><strong>Encarregado (canal de atendimento):</strong> <a href={`mailto:${DPO_EMAIL}`}>{DPO_EMAIL}</a></li>
+                <li><strong>ANPD:</strong> <a href="https://www.gov.br/anpd" target="_blank" rel="noreferrer">www.gov.br/anpd</a></li>
               </ul>
             </CardContent>
           </Card>

@@ -42,6 +42,12 @@ export interface PublicDashboard {
   questions: QuestionStats[];
 }
 
+/**
+ * Colunas da planilha que não são importadas (minimização, LGPD art. 6º, III).
+ * O nome não é usado em nenhum gráfico e a pesquisa inclui adolescentes.
+ */
+export const NOT_IMPORTED_KEYS = new Set(['nome']);
+
 export const CHARTABLE_KINDS: QuestionKind[] = ['category', 'multi', 'scale'];
 
 export const KIND_LABELS: Record<QuestionKind, string> = {
@@ -211,7 +217,7 @@ export function parseSheetRows(rows: unknown[][], questions: SurveyQuestion[]): 
     }
     const answers: Answers = {};
     columns.forEach((q, i) => {
-      if (!q || q.kind === 'date') return;
+      if (!q || q.kind === 'date' || NOT_IMPORTED_KEYS.has(q.key)) return;
       const value = normalizeAnswer(row[i], q);
       if (value !== null) answers[q.key] = value;
     });

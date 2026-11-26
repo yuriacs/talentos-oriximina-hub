@@ -40,8 +40,8 @@ describe('survey parser', () => {
     );
     expect(parsed.skippedRows).toBe(1);
     expect(parsed.newQuestions.map((n) => n.question)).toEqual(['Pergunta nova']);
+    // O nome do respondente não é importado (minimização)
     expect(parsed.responses[0].answers).toEqual({
-      nome: 'Ana',
       renda: 'Mais de 01 salário mínimo',
       temas: ['Emprego, Renda e Oportunidades'],
       nota: 7,

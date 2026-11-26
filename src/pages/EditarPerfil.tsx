@@ -28,6 +28,8 @@ import MobilityForm from '@/components/profile/MobilityForm';
 import InclusionForm from '@/components/profile/InclusionForm';
 import ResourcesForm from '@/components/profile/ResourcesForm';
 import PortfolioLinksForm from '@/components/profile/PortfolioLinksForm';
+import { PrivacyCenter } from '@/components/privacy/PrivacyCenter';
+import { supabase } from '@/integrations/supabase/client';
 
 function computeScore(profile: any, skills: any[], projects: any[], availability: any[], softSkills: any[]) {
   let score = 0;
@@ -73,7 +75,7 @@ export default function EditarPerfil() {
   const {
     profile, skills, education, experiences, projects, certifications, languages,
     availability,
-    loading, updateProfile, addSkill, deleteSkill,
+    loading, refetch, updateProfile, addSkill, deleteSkill,
     addEducation, deleteEducation, addExperience, deleteExperience,
     addProject, deleteProject, toggleAvailability,
   } = useProfile();
@@ -140,9 +142,11 @@ export default function EditarPerfil() {
     setSaving(true);
     const { ok } = await saveAll();
     if (ok) {
-      const { error } = await updateProfile({ status: 'PUBLISHED', profile_completion: score } as any);
-      if (error) toast.error('Não foi possível publicar. Tente novamente.');
-      else toast.success('Perfil publicado! Agora as empresas podem te encontrar.');
+      // O status só muda pela função do banco (o usuário não pode alterá-lo direto)
+      await updateProfile({ profile_completion: score } as any);
+      const { error } = await supabase.rpc('set_my_profile_published', { _publish: true });
+      if (error) toast.error('Não foi possível publicar. Tente novamente.', { description: error.message });
+      else { toast.success('Perfil publicado! Agora as empresas podem te encontrar.'); await refetch(); }
     }
     setSaving(false);
   };
@@ -346,6 +350,8 @@ export default function EditarPerfil() {
             </div>
           </StepSaveProvider>
         </div>
+
+        <PrivacyCenter status={profile.status} onChanged={refetch} />
       </div>
     </Layout>
   );

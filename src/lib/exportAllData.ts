@@ -18,6 +18,7 @@ export const EXPORT_TABLES = [
   'messages',
   'reports',
   'admin_logs',
+  'consent_records',
   'survey_questions',
   'survey_responses',
 ] as const;

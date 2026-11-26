@@ -9,6 +9,7 @@ import { Save, Accessibility } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
 import { useStepSave } from './stepSave';
+import { SensitiveConsentBox } from '@/components/privacy/SensitiveConsentBox';
 
 interface Props {
   profile: Tables<'profiles'>;
@@ -24,9 +25,18 @@ export default function InclusionForm({ profile, onSave }: Props) {
     social_programs_interest: p.social_programs_interest || false,
   });
   const [saving, setSaving] = useState(false);
+  const [consentedAt, setConsentedAt] = useState<string | null>(p.sensitive_data_consent_at ?? null);
 
   const save = async () => {
-    const { error } = await onSave(form as any);
+    // Sem autorização, não envia nada sobre deficiência. Campo vazio vira null.
+    const sensitive = consentedAt
+      ? {
+          is_pcd: form.is_pcd,
+          disability_type: form.is_pcd ? form.disability_type || null : null,
+          accessibility_needs: form.is_pcd ? form.accessibility_needs || null : null,
+        }
+      : {};
+    const { error } = await onSave({ social_programs_interest: form.social_programs_interest, ...sensitive } as any);
     if (error) { toast.error('Erro ao salvar'); return false; }
     return true;
   };
@@ -47,12 +57,20 @@ export default function InclusionForm({ profile, onSave }: Props) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        <SensitiveConsentBox
+          consentedAt={consentedAt}
+          hasExistingData={!!(p.is_pcd || p.disability_type || p.accessibility_needs)}
+          onChange={(at) => {
+            setConsentedAt(at);
+            if (!at) setForm(f => ({ ...f, is_pcd: false, disability_type: '', accessibility_needs: '' }));
+          }}
+        />
         <div className="flex items-center justify-between gap-3 p-3 border rounded-lg">
-          <Label>Pessoa com Deficiência (PcD)?</Label>
-          <Switch checked={form.is_pcd} onCheckedChange={v => setForm(f => ({ ...f, is_pcd: v }))} />
+          <Label>Pessoa com Deficiência (PcD)? <span className="text-muted-foreground text-xs">(opcional, dado sensível)</span></Label>
+          <Switch checked={form.is_pcd} disabled={!consentedAt} onCheckedChange={v => setForm(f => ({ ...f, is_pcd: v }))} />
         </div>
 
-        {form.is_pcd && (
+        {consentedAt && form.is_pcd && (
           <>
             <div className="space-y-2">
               <Label>Tipo de Deficiência</Label>

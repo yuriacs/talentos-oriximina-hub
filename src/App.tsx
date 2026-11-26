@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { ConsentGate } from "@/components/privacy/ConsentGate";
 import Index from "./pages/Index";
 import Explorar from "./pages/Explorar";
 import Login from "./pages/Login";
@@ -42,6 +43,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <ScrollToTop />
+          <ConsentGate />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/explorar" element={<Explorar />} />
