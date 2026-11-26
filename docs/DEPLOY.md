@@ -408,7 +408,7 @@ $ sudo rm -rf /tmp/backup-supabase
 
 ### 9.4 Avisar sobre as senhas antigas
 
-Na migração anterior (Lovable → Supabase, outubro de 2026), **37 das 38
+Na migração anterior (outubro de 2026), **37 das 38
 contas ficaram sem senha**. Essas pessoas entram clicando em
 **"Esqueceu a senha?"** na tela de login e recebem um link por e-mail.
 A SEMJU pode avisar os jovens por seus canais. Quem não receber o e-mail pode
