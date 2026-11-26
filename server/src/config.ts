@@ -44,6 +44,6 @@ export const config = {
   },
 };
 
-/** Sem SMTP não dá para mandar e-mail: o cadastro é confirmado na hora. */
-export const emailEnabled = () => !!config.smtp.host;
+/** Sem SMTP completo não dá para mandar e-mail: o cadastro é confirmado na hora. */
+export const emailEnabled = () => !!(config.smtp.host && config.smtp.user && config.smtp.pass);
 export const googleEnabled = () => !!(config.google.clientId && config.google.clientSecret);

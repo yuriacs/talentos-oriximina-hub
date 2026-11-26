@@ -54,17 +54,22 @@ export async function authRoutes(app: FastifyInstance) {
       const userId = rows[0].id as string;
       if (needsConfirmation) {
         const token = await createOneTimeToken(db, userId, 'confirm_email');
-        return { userId, token };
+        const link = `${config.appUrl}/api/auth/confirm?token=${token}&redirect=${encodeURIComponent(redirect)}`;
+        // Envia antes de confirmar a transação: se o e-mail falhar, o cadastro é desfeito
+        // e a pessoa pode tentar de novo (em vez de ficar com uma conta travada).
+        try {
+          await sendConfirmationEmail(email, link);
+        } catch (err) {
+          request.log.error(err, 'falha ao enviar e-mail de confirmação');
+          throw Object.assign(new Error('Não foi possível enviar o e-mail de confirmação agora. Tente de novo em alguns minutos.'), { statusCode: 502, expose: true });
+        }
+        return { userId };
       }
       await createSession(db, reply, userId);
       return { userId };
     });
 
     if ('conflict' in result) return reply.code(409).send({ message: 'User already registered' });
-    if (result.token) {
-      const link = `${config.appUrl}/api/auth/confirm?token=${result.token}&redirect=${encodeURIComponent(redirect)}`;
-      await sendConfirmationEmail(email, link);
-    }
     return { needsConfirmation };
   });
 

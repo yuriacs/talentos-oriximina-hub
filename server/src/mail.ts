@@ -16,6 +16,17 @@ function getTransport() {
   return transport;
 }
 
+/** Testa a conexão e o login no SMTP (usado ao iniciar a API) */
+export async function verifySmtp(): Promise<string | null> {
+  if (!emailEnabled()) return null;
+  try {
+    await getTransport().verify();
+    return null;
+  } catch (err) {
+    return (err as Error).message;
+  }
+}
+
 const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
 async function send(to: string, subject: string, intro: string, buttonText: string, link: string, outro: string) {

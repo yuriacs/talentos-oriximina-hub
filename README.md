@@ -47,15 +47,16 @@ Leia [`docs/LGPD.md`](docs/LGPD.md) antes de mexer em cadastro, perfis, admin ou
 
 ## 🛠️ Como Executar o Projeto
 
-Em produção, tudo sobe com Docker:
+Em produção, tudo sobe com Docker (Postgres, API, site e HTTPS automático):
 
 ```bash
-cp .env.example .env   # preencha senha do banco, endereço do site, SMTP e Google
-docker compose up -d --build
+cp .env.example .env   # preencha senha do banco, domínio, SMTP e Google
+docker compose --profile https up -d --build
 ```
 
-Instalação no servidor, importação dos dados antigos do Supabase, backup e
-desenvolvimento local estão em [`docs/OPERACAO.md`](docs/OPERACAO.md).
+- **Instalar numa VPS, passo a passo:** [`docs/DEPLOY.md`](docs/DEPLOY.md)
+- **Referência técnica e desenvolvimento local:** [`docs/OPERACAO.md`](docs/OPERACAO.md)
+- **Proteção de dados (LGPD):** [`docs/LGPD.md`](docs/LGPD.md)
 
 ## 📁 Estrutura de Pastas
 

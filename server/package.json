@@ -27,6 +27,8 @@
     "@types/node": "^26.6.11",
     "@types/nodemailer": "^8.0.2",
     "@types/pg": "^8.23.1",
+    "@types/smtp-server": "^3.5.13",
+    "smtp-server": "^3.21.7",
     "typescript": "^7.0.2",
     "vitest": "^5.1.2"
   }

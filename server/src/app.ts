@@ -56,7 +56,8 @@ export async function buildApp() {
   app.setErrorHandler((err, request, reply) => {
     request.log.error(err);
     const status = (err as { statusCode?: number }).statusCode ?? 500;
-    reply.code(status).send({ message: status >= 500 ? 'Erro interno do servidor' : (err as Error).message });
+    const expose = status < 500 || (err as { expose?: boolean }).expose;
+    reply.code(status).send({ message: expose ? (err as Error).message : 'Erro interno do servidor' });
   });
 
   return app;
