@@ -1,6 +1,6 @@
 -- ============================================================
 -- Adequação à LGPD (Lei nº 13.709/2018)
--- Aplicar no SQL Editor do Supabase (ou via `supabase db push`).
+-- Aplicada automaticamente pela API ao iniciar (server/src/migrate.ts).
 -- Todas as mudanças são aditivas ou corretivas: nenhum dado existente é apagado.
 -- ============================================================
 
@@ -302,9 +302,8 @@ GRANT EXECUTE ON FUNCTION public.set_my_profile_published(boolean) TO authentica
 -- 7. Exclusão da própria conta (art. 18, VI)
 -- Apaga empresa, perfil (com formação, habilidades, projetos,
 -- mensagens e denúncias em cascata), consentimentos, papéis e o
--- usuário de autenticação. Fotos e logos são removidos pelo site
--- antes de chamar esta função (o Supabase não permite apagar
--- arquivos do Storage por SQL).
+-- usuário de autenticação. Fotos e logos são apagados do disco pela
+-- API logo depois de chamar esta função.
 -- ------------------------------------------------------------
 CREATE OR REPLACE FUNCTION public.delete_my_account()
 RETURNS void
@@ -357,7 +356,6 @@ $$;
 REVOKE ALL ON FUNCTION public.anonymize_survey_names() FROM public, anon;
 GRANT EXECUTE ON FUNCTION public.anonymize_survey_names() TO authenticated;
 
-NOTIFY pgrst, 'reload schema';
 
 -- ------------------------------------------------------------
 -- Conferência (rode à parte, só leitura): perfis sem usuário.

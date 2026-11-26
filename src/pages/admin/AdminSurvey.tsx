@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
-import type { Json } from '@/integrations/supabase/types';
+import { db } from '@/lib/api';
+import type { Json } from '@/lib/database.types';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -41,13 +41,13 @@ export default function AdminSurvey() {
 
   const fetchData = async () => {
     const [q, r] = await Promise.all([
-      supabase.from('survey_questions').select('*').order('position'),
-      supabase.from('survey_responses').select('id, submitted_at, answers').order('submitted_at', { ascending: false }),
+      db.from('survey_questions').select('*').order('position'),
+      db.from('survey_responses').select('id, submitted_at, answers').order('submitted_at', { ascending: false }),
     ]);
     const error = q.error || r.error;
     if (error) {
-      // PGRST205: tabela inexistente — a migração da pesquisa não foi aplicada
-      setLoadError(error.code === 'PGRST205' ? 'missing_tables' : error.message);
+      // Tabela inexistente: a migração da pesquisa não foi aplicada
+      setLoadError(error.code === '42P01' || /Tabela desconhecida/.test(error.message) ? 'missing_tables' : error.message);
     } else if (!q.data?.length) {
       setLoadError('no_questions');
     } else {
@@ -82,8 +82,8 @@ export default function AdminSurvey() {
               <CardDescription>
                 {loadError === 'missing_tables' || loadError === 'no_questions' ? (
                   <>
-                    Execute o arquivo <code className="text-foreground">supabase/migrations/20261026120000_survey_dashboard.sql</code>{' '}
-                    no SQL Editor do Supabase (ou peça ao Lovable para aplicar a migração) e recarregue esta página.
+                    A migração <code className="text-foreground">db/migrations/20261026120000_survey_dashboard.sql</code>{' '}
+                    não foi aplicada neste banco. Reinicie a API (ela aplica as migrações ao iniciar) e recarregue esta página.
                     A importação fica bloqueada até lá.
                   </>
                 ) : (
@@ -351,7 +351,7 @@ function VisibilitySettings({
   onChange: (questions: SurveyQuestion[]) => void;
 }) {
   const update = async (key: string, patch: Partial<Pick<SurveyQuestion, 'is_public' | 'label'>>) => {
-    const { error } = await supabase
+    const { error } = await db
       .from('survey_questions')
       .update({ ...patch, updated_at: new Date().toISOString() })
       .eq('key', key);
@@ -451,7 +451,7 @@ function ImportSheet({
   const removeNames = async () => {
     if (!confirm('Remover definitivamente o nome de todas as respostas da pesquisa? Não dá para desfazer.')) return;
     setBusy(true);
-    const { data, error } = await supabase.rpc('anonymize_survey_names');
+    const { data, error } = await db.rpc('anonymize_survey_names');
     setBusy(false);
     if (error) { toast.error('Não foi possível remover os nomes', { description: error.message }); return; }
     toast.success(`Nome removido de ${data ?? 0} respostas`);
@@ -462,7 +462,7 @@ function ImportSheet({
     if (!parsed) return;
     setBusy(true);
     if (parsed.newQuestions.length) {
-      const { error } = await supabase.from('survey_questions').upsert(parsed.newQuestions);
+      const { error } = await db.from('survey_questions').upsert(parsed.newQuestions);
       if (error) {
         toast.error('Erro ao criar as novas perguntas');
         setBusy(false);
@@ -475,7 +475,7 @@ function ImportSheet({
         answers: r.answers as unknown as Json,
         imported_by: userId ?? null,
       }));
-      const { error } = await supabase.from('survey_responses').upsert(chunk, { onConflict: 'submitted_at' });
+      const { error } = await db.from('survey_responses').upsert(chunk, { onConflict: 'submitted_at' });
       if (error) {
         toast.error('Erro ao importar as respostas');
         setBusy(false);
@@ -483,7 +483,7 @@ function ImportSheet({
       }
     }
     if (userId) {
-      await supabase.from('admin_logs').insert({
+      await db.from('admin_logs').insert({
         admin_id: userId,
         action: 'survey_imported',
         details: { file: fileName, total: parsed.responses.length, new: newCount },

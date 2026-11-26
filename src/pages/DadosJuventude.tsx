@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { QuestionChartGrid } from '@/components/survey/SurveyCharts';
 import { formatDateTime, type PublicDashboard, type QuestionStats } from '@/lib/survey';
 import { BarChart3, Loader2, ShieldCheck } from 'lucide-react';
@@ -20,7 +20,7 @@ export default function DadosJuventude() {
 
   useEffect(() => {
     async function fetchDashboard() {
-      const { data } = await supabase.rpc('get_public_survey_dashboard');
+      const { data } = await db.rpc('get_public_survey_dashboard');
       setDashboard((data as unknown as PublicDashboard) ?? null);
       setLoading(false);
     }

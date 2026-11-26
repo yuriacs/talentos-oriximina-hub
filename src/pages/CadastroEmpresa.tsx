@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Building2, Phone, Briefcase, Award, FileText, CheckCircle2, ArrowLeft, ArrowRight, Send, ImagePlus, X, Loader2, Clock, Check,
 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { db, storage } from '@/lib/api';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -205,7 +205,7 @@ export default function CadastroEmpresa() {
   // Uma empresa por conta: quem já cadastrou vê a situação do cadastro
   useEffect(() => {
     if (!user) return;
-    supabase
+    db
       .from('companies')
       .select('nome_fantasia, status')
       .eq('user_id', user.id)
@@ -266,14 +266,15 @@ export default function CadastroEmpresa() {
     try {
       let logo_url: string | null = null;
       if (logoFile) {
-        const ext = logoFile.name.split('.').pop();
+        const ext = storage.imageExtension(logoFile);
+        if (!ext) throw new Error('Envie o logotipo em JPG, PNG, WEBP ou GIF.');
         const path = `${user.id}/${Date.now()}.${ext}`;
-        const { error: uploadError } = await supabase.storage.from('company-logos').upload(path, logoFile);
-        if (uploadError) throw new Error('Não foi possível enviar o logotipo. Tente uma imagem menor ou envie sem logo.');
-        logo_url = supabase.storage.from('company-logos').getPublicUrl(path).data.publicUrl;
+        const { data: uploaded, error: uploadError } = await storage.upload('company-logos', path, logoFile);
+        if (uploadError || !uploaded) throw new Error('Não foi possível enviar o logotipo. Tente uma imagem menor ou envie sem logo.');
+        logo_url = uploaded.publicUrl;
       }
 
-      const { error } = await supabase.from('companies').insert({
+      const { error } = await db.from('companies').insert({
         user_id: user.id,
         logo_url,
         razao_social: data.razao_social.trim(),

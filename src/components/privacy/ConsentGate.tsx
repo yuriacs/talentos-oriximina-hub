@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -32,7 +32,7 @@ export function ConsentGate() {
   useEffect(() => {
     if (!user) { setNeedsConsent(false); return; }
     let cancelled = false;
-    supabase
+    db
       .from('consent_records')
       .select('id')
       .eq('user_id', user.id)
@@ -53,7 +53,7 @@ export function ConsentGate() {
 
   const accept = async () => {
     setSaving(true);
-    const { error } = await supabase.from('consent_records').insert({
+    const { error } = await db.from('consent_records').insert({
       user_id: user.id, document: 'termos_privacidade', version: TERMS_VERSION, granted: true,
     });
     setSaving(false);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -29,7 +29,7 @@ export default function AdminProfiles() {
   const { user } = useAuth();
 
   const fetchProfiles = async () => {
-    let query = supabase.from('profiles').select('*').order('created_at', { ascending: false });
+    let query = db.from('profiles').select('*').order('created_at', { ascending: false });
     if (statusFilter !== 'ALL') query = query.eq('status', statusFilter as any);
     if (search) query = query.ilike('full_name', `%${search}%`);
     const { data } = await query;
@@ -40,14 +40,14 @@ export default function AdminProfiles() {
   useEffect(() => { fetchProfiles(); }, [statusFilter, search]);
 
   const updateProfileStatus = async (profileId: string, newStatus: string) => {
-    const { error } = await supabase.from('profiles').update({ status: newStatus as any }).eq('id', profileId);
+    const { error } = await db.from('profiles').update({ status: newStatus as any }).eq('id', profileId);
     if (error) {
       toast.error('Erro ao atualizar status');
     } else {
       toast.success(`Perfil ${newStatus === 'BLOCKED' ? 'bloqueado' : 'atualizado'}`);
       // Log action
       if (user) {
-        await supabase.from('admin_logs').insert({
+        await db.from('admin_logs').insert({
           admin_id: user.id,
           action: `profile_status_changed_to_${newStatus}`,
           target_id: profileId,
@@ -58,13 +58,13 @@ export default function AdminProfiles() {
   };
 
   const toggleVerified = async (profileId: string, current: boolean) => {
-    const { error } = await supabase.from('profiles').update({ is_verified: !current }).eq('id', profileId);
+    const { error } = await db.from('profiles').update({ is_verified: !current }).eq('id', profileId);
     if (error) {
       toast.error('Erro ao atualizar verificação');
     } else {
       toast.success(!current ? 'Perfil verificado!' : 'Verificação removida');
       if (user) {
-        await supabase.from('admin_logs').insert({
+        await db.from('admin_logs').insert({
           admin_id: user.id,
           action: !current ? 'profile_verified' : 'profile_unverified',
           target_id: profileId,

@@ -185,12 +185,7 @@ export default function Cadastro() {
 
             <Card className="border-border/50">
               <CardContent className="pt-6">
-                <GoogleSignInButton redirectPath={redirect ?? '/meu-perfil'} />
-
-                <div className="relative my-6">
-                  <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
-                  <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">ou com e-mail</span></div>
-                </div>
+                <GoogleSignInButton redirectPath={redirect ?? '/meu-perfil'} divider={{ position: 'after', label: 'ou com e-mail' }} />
 
                 <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                   <div className="space-y-2">

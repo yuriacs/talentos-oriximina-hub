@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import type { Tables, Database } from '@/integrations/supabase/types';
+import type { Tables, Database } from '@/lib/database.types';
 
 type AvailabilityType = Database['public']['Enums']['availability_type'];
 

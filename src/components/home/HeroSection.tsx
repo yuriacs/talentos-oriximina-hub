@@ -7,14 +7,14 @@ import {
   MapPin
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 
 export function HeroSection() {
   const [companyCount, setCompanyCount] = useState(0);
   const [isPulsing, setIsPulsing] = useState(true);
 
   useEffect(() => {
-    supabase.rpc('get_public_companies').then(({ data }) => {
+    db.rpc('get_public_companies').then(({ data }) => {
       setCompanyCount(data?.length ?? 0);
     });
     const timer = setTimeout(() => setIsPulsing(false), 30000);

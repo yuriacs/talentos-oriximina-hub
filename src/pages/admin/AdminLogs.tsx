@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { Card, CardContent } from '@/components/ui/card';
 
 interface Log {
@@ -17,7 +17,7 @@ export default function AdminLogs() {
 
   useEffect(() => {
     const fetchLogs = async () => {
-      const { data } = await supabase
+      const { data } = await db
         .from('admin_logs')
         .select('*')
         .order('created_at', { ascending: false })

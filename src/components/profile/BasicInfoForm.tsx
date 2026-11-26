@@ -8,9 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Save, Camera, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { db, storage } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
-import type { Tables } from '@/integrations/supabase/types';
+import type { Tables } from '@/lib/database.types';
 import { useStepSave } from './stepSave';
 import { maskPhone } from '@/lib/br';
 
@@ -74,25 +74,23 @@ export default function BasicInfoForm({ profile, onSave }: Props) {
       return;
     }
 
+    const ext = storage.imageExtension(file);
+    if (!ext) {
+      toast.error('Envie a foto em JPG, PNG, WEBP ou GIF');
+      return;
+    }
+
     setUploading(true);
-    const ext = file.name.split('.').pop();
     const filePath = `${user.id}/avatar.${ext}`;
+    const { data: uploaded, error: uploadError } = await storage.upload('avatars', filePath, file);
 
-    const { error: uploadError } = await supabase.storage
-      .from('avatars')
-      .upload(filePath, file, { upsert: true });
-
-    if (uploadError) {
-      toast.error('Erro ao enviar imagem');
+    if (uploadError || !uploaded) {
+      toast.error('Erro ao enviar imagem', { description: uploadError?.message });
       setUploading(false);
       return;
     }
 
-    const { data: { publicUrl } } = supabase.storage
-      .from('avatars')
-      .getPublicUrl(filePath);
-
-    const url = `${publicUrl}?t=${Date.now()}`;
+    const url = `${uploaded.publicUrl}?t=${Date.now()}`;
     setPhotoUrl(url);
     const { error } = await onSave({ photo: url } as any);
     if (error) toast.error('Erro ao salvar foto');

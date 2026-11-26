@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { useStepSave } from './stepSave';
 
 const hasText = (draft: object) => Object.values(draft).some(v => typeof v === 'string' && v.trim() !== '');
-import type { Tables, TablesInsert } from '@/integrations/supabase/types';
+import type { Tables, TablesInsert } from '@/lib/database.types';
 
 interface Props {
   education: Tables<'education'>[];

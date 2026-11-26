@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SkillChip } from '@/components/ui/skill-chip';
 import { availabilityLabels } from '@/data/mockData';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { Link } from 'react-router-dom';
 import {
   Select,
@@ -79,7 +79,7 @@ export default function Explorar() {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const { data: profilesData } = await supabase
+      const { data: profilesData } = await db
         .rpc('get_public_profiles');
 
       const ids = (profilesData || []).map(p => p.id);
@@ -87,9 +87,9 @@ export default function Explorar() {
 
       if (ids.length > 0) {
         const [skillsRes, availRes, projRes] = await Promise.all([
-          supabase.from('skills').select('id, profile_id, name, category, level').in('profile_id', ids),
-          supabase.from('availability').select('profile_id, type').in('profile_id', ids),
-          supabase.from('projects').select('id, profile_id').in('profile_id', ids),
+          db.from('skills').select('id, profile_id, name, category, level').in('profile_id', ids),
+          db.from('availability').select('profile_id, type').in('profile_id', ids),
+          db.from('projects').select('id, profile_id').in('profile_id', ids),
         ]);
         setAllSkills(skillsRes.data || []);
         setAllAvailability(availRes.data || []);

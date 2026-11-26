@@ -1,6 +1,6 @@
 // Exporta todas as tabelas do banco (com a sessão de admin) e a lista de
-// usuários do Auth, para migrar o site para outro projeto Supabase.
-import { supabase } from '@/integrations/supabase/client';
+// usuários, como cópia de consulta. Para backup completo use pg_dump (docs/OPERACAO.md).
+import { adminApi, db } from '@/lib/api';
 
 // Ordem de importação: tabelas referenciadas vêm antes das que referenciam
 export const EXPORT_TABLES = [
@@ -24,8 +24,7 @@ export const EXPORT_TABLES = [
 ] as const;
 
 const PAGE_SIZE = 1000;
-// A função admin-user-management devolve no máximo 200 usuários
-const USER_LIST_LIMIT = 200;
+const USER_LIST_LIMIT = 10000;
 
 export interface ExportUser {
   id: string;
@@ -48,13 +47,13 @@ export interface FullExport {
 async function fetchTable(table: string): Promise<Record<string, unknown>[] | null> {
   const rows: Record<string, unknown>[] = [];
   for (let from = 0; ; from += PAGE_SIZE) {
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from(table as never)
       .select('*')
       .range(from, from + PAGE_SIZE - 1);
     if (error) {
       // Tabela que não existe neste banco (ex.: pesquisa ainda não migrada)
-      if (error.code === 'PGRST205' || error.code === '42P01') return null;
+      if (error.code === '42P01' || /Tabela desconhecida/.test(error.message)) return null;
       throw new Error(`${table}: ${error.message}`);
     }
     rows.push(...((data ?? []) as Record<string, unknown>[]));
@@ -64,9 +63,7 @@ async function fetchTable(table: string): Promise<Record<string, unknown>[] | nu
 
 export async function exportAllData(onProgress?: (step: string) => void): Promise<FullExport> {
   onProgress?.('usuários');
-  const { data, error } = await supabase.functions.invoke('admin-user-management', {
-    body: { action: 'list_users', search: '' },
-  });
+  const { data, error } = await adminApi.listUsers('', USER_LIST_LIMIT);
   if (error) throw new Error(`usuários: ${error.message}`);
   const users = ((data as { users?: ExportUser[] })?.users ?? []).map((u) => ({
     id: u.id,
@@ -88,7 +85,7 @@ export async function exportAllData(onProgress?: (step: string) => void): Promis
 
   return {
     exported_at: new Date().toISOString(),
-    source_url: import.meta.env.VITE_SUPABASE_URL,
+    source_url: window.location.origin,
     users,
     users_may_be_truncated: users.length >= USER_LIST_LIMIT,
     tables,

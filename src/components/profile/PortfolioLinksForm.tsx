@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Save, Link2, Linkedin, Instagram, Globe, Video } from 'lucide-react';
 import { toast } from 'sonner';
-import type { Tables } from '@/integrations/supabase/types';
+import type { Tables } from '@/lib/database.types';
 import { useStepSave } from './stepSave';
 import { isValidUrl, normalizeUrl } from '@/lib/br';
 

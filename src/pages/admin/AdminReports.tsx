@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -24,7 +24,7 @@ export default function AdminReports() {
   const { user } = useAuth();
 
   const fetchReports = async () => {
-    let query = supabase.from('reports').select('*').order('created_at', { ascending: false });
+    let query = db.from('reports').select('*').order('created_at', { ascending: false });
     if (statusFilter !== 'ALL') query = query.eq('status', statusFilter as any);
     const { data } = await query;
     setReports((data as Report[]) || []);
@@ -38,13 +38,13 @@ export default function AdminReports() {
     if (newStatus === 'RESOLVED' || newStatus === 'DISMISSED') {
       update.resolved_at = new Date().toISOString();
     }
-    const { error } = await supabase.from('reports').update(update).eq('id', reportId);
+    const { error } = await db.from('reports').update(update).eq('id', reportId);
     if (error) {
       toast.error('Erro ao atualizar denúncia');
     } else {
       toast.success('Denúncia atualizada');
       if (user) {
-        await supabase.from('admin_logs').insert({
+        await db.from('admin_logs').insert({
           admin_id: user.id,
           action: `report_${newStatus.toLowerCase()}`,
           target_id: reportId,

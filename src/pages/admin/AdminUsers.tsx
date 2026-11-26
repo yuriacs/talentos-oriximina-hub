@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { adminApi } from '@/lib/api';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -37,10 +37,7 @@ export default function AdminUsers() {
 
   const fetchUsers = async () => {
     setLoading(true);
-    const { data, error } = await supabase.functions.invoke(
-      'admin-user-management',
-      { body: { action: 'list_users', search } },
-    );
+    const { data, error } = await adminApi.listUsers(search);
     if (error) {
       toast.error('Erro ao carregar usuários');
       setUsers([]);
@@ -59,10 +56,7 @@ export default function AdminUsers() {
   const resetPassword = async () => {
     if (!actionUser) return;
     setResetting(true);
-    const { data, error } = await supabase.functions.invoke(
-      'admin-user-management',
-      { body: { action: 'reset_password', user_id: actionUser.id } },
-    );
+    const { data, error } = await adminApi.resetPassword(actionUser.id);
     setResetting(false);
     if (error || !(data as any)?.temp_password) {
       toast.error('Erro ao redefinir senha');
@@ -74,18 +68,9 @@ export default function AdminUsers() {
 
   const sendRecoveryLink = async (u: AdminUser) => {
     setSendingLink(true);
-    const { error } = await supabase.functions.invoke(
-      'admin-user-management',
-      {
-        body: {
-          action: 'send_recovery_link',
-          email: u.email,
-          redirect_to: `${window.location.origin}/reset-password`,
-        },
-      },
-    );
+    const { error } = await adminApi.sendRecoveryLink(u.email);
     setSendingLink(false);
-    if (error) toast.error('Erro ao enviar link');
+    if (error) toast.error('Erro ao enviar link', { description: error.message });
     else toast.success('Link de recuperação enviado por e-mail');
   };
 

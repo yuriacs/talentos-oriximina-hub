@@ -6,12 +6,9 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+// Tipos das tabelas e funções do banco (db/migrations).
+// Ao criar ou alterar uma tabela, atualize este arquivo.
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.1"
-  }
   public: {
     Tables: {
       admin_logs: {
@@ -897,7 +894,7 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Database
 
 type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 

@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Sparkles, Mail, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { authApi } from '@/lib/api';
 
 export default function RecuperarSenha() {
   const [email, setEmail] = useState('');
@@ -18,9 +18,7 @@ export default function RecuperarSenha() {
     e.preventDefault();
     setIsLoading(true);
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
+    const { error } = await authApi.recover(email.trim());
 
     if (error) {
       toast.error('Erro ao enviar e-mail', { description: error.message });

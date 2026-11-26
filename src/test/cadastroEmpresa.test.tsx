@@ -8,7 +8,7 @@ vi.mock('@/hooks/useAuth', () => ({
   useAuth: () => ({ user: { id: 'u1', email: 'rh@empresa.com' }, isLoading: false, isAdmin: false, signOut: vi.fn() }),
 }));
 
-vi.mock('@/integrations/supabase/client', () => {
+vi.mock('@/lib/api', () => {
   const query = {
     select: () => query,
     eq: () => query,
@@ -17,7 +17,7 @@ vi.mock('@/integrations/supabase/client', () => {
     maybeSingle: async () => ({ data: null, error: null }),
     insert,
   };
-  return { supabase: { from: () => query, storage: { from: () => ({}) } } };
+  return { db: { from: () => query }, storage: { imageExtension: () => 'png', upload: vi.fn() } };
 });
 
 import CadastroEmpresa from '@/pages/CadastroEmpresa';

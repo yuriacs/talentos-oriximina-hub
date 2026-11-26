@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Plus, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { useStepSave } from './stepSave';
-import type { Tables, TablesInsert } from '@/integrations/supabase/types';
+import type { Tables, TablesInsert } from '@/lib/database.types';
 
 interface Props {
   skills: Tables<'skills'>[];

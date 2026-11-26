@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, FileCheck, AlertTriangle, BarChart3, GraduationCap, Briefcase, Accessibility, Wifi, Monitor } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { toast } from 'sonner';
@@ -159,9 +159,9 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       const [profilesRes, reports, messages] = await Promise.all([
-        supabase.from('profiles').select('status, age_range, gender, race_color, education_level, employment_status, is_pcd, digital_skill_level, internet_access, has_computer, interest_areas, desired_opportunity_types'),
-        supabase.from('reports').select('status').eq('status', 'PENDING'),
-        supabase.from('messages').select('id', { count: 'exact', head: true }),
+        db.from('profiles').select('status, age_range, gender, race_color, education_level, employment_status, is_pcd, digital_skill_level, internet_access, has_computer, interest_areas, desired_opportunity_types'),
+        db.from('reports').select('status').eq('status', 'PENDING'),
+        db.from('messages').select('id', { count: 'exact', head: true }),
       ]);
 
       const profileList = (profilesRes.data || []) as ProfileRow[];

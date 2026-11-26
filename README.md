@@ -10,7 +10,9 @@ O projeto foi construído com as tecnologias mais modernas do ecossistema JavaSc
 - **Linguagem:** [TypeScript](https://www.typescriptlang.org/)
 - **Estilização:** [Tailwind CSS](https://tailwindcss.com/)
 - **Componentes UI:** [Radix UI](https://www.radix-ui.com/) & [shadcn/ui](https://ui.shadcn.com/)
-- **Backend & Autenticação:** [Supabase](https://supabase.com/)
+- **Backend:** API própria em [Node.js](https://nodejs.org/) + [Fastify](https://fastify.dev/) (`server/`)
+- **Banco de dados:** [PostgreSQL 16](https://www.postgresql.org/), com regras de segurança por linha (RLS)
+- **Implantação:** Docker Compose (Postgres + API + nginx)
 - **Gerenciamento de Estado & Cache:** [TanStack Query (React Query)](https://tanstack.com/query/latest)
 - **Formulários:** [React Hook Form](https://react-hook-form.com/) com validação [Zod](https://zod.dev/)
 - **Ícones:** [Lucide React](https://lucide.dev/)
@@ -19,7 +21,7 @@ O projeto foi construído com as tecnologias mais modernas do ecossistema JavaSc
 ## ✨ Funcionalidades Principais
 
 ### Para Talentos (Usuários)
-- **Cadastro e Autenticação:** Fluxo completo de login e registro via Supabase Auth.
+- **Cadastro e Autenticação:** Cadastro com e-mail e senha (confirmação por e-mail institucional) e login com Google.
 - **Perfil Profissional:** Criação de perfil detalhado incluindo bio, localização e contatos.
 - **Portfólio e Currículo:** Seções para adicionar experiências profissionais, formação acadêmica, certificações e projetos.
 - **Gestão de Habilidades:** Adição de competências técnicas e comportamentais.
@@ -45,45 +47,26 @@ Leia [`docs/LGPD.md`](docs/LGPD.md) antes de mexer em cadastro, perfis, admin ou
 
 ## 🛠️ Como Executar o Projeto
 
-### Pré-requisitos
-- [Node.js](https://nodejs.org/) (versão 18 ou superior)
-- [pnpm](https://pnpm.io/) ou [npm](https://www.npmjs.com/)
+Em produção, tudo sobe com Docker:
 
-### Instalação
+```bash
+cp .env.example .env   # preencha senha do banco, endereço do site, SMTP e Google
+docker compose up -d --build
+```
 
-1. Clone o repositório:
-   ```bash
-   git clone <url-do-repositorio>
-   cd talentos-oriximina-hub
-   ```
-
-2. Instale as dependências:
-   ```bash
-   pnpm install
-   ```
-
-3. Configure as variáveis de ambiente:
-   Crie um arquivo `.env` na raiz do projeto com suas credenciais do Supabase:
-   ```env
-   VITE_SUPABASE_URL=sua_url_do_supabase
-   VITE_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
-   ```
-
-4. Inicie o servidor de desenvolvimento:
-   ```bash
-   pnpm dev
-   ```
-
-5. Acesse a aplicação em `http://localhost:5173`.
+Instalação no servidor, importação dos dados antigos do Supabase, backup e
+desenvolvimento local estão em [`docs/OPERACAO.md`](docs/OPERACAO.md).
 
 ## 📁 Estrutura de Pastas
 
 ```text
+db/migrations/      # Estrutura do banco (aplicada pela API ao iniciar)
+server/             # API: login, sessões, e-mails, fotos e consultas ao banco
+deploy/nginx.conf   # Servidor web do site
 src/
 ├── components/     # Componentes reutilizáveis (UI, Layout, Home)
 ├── hooks/          # Hooks customizados (Auth, Profile, etc.)
-├── integrations/   # Configuração e tipos do Supabase
-├── lib/            # Utilitários e configurações de bibliotecas
+├── lib/            # Cliente da API (api.ts), tipos do banco e utilitários
 ├── pages/          # Páginas da aplicação (incluindo subpasta admin)
 ├── types/          # Definições de tipos TypeScript
 └── data/           # Dados mockados para testes e desenvolvimento

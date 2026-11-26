@@ -87,9 +87,9 @@ export default function PoliticaPrivacidade() {
 
               <h3>2.4. Dados técnicos</h3>
               <p>
-                Para manter você conectado, o site guarda um token de sessão no armazenamento do seu navegador. O
-                provedor de banco de dados e autenticação registra dados técnicos de acesso (como endereço IP e
-                horário de login) para segurança. Não usamos cookies de publicidade, ferramentas de análise de
+                Para manter você conectado, o site usa um cookie de sessão (essencial, sem finalidade de
+                publicidade). O servidor registra dados técnicos de acesso, como endereço IP e horário dos pedidos,
+                para segurança e para limitar tentativas abusivas de login. Não usamos cookies de publicidade, ferramentas de análise de
                 comportamento nem pixels de redes sociais.
               </p>
 
@@ -122,20 +122,21 @@ export default function PoliticaPrivacidade() {
               <p><strong>A Plataforma não vende, aluga nem comercializa dados pessoais.</strong></p>
 
               <h2>5. Fornecedores e transferência internacional</h2>
-              <p>A Plataforma usa serviços de terceiros que tratam dados em nome da Prefeitura (operadores):</p>
-              <ul>
-                <li><strong>Supabase:</strong> banco de dados, autenticação e armazenamento de fotos e logomarcas.</li>
-                <li><strong>Vercel:</strong> hospedagem do site.</li>
-                <li><strong>Google:</strong> login com conta Google (só se você escolher essa opção) e o formulário da pesquisa.</li>
-              </ul>
               <p>
-                Os servidores desses fornecedores podem estar fora do Brasil. Essas transferências internacionais se
-                apoiam no art. 33 da LGPD e nas cláusulas de proteção de dados dos contratos desses fornecedores.
+                O site, o banco de dados e as fotos ficam em servidor da Prefeitura ou de empresa de hospedagem
+                contratada por ela, que atua como operadora e só trata os dados conforme as instruções da Prefeitura.
+                Também usamos o <strong>Google</strong> para o login com conta Google (só se você escolher essa
+                opção) e para o formulário da pesquisa. Os e-mails da Plataforma (confirmação de cadastro e
+                redefinição de senha) saem pelo e-mail institucional da Prefeitura.
+              </p>
+              <p>
+                Os servidores do Google podem estar fora do Brasil. Essa transferência internacional se apoia no
+                art. 33 da LGPD e nas cláusulas de proteção de dados oferecidas por esse fornecedor.
               </p>
 
               <h2>6. Por quanto tempo guardamos</h2>
               <ul>
-                <li><strong>Conta e perfil:</strong> enquanto você mantiver a conta. Ao excluir a conta, os dados são apagados na hora do banco principal. Cópias de segurança do fornecedor são substituídas automaticamente em poucos dias.</li>
+                <li><strong>Conta e perfil:</strong> enquanto você mantiver a conta. Ao excluir a conta, os dados e as fotos são apagados na hora do banco principal. As cópias de segurança antigas são descartadas conforme a rotina de backup do servidor.</li>
                 <li><strong>Dados sensíveis:</strong> até você revogar a autorização, o que os apaga imediatamente.</li>
                 <li><strong>Registro de aceites:</strong> enquanto a conta existir, para comprovar o consentimento (art. 8º, §2º).</li>
                 <li><strong>Empresas:</strong> durante a adesão ao programa e a validade do Selo e, depois, pelo prazo exigido pelas regras de arquivo da administração pública.</li>
@@ -168,9 +169,9 @@ export default function PoliticaPrivacidade() {
 
               <h2>8. Segurança</h2>
               <ul>
-                <li>Conexão criptografada (HTTPS) e dados criptografados em repouso pelo fornecedor.</li>
+                <li>Conexão criptografada (HTTPS) e banco de dados sem acesso direto pela internet.</li>
                 <li>Regras de acesso no próprio banco de dados (Row Level Security): cada pessoa só acessa os próprios dados, e as páginas públicas recebem apenas campos não sensíveis.</li>
-                <li>Senhas guardadas apenas como hash criptográfico.</li>
+                <li>Senhas guardadas apenas como hash criptográfico (bcrypt), com limite de tentativas de login.</li>
                 <li>Acesso administrativo restrito a servidores designados, com registro das ações.</li>
                 <li>Em caso de incidente de segurança que possa causar risco ou dano relevante, comunicaremos a ANPD e as pessoas afetadas (art. 48 da LGPD).</li>
               </ul>

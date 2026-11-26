@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SkillChip } from '@/components/ui/skill-chip';
 import { availabilityLabels } from '@/data/mockData';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { withRedirect } from '@/lib/redirect';
 import {
@@ -60,18 +60,18 @@ export default function Perfil() {
     async function fetchProfile() {
       setLoading(true);
       // Quem está pedindo é identificado no banco pela sessão (auth.uid())
-      const { data: safeData } = await supabase.rpc('get_safe_profile_data', { _profile_id: id });
+      const { data: safeData } = await db.rpc('get_safe_profile_data', { _profile_id: id });
       const p = safeData as any;
       if (!p) {setLoading(false);return;}
       setProfile(p);
 
       const [skillsRes, projectsRes, eduRes, expRes, certRes, availRes] = await Promise.all([
-      supabase.from('skills').select('*').eq('profile_id', id),
-      supabase.from('projects').select('*').eq('profile_id', id),
-      supabase.from('education').select('*').eq('profile_id', id),
-      supabase.from('experiences').select('*').eq('profile_id', id),
-      supabase.from('certifications').select('*').eq('profile_id', id),
-      supabase.from('availability').select('*').eq('profile_id', id)]
+      db.from('skills').select('*').eq('profile_id', id),
+      db.from('projects').select('*').eq('profile_id', id),
+      db.from('education').select('*').eq('profile_id', id),
+      db.from('experiences').select('*').eq('profile_id', id),
+      db.from('certifications').select('*').eq('profile_id', id),
+      db.from('availability').select('*').eq('profile_id', id)]
       );
 
       setSkills(skillsRes.data || []);

@@ -29,7 +29,7 @@ import InclusionForm from '@/components/profile/InclusionForm';
 import ResourcesForm from '@/components/profile/ResourcesForm';
 import PortfolioLinksForm from '@/components/profile/PortfolioLinksForm';
 import { PrivacyCenter } from '@/components/privacy/PrivacyCenter';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 
 function computeScore(profile: any, skills: any[], projects: any[], availability: any[], softSkills: any[]) {
   let score = 0;
@@ -144,7 +144,7 @@ export default function EditarPerfil() {
     if (ok) {
       // O status só muda pela função do banco (o usuário não pode alterá-lo direto)
       await updateProfile({ profile_completion: score } as any);
-      const { error } = await supabase.rpc('set_my_profile_published', { _publish: true });
+      const { error } = await db.rpc('set_my_profile_published', { _publish: true });
       if (error) toast.error('Não foi possível publicar. Tente novamente.', { description: error.message });
       else { toast.success('Perfil publicado! Agora as empresas podem te encontrar.'); await refetch(); }
     }

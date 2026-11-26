@@ -10,6 +10,11 @@ export default defineConfig({
     hmr: {
       overlay: false,
     },
+    // Em desenvolvimento, a API (server/, porta 3000) atende /api e /uploads
+    proxy: {
+      "/api": "http://localhost:3000",
+      "/uploads": "http://localhost:3000",
+    },
   },
   plugins: [react()],
   resolve: {

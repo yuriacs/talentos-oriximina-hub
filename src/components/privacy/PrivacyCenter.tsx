@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Download, EyeOff, ShieldCheck, Trash2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +14,7 @@ import {
 import { downloadJson } from '@/lib/exportAllData';
 import { collectMyData, deleteMyAccount } from '@/lib/myData';
 import { DPO_EMAIL } from '@/lib/privacy';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Props {
   status: string;
@@ -25,6 +26,7 @@ const CONFIRM_WORD = 'EXCLUIR';
 /** Direitos do titular em um só lugar: acessar, despublicar e excluir */
 export function PrivacyCenter({ status, onChanged }: Props) {
   const navigate = useNavigate();
+  const { refresh } = useAuth();
   const [busy, setBusy] = useState<string | null>(null);
   const [confirmText, setConfirmText] = useState('');
 
@@ -41,7 +43,7 @@ export function PrivacyCenter({ status, onChanged }: Props) {
 
   const setPublished = async (publish: boolean) => {
     setBusy('publish');
-    const { error } = await supabase.rpc('set_my_profile_published', { _publish: publish });
+    const { error } = await db.rpc('set_my_profile_published', { _publish: publish });
     setBusy(null);
     if (error) { toast.error('Não foi possível alterar a visibilidade', { description: error.message }); return; }
     toast.success(publish ? 'Perfil publicado' : 'Perfil retirado da vitrine. Só você e a SEMJU podem vê-lo.');
@@ -52,6 +54,7 @@ export function PrivacyCenter({ status, onChanged }: Props) {
     setBusy('delete');
     try {
       await deleteMyAccount();
+      await refresh();
       toast.success('Sua conta e seus dados foram excluídos.');
       navigate('/', { replace: true });
     } catch (e) {

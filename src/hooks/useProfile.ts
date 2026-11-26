@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { useAuth } from './useAuth';
-import type { Tables, TablesInsert } from '@/integrations/supabase/types';
+import type { Tables, TablesInsert } from '@/lib/database.types';
 
 type Profile = Tables<'profiles'>;
 type Skill = Tables<'skills'>;
@@ -44,7 +44,7 @@ export function useProfile() {
   const fetchAll = useCallback(async () => {
     if (!user) { setLoading(false); return; }
 
-    const { data: profile } = await supabase
+    const { data: profile } = await db
       .from('profiles')
       .select('*')
       .eq('user_id', user.id)
@@ -54,14 +54,14 @@ export function useProfile() {
 
     const profileId = profile.id;
     const [skills, education, experiences, projects, certifications, languages, availability, softSkillsRes] = await Promise.all([
-      supabase.from('skills').select('*').eq('profile_id', profileId),
-      supabase.from('education').select('*').eq('profile_id', profileId),
-      supabase.from('experiences').select('*').eq('profile_id', profileId),
-      supabase.from('projects').select('*').eq('profile_id', profileId),
-      supabase.from('certifications').select('*').eq('profile_id', profileId),
-      supabase.from('languages').select('*').eq('profile_id', profileId),
-      supabase.from('availability').select('*').eq('profile_id', profileId),
-      supabase.from('soft_skills' as any).select('*').eq('profile_id', profileId) as any,
+      db.from('skills').select('*').eq('profile_id', profileId),
+      db.from('education').select('*').eq('profile_id', profileId),
+      db.from('experiences').select('*').eq('profile_id', profileId),
+      db.from('projects').select('*').eq('profile_id', profileId),
+      db.from('certifications').select('*').eq('profile_id', profileId),
+      db.from('languages').select('*').eq('profile_id', profileId),
+      db.from('availability').select('*').eq('profile_id', profileId),
+      db.from('soft_skills' as any).select('*').eq('profile_id', profileId) as any,
     ]);
 
     setData({
@@ -82,85 +82,85 @@ export function useProfile() {
 
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!data.profile) return { error: 'No profile' };
-    const { error } = await supabase.from('profiles').update(updates).eq('id', data.profile.id);
+    const { error } = await db.from('profiles').update(updates).eq('id', data.profile.id);
     if (!error) await fetchAll();
     return { error };
   };
 
   const addSkill = async (skill: Omit<TablesInsert<'skills'>, 'profile_id'>) => {
     if (!data.profile) return { error: 'No profile' };
-    const { error } = await supabase.from('skills').insert({ ...skill, profile_id: data.profile.id });
+    const { error } = await db.from('skills').insert({ ...skill, profile_id: data.profile.id });
     if (!error) await fetchAll();
     return { error };
   };
 
   const deleteSkill = async (id: string) => {
-    const { error } = await supabase.from('skills').delete().eq('id', id);
+    const { error } = await db.from('skills').delete().eq('id', id);
     if (!error) await fetchAll();
     return { error };
   };
 
   const addEducation = async (edu: Omit<TablesInsert<'education'>, 'profile_id'>) => {
     if (!data.profile) return { error: 'No profile' };
-    const { error } = await supabase.from('education').insert({ ...edu, profile_id: data.profile.id });
+    const { error } = await db.from('education').insert({ ...edu, profile_id: data.profile.id });
     if (!error) await fetchAll();
     return { error };
   };
 
   const deleteEducation = async (id: string) => {
-    const { error } = await supabase.from('education').delete().eq('id', id);
+    const { error } = await db.from('education').delete().eq('id', id);
     if (!error) await fetchAll();
     return { error };
   };
 
   const addExperience = async (exp: Omit<TablesInsert<'experiences'>, 'profile_id'>) => {
     if (!data.profile) return { error: 'No profile' };
-    const { error } = await supabase.from('experiences').insert({ ...exp, profile_id: data.profile.id });
+    const { error } = await db.from('experiences').insert({ ...exp, profile_id: data.profile.id });
     if (!error) await fetchAll();
     return { error };
   };
 
   const deleteExperience = async (id: string) => {
-    const { error } = await supabase.from('experiences').delete().eq('id', id);
+    const { error } = await db.from('experiences').delete().eq('id', id);
     if (!error) await fetchAll();
     return { error };
   };
 
   const addProject = async (proj: Omit<TablesInsert<'projects'>, 'profile_id'>) => {
     if (!data.profile) return { error: 'No profile' };
-    const { error } = await supabase.from('projects').insert({ ...proj, profile_id: data.profile.id });
+    const { error } = await db.from('projects').insert({ ...proj, profile_id: data.profile.id });
     if (!error) await fetchAll();
     return { error };
   };
 
   const deleteProject = async (id: string) => {
-    const { error } = await supabase.from('projects').delete().eq('id', id);
+    const { error } = await db.from('projects').delete().eq('id', id);
     if (!error) await fetchAll();
     return { error };
   };
 
   const addCertification = async (cert: Omit<TablesInsert<'certifications'>, 'profile_id'>) => {
     if (!data.profile) return { error: 'No profile' };
-    const { error } = await supabase.from('certifications').insert({ ...cert, profile_id: data.profile.id });
+    const { error } = await db.from('certifications').insert({ ...cert, profile_id: data.profile.id });
     if (!error) await fetchAll();
     return { error };
   };
 
   const deleteCertification = async (id: string) => {
-    const { error } = await supabase.from('certifications').delete().eq('id', id);
+    const { error } = await db.from('certifications').delete().eq('id', id);
     if (!error) await fetchAll();
     return { error };
   };
 
   const addLanguage = async (lang: Omit<TablesInsert<'languages'>, 'profile_id'>) => {
     if (!data.profile) return { error: 'No profile' };
-    const { error } = await supabase.from('languages').insert({ ...lang, profile_id: data.profile.id });
+    const { error } = await db.from('languages').insert({ ...lang, profile_id: data.profile.id });
     if (!error) await fetchAll();
     return { error };
   };
 
   const deleteLanguage = async (id: string) => {
-    const { error } = await supabase.from('languages').delete().eq('id', id);
+    const { error } = await db.from('languages').delete().eq('id', id);
     if (!error) await fetchAll();
     return { error };
   };
@@ -169,11 +169,11 @@ export function useProfile() {
     if (!data.profile) return { error: 'No profile' };
     const existing = data.availability.find(a => a.type === type);
     if (existing) {
-      const { error } = await supabase.from('availability').delete().eq('id', existing.id);
+      const { error } = await db.from('availability').delete().eq('id', existing.id);
       if (!error) await fetchAll();
       return { error };
     } else {
-      const { error } = await supabase.from('availability').insert({ type, profile_id: data.profile.id });
+      const { error } = await db.from('availability').insert({ type, profile_id: data.profile.id });
       if (!error) await fetchAll();
       return { error };
     }
@@ -182,7 +182,7 @@ export function useProfile() {
   // Soft skills CRUD
   const addSoftSkill = async (skill: { name: string; rating: number }) => {
     if (!data.profile) return { error: 'No profile' };
-    const { error } = await (supabase.from('soft_skills' as any) as any).insert({
+    const { error } = await (db.from('soft_skills' as any) as any).insert({
       name: skill.name,
       rating: skill.rating,
       profile_id: data.profile.id,
@@ -192,13 +192,13 @@ export function useProfile() {
   };
 
   const updateSoftSkill = async (id: string, rating: number) => {
-    const { error } = await (supabase.from('soft_skills' as any) as any).update({ rating }).eq('id', id);
+    const { error } = await (db.from('soft_skills' as any) as any).update({ rating }).eq('id', id);
     if (!error) await fetchAll();
     return { error };
   };
 
   const deleteSoftSkill = async (id: string) => {
-    const { error } = await (supabase.from('soft_skills' as any) as any).delete().eq('id', id);
+    const { error } = await (db.from('soft_skills' as any) as any).delete().eq('id', id);
     if (!error) await fetchAll();
     return { error };
   };

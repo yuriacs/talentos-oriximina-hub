@@ -7,7 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Save, Briefcase, CheckCircle2, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-import type { Tables } from '@/integrations/supabase/types';
+import type { Tables } from '@/lib/database.types';
 import { useStepSave } from './stepSave';
 
 interface Props {

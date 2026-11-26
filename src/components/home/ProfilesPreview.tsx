@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ProfileCard } from '@/components/ui/profile-card';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import type { ProfileCardData } from '@/types';
 import { ArrowRight, Loader2, Users } from 'lucide-react';
 
@@ -13,7 +13,7 @@ export function ProfilesPreview() {
   useEffect(() => {
     const fetchProfiles = async () => {
       setLoading(true);
-      const { data: profilesData } = await supabase
+      const { data: profilesData } = await db
         .rpc('get_public_profiles');
 
       if (!profilesData?.length) {
@@ -25,9 +25,9 @@ export function ProfilesPreview() {
       const profileIds = profilesData.map(p => p.id);
 
       const [skillsRes, availRes, projectsRes] = await Promise.all([
-        supabase.from('skills').select('*').in('profile_id', profileIds),
-        supabase.from('availability').select('*').in('profile_id', profileIds),
-        supabase.from('projects').select('id, profile_id').in('profile_id', profileIds),
+        db.from('skills').select('*').in('profile_id', profileIds),
+        db.from('availability').select('*').in('profile_id', profileIds),
+        db.from('projects').select('id, profile_id').in('profile_id', profileIds),
       ]);
 
       const cards: ProfileCardData[] = profilesData.map(p => {

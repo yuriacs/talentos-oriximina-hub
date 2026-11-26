@@ -25,7 +25,7 @@ vi.mock('@/hooks/useProfile', () => ({
   }),
 }));
 
-vi.mock('@/integrations/supabase/client', () => ({ supabase: {} }));
+vi.mock('@/lib/api', () => ({ db: {}, authApi: {}, storage: {} }));
 
 import EditarPerfil from '@/pages/EditarPerfil';
 

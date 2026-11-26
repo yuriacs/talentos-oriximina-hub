@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .config/
+# Variáveis locais
+.env
+server/.env
+server/dist
+server/uploads

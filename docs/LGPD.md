@@ -10,7 +10,7 @@ para a prestação de contas. Última revisão: 26/11/2026.
 |---|---|
 | Controlador | Prefeitura Municipal de Oriximiná — SEMJU |
 | Encarregado (canal) | semju@oriximina.pa.gov.br (`DPO_EMAIL` em `src/lib/privacy.ts`) |
-| Operadores | Supabase (banco, autenticação, arquivos), Vercel (hospedagem), Google (login opcional e Google Forms da pesquisa) |
+| Operadores | Hospedagem: servidor da Prefeitura ou empresa contratada (banco Postgres, API e fotos). Google: login opcional e Google Forms da pesquisa |
 | Titulares | Jovens com 18 anos ou mais, responsáveis por empresas, respondentes da pesquisa |
 
 ## 2. Inventário de dados
@@ -61,6 +61,12 @@ usada no navegador para checar a idade mínima e **não é gravada**.
 - Raça/cor e deficiência só podem ser gravados após consentimento específico
   (checado também no banco, por trigger). Revogar apaga os dados.
 
+**Infraestrutura própria (26/11/2026)**
+- Saída do Supabase: banco Postgres, API e fotos no servidor da Prefeitura,
+  com regras RLS mantidas no banco e sessões em cookie `httpOnly`.
+- Senhas em bcrypt, limite de tentativas de login, proteção contra CSRF,
+  fotos gravadas só na pasta do próprio usuário.
+
 **Minimização**
 - A pesquisa não importa mais o nome dos respondentes; há botão no admin
   para apagar os nomes já importados.
@@ -79,15 +85,13 @@ usada no navegador para checar a idade mínima e **não é gravada**.
 
 ## 4. Como publicar
 
-1. Abra o SQL Editor do Supabase e execute
-   `supabase/migrations/20261126120000_adequacao_lgpd.sql`.
-2. Rode a consulta de conferência no fim do arquivo para ver se há perfis
-   órfãos e decida o que fazer com eles.
-3. Republique a Edge Function `admin-user-management`
-   (`supabase functions deploy admin-user-management`).
-4. Faça o deploy do site (merge na `main`, a Vercel publica).
-5. Teste: cadastro, aceite no login com Google, dados sensíveis, publicar e
-   despublicar, baixar dados e excluir uma conta de teste.
+O sistema não usa mais o Supabase: roda em Docker no servidor da
+Prefeitura (Postgres + API + site). Instalação, importação dos dados do
+Supabase e backup estão em [`OPERACAO.md`](OPERACAO.md). As migrações de
+`db/migrations`, inclusive a desta adequação, são aplicadas pela API ao iniciar.
+
+Depois de publicar, teste com uma conta de teste: cadastro, login com Google,
+dados sensíveis, publicar e despublicar, baixar dados e excluir a conta.
 
 ## 5. Pendências para a Prefeitura (não resolvidas por código)
 
@@ -95,9 +99,10 @@ usada no navegador para checar a idade mínima e **não é gravada**.
       divulgar a identidade e o contato dele no site oficial (art. 41).
 - [ ] Elaborar e aprovar o RIPD, já que há dados sensíveis (art. 38). Este
       documento serve de ponto de partida.
-- [ ] Conferir a região do projeto Supabase (Settings → General). Se possível,
-      usar São Paulo (`sa-east-1`) e registrar os contratos/DPA de Supabase e
-      Vercel para a transferência internacional (art. 33).
+- [ ] Hospedar o servidor no Brasil e, se for de empresa contratada, firmar
+      contrato com cláusulas de proteção de dados (operador, art. 39).
+- [ ] Depois da migração, excluir o projeto do Supabase e a hospedagem na
+      Vercel, e apagar cópias soltas dos backups (art. 16).
 - [ ] Definir com o setor de arquivo os prazos de guarda de empresas e logs.
 - [ ] Plano de resposta a incidentes: quem avisa a ANPD e os titulares e em
       quanto tempo (art. 48 e Resolução CD/ANPD nº 15/2024).

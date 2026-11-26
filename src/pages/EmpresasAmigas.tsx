@@ -4,7 +4,7 @@ import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import {
   Building2,
   Globe,
@@ -36,7 +36,7 @@ export default function EmpresasAmigas() {
   useEffect(() => {
     async function fetchCompanies() {
       setLoading(true);
-      const { data } = await supabase.rpc('get_public_companies');
+      const { data } = await db.rpc('get_public_companies');
       setCompanies(data || []);
       setLoading(false);
     }

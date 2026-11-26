@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldAlert, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -25,7 +25,7 @@ export function SensitiveConsentBox({ consentedAt, hasExistingData, onChange }: 
   const setConsent = async (granted: boolean) => {
     if (!granted && !confirm('Isso apaga sua raça/cor e suas informações de deficiência e acessibilidade. Continuar?')) return;
     setBusy(true);
-    const { error } = await supabase.rpc('set_sensitive_data_consent', {
+    const { error } = await db.rpc('set_sensitive_data_consent', {
       _granted: granted, _version: SENSITIVE_CONSENT_VERSION,
     });
     setBusy(false);

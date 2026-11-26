@@ -7,7 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Sparkles, Lock, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { authApi } from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
+
+const MIN_PASSWORD = 8;
 
 export default function ResetPassword() {
   const [password, setPassword] = useState('');
@@ -16,62 +19,16 @@ export default function ResetPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRecovery, setIsRecovery] = useState(false);
   const [isCheckingLink, setIsCheckingLink] = useState(true);
+  const [token, setToken] = useState('');
   const navigate = useNavigate();
+  const { refresh } = useAuth();
 
+  // O link do e-mail traz ?token=...; a validade é conferida ao salvar
   useEffect(() => {
-    const checkRecoveryState = async () => {
-      const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-      const searchParams = new URLSearchParams(window.location.search);
-      const hashType = hashParams.get('type');
-      const accessToken = hashParams.get('access_token');
-      const refreshToken = hashParams.get('refresh_token');
-      const recoveryType = searchParams.get('type');
-      const tokenHash = searchParams.get('token_hash');
-
-      if (hashType === 'recovery' && accessToken && refreshToken) {
-        setIsRecovery(true);
-        setIsCheckingLink(false);
-        return;
-      }
-
-      if (recoveryType === 'recovery' && tokenHash) {
-        const { error } = await supabase.auth.verifyOtp({
-          token_hash: tokenHash,
-          type: 'recovery',
-        });
-
-        if (error) {
-          toast.error('Link de recuperação inválido ou expirado', {
-            description: error.message,
-          });
-        } else {
-          setIsRecovery(true);
-        }
-
-        setIsCheckingLink(false);
-        return;
-      }
-
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      setIsRecovery(!!session);
-      setIsCheckingLink(false);
-    };
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
-        setIsRecovery(true);
-        setIsCheckingLink(false);
-      }
-    });
-
-    void checkRecoveryState();
-
-    return () => subscription.unsubscribe();
+    const value = new URLSearchParams(window.location.search).get('token') ?? '';
+    setToken(value);
+    setIsRecovery(value.length > 20);
+    setIsCheckingLink(false);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,19 +39,21 @@ export default function ResetPassword() {
       return;
     }
 
-    if (password.length < 6) {
-      toast.error('A senha deve ter pelo menos 6 caracteres');
+    if (password.length < MIN_PASSWORD) {
+      toast.error(`A senha deve ter pelo menos ${MIN_PASSWORD} caracteres`);
       return;
     }
 
     setIsLoading(true);
-    const { error } = await supabase.auth.updateUser({ password });
+    const { error } = await authApi.resetPassword(token, password);
 
     if (error) {
       toast.error('Erro ao redefinir senha', { description: error.message });
+      if (error.status === 400 && /link/i.test(error.message)) setIsRecovery(false);
     } else {
       toast.success('Senha redefinida com sucesso!');
-      navigate('/login');
+      await refresh();
+      navigate('/meu-perfil');
     }
     setIsLoading(false);
   };

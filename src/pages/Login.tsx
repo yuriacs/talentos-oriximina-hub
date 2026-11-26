@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,20 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { signIn } = useAuth();
   const navigate = useNavigate();
-  const redirect = getRedirectPath(useLocation().search);
+  const location = useLocation();
+  const redirect = getRedirectPath(location.search);
+
+  // Avisos vindos do servidor (link de e-mail expirado, falha no Google)
+  useEffect(() => {
+    const erro = new URLSearchParams(location.search).get('erro');
+    const messages: Record<string, string> = {
+      'link-invalido': 'O link é inválido ou expirou. Faça login ou peça um novo link.',
+      google: 'Não foi possível entrar com o Google. Tente de novo.',
+      'google-email': 'Sua conta Google precisa ter um e-mail verificado.',
+      'google-indisponivel': 'O login com Google não está disponível no momento.',
+    };
+    if (erro && messages[erro]) toast.error(messages[erro]);
+  }, [location.search]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +40,12 @@ export default function Login() {
     const { error } = await signIn(email, password);
 
     if (error) {
-      toast.error('Erro ao fazer login', { description: error.message });
+      const message = /invalid login/i.test(error.message)
+        ? 'E-mail ou senha incorretos. Se você se cadastrou antes de novembro de 2026 e nunca trocou a senha, use "Esqueceu a senha?".'
+        : /not confirmed/i.test(error.message)
+          ? 'Confirme seu e-mail pelo link que enviamos antes de entrar.'
+          : error.message;
+      toast.error('Erro ao fazer login', { description: message });
     } else {
       toast.success('Login realizado com sucesso!');
       navigate(redirect ?? '/');
@@ -79,12 +97,7 @@ export default function Login() {
                 </Button>
               </form>
 
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
-                <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">ou</span></div>
-              </div>
-
-              <GoogleSignInButton redirectPath={redirect} />
+              <GoogleSignInButton redirectPath={redirect} divider={{ position: 'before', label: 'ou' }} />
 
               <div className="mt-6 text-center text-sm">
                 <span className="text-muted-foreground">Ainda não tem uma conta? </span>

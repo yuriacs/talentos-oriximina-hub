@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { db } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -52,7 +52,7 @@ export default function AdminCompanies() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const fetchCompanies = async () => {
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('companies')
       .select('*')
       .order('created_at', { ascending: false });
@@ -69,7 +69,7 @@ export default function AdminCompanies() {
   useEffect(() => { fetchCompanies(); }, []);
 
   const updateStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from('companies').update({ status }).eq('id', id);
+    const { error } = await db.from('companies').update({ status }).eq('id', id);
     if (error) {
       toast.error('Erro ao atualizar status');
     } else {
