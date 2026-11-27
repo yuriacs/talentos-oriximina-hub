@@ -32,6 +32,7 @@ services:
       DATABASE_URL: postgres://observatorio:${POSTGRES_PASSWORD}@db:5432/observatorio
       APP_URL: ${APP_URL:?defina APP_URL no .env}
       COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      TRUST_PROXY_HOPS: ${TRUST_PROXY_HOPS:-2}
       SMTP_HOST: ${SMTP_HOST:-}
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_SECURE: ${SMTP_SECURE:-false}

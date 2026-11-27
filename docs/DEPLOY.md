@@ -30,6 +30,7 @@ diz como saber se deu certo antes de seguir.
 14. [Problemas comuns](#14-problemas-comuns)
 15. [Segurança e LGPD: regras para quem opera](#15-segurança-e-lgpd-regras-para-quem-opera)
 16. [Depois que tudo estiver no ar](#16-depois-que-tudo-estiver-no-ar)
+17. [Servidor compartilhado com Nginx próprio (instalação da Prefeitura)](#17-servidor-compartilhado-com-nginx-próprio-instalação-da-prefeitura)
 
 ---
 
@@ -268,6 +269,12 @@ Salve com Ctrl+O, Enter e saia com Ctrl+X.
 O sistema manda dois tipos de e-mail: **confirmação de cadastro** e
 **redefinição de senha**. Ele usa o servidor do Gmail com uma **senha de app**.
 
+> **Atenção, se os dados antigos já foram importados:** com o e-mail ligado,
+> qualquer conta pode recuperar a senha pelo "Esqueceu a senha?". Antes de
+> preencher o SMTP, revise os administradores (passo 10.1) e **retire o papel de
+> admin de toda conta cujo e-mail ninguém da SEMJU controle**. Senão, quem tiver
+> acesso àquela caixa de e-mail vira administrador.
+
 1. Entre na conta que vai enviar os e-mails, de preferência uma conta só para
    o sistema, como `observatorio@oriximina.pa.gov.br` ou um Gmail criado para isso.
 2. Ative a **verificação em duas etapas** em
@@ -352,11 +359,8 @@ O esperado é `certificate obtained successfully`.
 Agora abra **https://observajuv.oriximina.pa.gov.br** no navegador: o site deve
 carregar com o cadeado de HTTPS.
 
-> **A Prefeitura já tem um proxy HTTPS próprio?** Então não use o Caddy: suba
-> com `docker compose up -d --build` (sem `--profile https`) e peça à TI para
-> apontar o proxy para `http://127.0.0.1:8080` desta máquina. Se o proxy estiver
-> em **outra** máquina, use `WEB_BIND=0.0.0.0` no `.env` e libere a porta 8080
-> **só para o IP do proxy**: `sudo ufw allow from IP_DO_PROXY to any port 8080`.
+> **O servidor já tem um Nginx (ou outro proxy) cuidando das portas 80 e 443?**
+> Então não use o Caddy: siga o [passo 17](#17-servidor-compartilhado-com-nginx-próprio-instalação-da-prefeitura).
 
 ---
 
@@ -579,10 +583,82 @@ Mais detalhes sobre o tratamento de dados estão em [`LGPD.md`](LGPD.md).
 
 ## 16. Depois que tudo estiver no ar
 
-Depois de uma ou duas semanas de funcionamento sem problemas:
+**Logo após a virada:**
+
+- [ ] **Remover o site da Vercel** (ou redirecioná-lo para o endereço oficial).
+      Enquanto ele estiver no ar, quem entrar por lá cria conta e edita perfil
+      no banco antigo, e esses dados não chegam ao servidor novo.
+- [ ] **Pausar o projeto no Supabase** (Project Settings → General → Pause
+      project). Os dados continuam lá, como garantia para voltar atrás.
+
+**Depois de uma ou duas semanas de funcionamento sem problemas:**
 
 - [ ] **Excluir o projeto no Supabase** (Project Settings → General → Delete project).
-- [ ] **Remover o site da Vercel** (o domínio já aponta para a VPS).
 - [ ] Apagar cópias soltas do backup do Supabase (Downloads, e-mails, WhatsApp),
       mantendo uma única cópia guardada em local seguro, pelo prazo definido pela SEMJU.
 - [ ] Registrar no processo/ofício da SEMJU a data da migração e onde estão os backups.
+
+---
+
+## 17. Servidor compartilhado com Nginx próprio (instalação da Prefeitura)
+
+Os passos 1 a 16 partem de uma VPS vazia. No servidor da Prefeitura, que já
+hospeda outros sistemas e tem um Nginx com certificado do certbot nas portas
+80 e 443, a instalação muda assim:
+
+| Passo | No servidor compartilhado |
+|---|---|
+| 1. Segurança (`ufw enable`, bloquear root) | **Não execute.** Pode cortar o SSH e bloquear os outros sistemas. Fale com a TI. |
+| 2. Docker | Use o que já está instalado (`docker compose version`). |
+| 3. DNS | Só confira se o domínio já aponta para o servidor. |
+| 5. `.env` | Escolha uma porta livre em `WEB_PORT` (ex.: `8093`); veja as usadas com `sudo ss -ltnp`. Mantenha `WEB_BIND=127.0.0.1`. |
+| 8. Subir | **Sem** `--profile https`: `docker compose up -d --build`. |
+| 11 a 14 | Em todos os comandos, tire o `--profile https`. |
+
+### 17.1 Configuração do Nginx do servidor
+
+No arquivo do site (ex.: `/etc/nginx/sites-available/observajuv`), dentro do
+bloco `server { listen 443 ssl; ... }`, o `location /` deve ficar assim
+(troque `8093` pela porta escolhida):
+
+```nginx
+client_max_body_size 6m;
+
+location / {
+    proxy_pass http://127.0.0.1:8093;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+```
+
+Por que cada linha importa:
+
+- `client_max_body_size 6m`: o padrão do Nginx é 1 MB, e as fotos de perfil
+  podem ter até 5 MB. Sem a linha, o envio de fotos maiores falha (erro 413).
+- `X-Forwarded-For`: leva o IP real do visitante até a API. Sem ele, todo mundo
+  parece vir do mesmo endereço, e o limite de 10 tentativas de login por minuto
+  passa a valer para o site inteiro, bloqueando todos em horário de pico.
+
+Guarde a configuração antiga antes de trocar e teste antes de recarregar:
+
+```bash
+$ sudo cp /etc/nginx/sites-available/observajuv /root/observajuv.nginx.antigo
+$ sudo nano /etc/nginx/sites-available/observajuv
+$ sudo nginx -t && sudo systemctl reload nginx
+```
+
+**Confira:** `curl -s https://observajuv.oriximina.pa.gov.br/api/auth/providers`
+responde com `{"google":...}`.
+
+Para voltar ao site antigo: `sudo cp /root/observajuv.nginx.antigo
+/etc/nginx/sites-available/observajuv && sudo nginx -t && sudo systemctl reload nginx`.
+
+### 17.2 Quantos proxies ficam na frente
+
+A API só aceita o IP informado pelos proxies da rede interna, no máximo 2
+saltos: o Nginx do servidor e o nginx do próprio container. É o caso tanto com
+o Caddy quanto com o Nginx do servidor, então não é preciso mudar nada. Só se
+houver **mais um** proxy na frente (ex.: um balanceador da Prefeitura antes do
+Nginx), acrescente `TRUST_PROXY_HOPS=3` no `.env` e rode `docker compose up -d`.
+

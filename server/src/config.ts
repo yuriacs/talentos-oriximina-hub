@@ -30,6 +30,8 @@ export const config = {
   uploadsDir: env('UPLOADS_DIR', path.resolve(serverRoot, 'uploads')),
   cookieSecure: env('COOKIE_SECURE', isProduction ? 'true' : 'false') === 'true',
   sessionDays: Number(env('SESSION_DAYS', '30')),
+  /** Quantos proxies ficam na frente da API (Caddy ou Nginx do servidor + nginx do container) */
+  trustProxyHops: Number(env('TRUST_PROXY_HOPS', '2')),
   smtp: {
     host: process.env.SMTP_HOST || '',
     port: Number(process.env.SMTP_PORT || '587'),

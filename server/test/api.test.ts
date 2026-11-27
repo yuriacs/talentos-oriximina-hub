@@ -161,4 +161,16 @@ d('API do Observatório', () => {
     const res = (await db(cookie, { table: 'survey_responses', action: 'select' })).json();
     expect(res.data).toEqual([]);
   });
+  it('limita tentativas de login pelo IP real, ignorando X-Forwarded-For falso', async () => {
+    // Visitante 10.0.0.5 -> proxy HTTPS (172.18.0.1) -> nginx do container (172.18.0.3) -> API
+    const tentativa = (falso: string, cliente = '10.0.0.5') => app.inject({
+      method: 'POST', url: '/api/auth/login', remoteAddress: '172.18.0.3',
+      headers: { ...H, 'x-forwarded-for': `${falso}, ${cliente}, 172.18.0.1` },
+      payload: { email: 'ninguem@exemplo.com', password: 'errada123' },
+    });
+    for (let i = 0; i < 10; i++) expect((await tentativa(`1.2.3.${i}`)).statusCode).not.toBe(429);
+    expect((await tentativa('9.9.9.9')).statusCode).toBe(429);
+    // Outro visitante continua podendo tentar
+    expect((await tentativa('9.9.9.9', '10.0.0.6')).statusCode).not.toBe(429);
+  });
 });
